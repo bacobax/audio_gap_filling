@@ -6,7 +6,7 @@ max_device_batch_size: 512
 base_learning_rate: 0.00015
 weight_decay: 0.05
 mask_ratio: 0.25
-total_epoch: 3
+total_epoch: 10
 warmup_epoch: 1
 model_path: vit-t-mae.pt
 patch_size: 4
