@@ -8,14 +8,16 @@ import random
 import numpy as np
 
 from utils import MCD
+from datetime import datetime
 
 
 class TrainSystem:
     def __init__(self, hparams):
         self.hparams = hparams
         self.device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
-
-        self.writer = SummaryWriter(os.path.join('runs', 'test', 'mae-pretrain'))
+        print(f"Using device: {self.device}")
+        self.run_name = f"mae-pretrain-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        self.writer = SummaryWriter(os.path.join('runs', 'test', self.run_name))
         
         self.batch_size = self.hparams.get('batch_size', 4096)
 
@@ -103,13 +105,13 @@ class TrainSystem:
         total_epoch = args.get('total_epoch', 2000)
         warmup_epoch = args.get('warmup_epoch', 200)
         mask_ratio = args.get('mask_ratio', 0.75)
-        model_path = args.get('model_path', 'vit-t-mae.pt')
+        model_path = args.get('model_path', f'vit-t-mae-{self.run_name}.pt')
 
         lr_func = lambda epoch: min(
             (epoch + 1) / (warmup_epoch + 1e-8),
             0.5 * (math.cos(epoch / total_epoch * math.pi) + 1)
         )
-        lr_scheduler = torch.optim.lr_scheduler.LambdaLR(self.optim, lr_lambda=lr_func, verbose=True)
+        lr_scheduler = torch.optim.lr_scheduler.LambdaLR(self.optim, lr_lambda=lr_func)
 
 
         self.optim.zero_grad()
@@ -136,7 +138,9 @@ class TrainSystem:
 
                 features, backward_indexes, masked_full = encoder(gap_slice, apply_mask=False)
                 predicted_val_img, mask = decoder(features, backward_indexes)
+                loss = torch.mean((predicted_val_img - gap_slice) ** 2 * mask) / mask_ratio
 
+                self.writer.add_scalar('mae_val_loss', loss.item(), global_step=e)
                 self.writer.add_image('mae_original_gap', gap_slice.squeeze(0), global_step=e)
                 self.writer.add_image('mae_target', target.squeeze(0), global_step=e)
                 self.writer.add_image('mae_predicted', predicted_val_img.squeeze(0), global_step=e)
@@ -145,7 +149,8 @@ class TrainSystem:
         model.train()
         losses = []
         step_count = 0
-        for (spectrogram_slice, start_idx, end_idx, start_sec, end_sec, _, _, start_gap_sec, end_gap_sec) in tqdm(iter(dataloader)):
+        pbar = tqdm(total=len(dataloader), desc='Training MAE', unit='batch', leave=False, dynamic_ncols=True)
+        for (spectrogram_slice, start_idx, end_idx, start_sec, end_sec, _, _, start_gap_sec, end_gap_sec) in dataloader:
             step_count += 1
             spectrogram_slice = spectrogram_slice.to(device)
             predicted_spectrogram, mask = model(spectrogram_slice)
@@ -155,4 +160,7 @@ class TrainSystem:
                 self.optim.step()
                 self.optim.zero_grad()
             losses.append(loss.item())
+            pbar.update(1)
+            pbar.set_postfix({'loss': loss.item()})
+        pbar.close()
         return losses

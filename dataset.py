@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 
 from utils import plot_spectrogram
+import random
 
 
 class MelSpecRandomCropDataset(Dataset):
@@ -120,12 +121,12 @@ class MelSpecRandomCropDataset(Dataset):
 
     # ───────────────────────────────────────────────────────────────────────────
     def __len__(self):
-        return len(self.valid_starts)
+        return min(len(self.valid_starts),400) if not self.test else len(self.valid_starts)
 
     # ───────────────────────────────────────────────────────────────────────────
     def __getitem__(self, _):
         """Return a random [1, 80, crop_frames] tensor, and start/end times in seconds."""
-        start = self.valid_starts[_]  # deterministic
+        start = random.choice(self.valid_starts)
         # or to sample randomly use:
         # start = random.choice(self.valid_starts)
         end = start + self.crop_frames
