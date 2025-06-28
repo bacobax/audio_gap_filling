@@ -327,7 +327,7 @@ if __name__ == '__main__':
         hop_length=256,
         n_fft=1024,
         n_mels=n_mels,
-        test=False
+        test=(False, None)
     )
 
     crop_frames = mydataset.crop_frames
