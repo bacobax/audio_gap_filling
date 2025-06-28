@@ -204,7 +204,7 @@ if __name__ == "__main__":
 
     for i, (gap_slice, target, start_sec, end_sec, _, _, gap_start_sec, gap_end_sec) in enumerate(dataloader):
 
-        plot_spectrogram()
+        plot_spectrogram(gap_slice, start_sec, end_sec)
 
         plt.imshow(target.squeeze().detach().cpu().numpy(), aspect="auto",
                    origin="lower", cmap="viridis")
