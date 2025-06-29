@@ -8,5 +8,5 @@ if __name__=="__main__":
 
 
     system = TrainSystem(config)
-
-    system.train()
+    system.eval_iteration(0, load_checkpoint="./vit-t-mae.pt")
+    #system.train()

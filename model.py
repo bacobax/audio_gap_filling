@@ -126,11 +126,15 @@ class MAE_Encoder(torch.nn.Module):
             patches = self.patchify(img)
             patches = rearrange(patches, 'b c h w -> (h w) b c')
             patches = patches + self.pos_embedding
+            T, B, _ = patches.shape
+            identity_bwd = torch.arange(T, device=patches.device).unsqueeze(1).repeat(1, B)
+
             patches = torch.cat([self.cls_token.expand(-1, patches.shape[1], -1), patches], dim=0)
             patches = rearrange(patches, 't b c -> b t c')
             features = self.layer_norm(self.transformer(patches))
             features = rearrange(features, 'b t c -> t b c')
-            return features, None, img
+
+            return features, identity_bwd, img
 
         patches = self.patchify(img)
         patches = rearrange(patches, 'b c h w -> (h w) b c')
@@ -207,16 +211,11 @@ class MAE_Decoder(torch.nn.Module):
 
     def forward(self, features, backward_indexes):
         T = features.shape[0]
-        if backward_indexes is None:
-            # No masking, so identity permutation
-            # T = number of tokens, B = batch size
-            T, B, _ = features.shape
-            backward_indexes = torch.arange(T, device=features.device).unsqueeze(-1).repeat(1, B)
-        else:
-            backward_indexes = torch.cat([
-                torch.zeros(1, backward_indexes.shape[1], dtype=torch.long, device=backward_indexes.device),
-                backward_indexes + 1
-            ], dim=0)
+
+        backward_indexes = torch.cat([
+            torch.zeros(1, backward_indexes.shape[1], dtype=torch.long, device=backward_indexes.device),
+            backward_indexes + 1
+        ], dim=0)
         features = torch.cat([features, self.mask_token.expand(backward_indexes.shape[0] - features.shape[0], features.shape[1], -1)], dim=0)
         features = take_indexes(features, backward_indexes)
         features = features + self.pos_embedding

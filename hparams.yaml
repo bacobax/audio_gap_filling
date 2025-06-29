@@ -5,11 +5,11 @@ batch_size: 4
 max_device_batch_size: 512
 base_learning_rate: 0.00015
 weight_decay: 0.05
-mask_ratio: 0.25
-total_epoch: 10
+mask_ratio: 0.40
+total_epoch: 8
 warmup_epoch: 1
 model_path: vit-t-mae.pt
-patch_size: 4
+patch_size: 8
 n_mels: 80
 audio_filename: gapped_audio.wav
 test_audio_filename: wav_test.wav

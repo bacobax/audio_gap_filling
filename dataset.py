@@ -148,7 +148,16 @@ class MelSpecRandomCropDataset(Dataset):
 
         if self.test:
             target_spectrogram = self.test_mel_db[:, start:end]
-            target_spectrogram_slice = torch.from_numpy(target_spectrogram).float().unsqueeze(0)  # [1, 80, crop_frames]
+            target_spectrogram_slice = torch.from_numpy(target_spectrogram).float().unsqueeze(0)
+
+            # Calcola gap relativo alla finestra
+            relative_gap_start = self.gap_start_col - start
+            relative_gap_end = self.gap_start_col + self.gap_frames - start
+
+            # Clamp per sicurezza (evitiamo che finisca fuori bounds per floating point o errore)
+            relative_gap_start = max(0, relative_gap_start)
+            relative_gap_end = min(self.crop_frames, relative_gap_end)
+
             return (
                 crop_tensor,
                 target_spectrogram_slice,
@@ -156,8 +165,8 @@ class MelSpecRandomCropDataset(Dataset):
                 end_time_sec,
                 gap_start_sec,
                 gap_end_sec,
-                self.gap_start_col,
-                self.gap_start_col + self.gap_frames,
+                relative_gap_start,
+                relative_gap_end,
             )
 
         return (

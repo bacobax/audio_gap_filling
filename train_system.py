@@ -9,7 +9,7 @@ import numpy as np
 
 from utils import MCD
 from datetime import datetime
-
+from model import MAE_ViT
 
 class TrainSystem:
     def __init__(self, hparams):
@@ -125,25 +125,51 @@ class TrainSystem:
 
             torch.save(self.model, model_path)
 
-    def eval_iteration(self, e):
+    def eval_iteration(self, e, load_checkpoint: str=None):
+
+        if load_checkpoint:
+            print(f"Loading model from {load_checkpoint}")
+            torch.serialization.add_safe_globals([MAE_ViT])
+            self.model = torch.load(load_checkpoint, map_location=self.device, weights_only=False)
+            self.model.to(self.device)
+
         self.model.eval()
         encoder = self.model.encoder
         decoder = self.model.decoder
         encoder.eval()
         decoder.eval()
         with torch.no_grad():
-            for i, (gap_slice, target, start_sec, end_sec, _, _, gap_start_sec, gap_end_sec) in enumerate(self.val_loader):
+            for i, (gap_slice, target, start_sec, end_sec, _, _, gap_start, gap_end) in enumerate(self.val_loader):
                 target = target.to(self.device)
                 gap_slice = gap_slice.to(self.device)
 
-                features, backward_indexes, masked_full = encoder(gap_slice, apply_mask=False)
-                predicted_val_img, mask = decoder(features, backward_indexes)
-                loss = torch.mean((predicted_val_img - gap_slice) ** 2 * mask) / mask_ratio
+                if isinstance(gap_start, torch.Tensor):
+                    gap_start = gap_start.squeeze().item()
+                if isinstance(gap_end, torch.Tensor):
+                    gap_end = gap_end.squeeze().item()
 
-                self.writer.add_scalar('mae_val_loss', loss.item(), global_step=e)
+                if gap_end == gap_start:
+                    print(f"⚠️ Skipping sample {i}: empty gap range")
+                    continue
+
+                features, backward_indexes, _ = encoder(gap_slice, apply_mask=False)
+                print("features stats:", features.min(), features.max(), features.mean(), features.isnan().any())
+                predicted, mask = decoder(features, backward_indexes)
+                print("mask stats:", mask.min(), mask.max(), mask.mean(), mask.isnan().any())
+                print("predicted stats:", predicted.min(), predicted.max(), predicted.mean(), predicted.isnan().any())
+
+                gap_region_target = target[:, :, :, gap_start:gap_end]  # Adjust dimensions
+                gap_region_pred = predicted[:, :, :, gap_start:gap_end]
+                print("gap_region_target shape:", gap_region_target.shape)
+                print("gap_region_target stats:", gap_region_target.min(), gap_region_target.max(), gap_region_target.mean(), gap_region_target.isnan().any())
+                print("gap_region_pred stats:", gap_region_pred.min(), gap_region_pred.max(), gap_region_pred.mean(), gap_region_pred.isnan().any())
+
+                test_loss = torch.mean((gap_region_pred - gap_region_target) ** 2)
+                print(f"Test loss for gap region: {test_loss.item()}")
+                self.writer.add_scalar('mae_val_loss', test_loss.item(), global_step=e)
                 self.writer.add_image('mae_original_gap', gap_slice.squeeze(0), global_step=e)
                 self.writer.add_image('mae_target', target.squeeze(0), global_step=e)
-                self.writer.add_image('mae_predicted', predicted_val_img.squeeze(0), global_step=e)
+                self.writer.add_image('mae_predicted', predicted.squeeze(0), global_step=e)
 
     def train_iteration(self, steps_per_update, dataloader, device, model, mask_ratio):
         model.train()
