@@ -116,7 +116,7 @@ class TrainSystem:
 
         self.optim.zero_grad()
         for e in range(total_epoch):
-            losses = self.train_iteration(self.steps_per_update, self.dataloader, self.device, self.model, mask_ratio)
+            losses = self.train_iteration(self.steps_per_update, self.dataloader, self.device, self.model, mask_ratio, e)
             lr_scheduler.step()
             avg_loss = sum(losses) / len(losses)
             self.writer.add_scalar('mae_loss', avg_loss, global_step=e)
@@ -170,7 +170,7 @@ class TrainSystem:
                 self.writer.add_image('mae_target', target.squeeze(0), global_step=e)
                 self.writer.add_image('mae_predicted', predicted.squeeze(0), global_step=e)
 
-    def train_iteration(self, steps_per_update, dataloader, device, model, mask_ratio):
+    def train_iteration(self, steps_per_update, dataloader, device, model, mask_ratio, e):
         model.train()
         losses = []
         step_count = 0
@@ -179,6 +179,9 @@ class TrainSystem:
             step_count += 1
             spectrogram_slice = spectrogram_slice.to(device)
             predicted_spectrogram, mask = model(spectrogram_slice)
+            if step_count == 50:
+                self.writer.add_image('mae_target_train', spectrogram_slice.squeeze(0), global_step=e)
+                self.writer.add_image('mae_predicted_train', predicted_spectrogram.squeeze(0), global_step=e)
             loss = torch.mean((predicted_spectrogram - spectrogram_slice) ** 2 * mask) / mask_ratio
             loss.backward()
             if step_count % steps_per_update == 0:
