@@ -123,14 +123,13 @@ class TrainSystem:
             print(f'In epoch {e}, average training loss is {avg_loss}.')    
             self.eval_iteration(e)
 
-            torch.save(self.model, model_path)
+            torch.save(self.model.state_dict(), model_path)
 
     def eval_iteration(self, e, load_checkpoint: str=None):
 
         if load_checkpoint:
-            print(f"Loading model from {load_checkpoint}")
-            torch.serialization.add_safe_globals([MAE_ViT])
-            self.model = torch.load(load_checkpoint, map_location=self.device, weights_only=False)
+            print(f"Loading model state dict from {load_checkpoint}")
+            self.model.load_state_dict(torch.load(load_checkpoint, map_location=self.device))
             self.model.to(self.device)
 
         self.model.eval()
