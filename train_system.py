@@ -179,9 +179,9 @@ class TrainSystem:
             step_count += 1
             spectrogram_slice = spectrogram_slice.to(device)
             predicted_spectrogram, mask = model(spectrogram_slice)
-            if step_count == 50:
-                self.writer.add_image('mae_target_train', spectrogram_slice.squeeze(0), global_step=e)
-                self.writer.add_image('mae_predicted_train', predicted_spectrogram.squeeze(0), global_step=e)
+            if step_count == 1:
+                self.writer.add_image('mae_target_train', spectrogram_slice.squeeze(0)[0], global_step=e)
+                self.writer.add_image('mae_predicted_train', predicted_spectrogram.squeeze(0)[0], global_step=e)
             loss = torch.mean((predicted_spectrogram - spectrogram_slice) ** 2 * mask) / mask_ratio
             loss.backward()
             if step_count % steps_per_update == 0:

@@ -9,12 +9,12 @@ mask_ratio: 0.40
 total_epoch: 8
 warmup_epoch: 1
 model_path: vit-t-mae.pt
-patch_size: 8
+patch_size: 4
 n_mels: 80
 audio_filename: gapped_audio.wav
 test_audio_filename: wav_test.wav
-emb_dim: 192
+emb_dim: 256
 encoder_layer: 12
-encoder_head: 3
-decoder_layer: 4
-decoder_head: 3
+encoder_head: 4
+decoder_layer: 6
+decoder_head: 4
