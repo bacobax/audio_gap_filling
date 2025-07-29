@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 import numpy as np
 import torch
 from torch.utils.data import Dataset
@@ -26,7 +27,7 @@ class MelSpecRandomCropDataset(Dataset):
         n_fft: int = 1024,
         hop_length: int = 256,
         n_mels: int = 80,
-        test: tuple[bool, str] = (False, None),
+        test: tuple[bool, Optional[str]] = (False, None),
     ):
         self.test = test[0]
         self.test_filename = test[1]

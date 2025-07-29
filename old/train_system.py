@@ -1,4 +1,5 @@
 
+
 from dataset import MelSpecRandomCropDataset
 from model import MAE_ViT
 import math, os, torch
@@ -6,7 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 import random
 import numpy as np
-
+from pprint import pprint
 from utils import MCD
 from datetime import datetime
 from model import MAE_ViT
@@ -76,11 +77,15 @@ class TrainSystem:
         )
 
     def check_patch_compatibility(self, mydataset):
+        print("PATCH SIZE COMP. CHECK")
         crop_frames = mydataset.crop_frames
-        min_patch_size = 1
-        max_patch_size = 80
+        min_patch_size = 2
+        max_patch_size = 34
+        common_divisors = MCD(crop_frames, self.n_mels, min_patch_size, max_patch_size)
+        print("compatible patch sizes")
+        pprint(common_divisors)
         if not crop_frames % self.patch_size == 0 and self.n_mels % self.patch_size == 0:
-            common_divisors = MCD(crop_frames, self.n_mels, min_patch_size, max_patch_size)
+            
             if len(common_divisors) == 0:
                 raise Exception(
                     f"No common divisors between {crop_frames} and {self.n_mels} in the range ({min_patch_size}, {max_patch_size})")
