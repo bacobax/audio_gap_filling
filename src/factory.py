@@ -143,7 +143,7 @@ class TrainingPipeline:
         
         # Setup device
         self.device = self._get_device()
-        
+        print(f"Using device: {self.device}")
         # Create components
         self.model = None
         self.train_dataset = None
