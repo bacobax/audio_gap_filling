@@ -84,39 +84,37 @@ class MAEEncoder(nn.Module):
         trunc_normal_(self.cls_token, std=.02)
         trunc_normal_(self.pos_embedding, std=.02)
     
-    def forward(self, img: torch.Tensor, apply_mask: bool = True) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        """
-        Forward pass through the encoder.
-        
+    def forward(
+        self,
+        img: torch.Tensor,
+        mask_bounds: Optional[Tuple[int, int]] = None,
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Forward pass through the encoder.
+
         Args:
-            img: Input spectrogram
-            apply_mask: Whether to apply masking
-            
+            img: Input spectrogram.
+            mask_bounds: Optional tuple ``(start, end)`` specifying the start and
+                end column (in pixel indices) of an already-masked region. If
+                ``None``, a random region will be masked.
+
         Returns:
             Tuple containing:
                 - Encoded features
                 - Backward indexes
-                - Masked image (if apply_mask=True) or original image (if apply_mask=False)
+                - Masked image corresponding to ``mask_bounds``
         """
-        if not apply_mask:
-            patches = self.patchify(img)
-            patches = rearrange(patches, 'b c h w -> (h w) b c')
-            patches = patches + self.pos_embedding
-            T, B, _ = patches.shape
-            identity_bwd = torch.arange(T, device=patches.device).unsqueeze(1).repeat(1, B)
-            
-            patches = torch.cat([self.cls_token.expand(-1, patches.shape[1], -1), patches], dim=0)
-            patches = rearrange(patches, 't b c -> b t c')
-            features = self.layer_norm(self.transformer(patches))
-            features = rearrange(features, 'b t c -> t b c')
-            
-            return features, identity_bwd, img
-        
         patches = self.patchify(img)
         patches = rearrange(patches, 'b c h w -> (h w) b c')
         patches = patches + self.pos_embedding
-        
-        patches, forward_indexes, backward_indexes, stripe_bounds = self.shuffle(patches)
+
+        if mask_bounds is not None:
+            start_pix, end_pix = mask_bounds
+            start_patch = start_pix // self.patch_size
+            end_patch = (end_pix + self.patch_size - 1) // self.patch_size
+            bounds = torch.tensor([[start_patch], [end_patch]], device=patches.device).repeat(1, patches.shape[1])
+            patches, forward_indexes, backward_indexes, stripe_bounds = self.shuffle(patches, bounds)
+        else:
+            patches, forward_indexes, backward_indexes, stripe_bounds = self.shuffle(patches)
         
         patches = torch.cat([self.cls_token.expand(-1, patches.shape[1], -1), patches], dim=0)
         patches = rearrange(patches, 't b c -> b t c')
@@ -287,17 +285,23 @@ class MAEViT(BaseModel):
         #         f"Image size {image_size} must be divisible by patch size {patch_size}"
         #     )
     
-    def forward(self, img: torch.Tensor, apply_mask: bool = True) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Forward pass through the MAE model.
+    def forward(
+        self,
+        img: torch.Tensor,
+        mask_bounds: Optional[Tuple[int, int]] = None,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Forward pass through the MAE model.
+
         Args:
-            img: Input spectrogram
-            apply_mask: Whether to apply masking during encoding
+            img: Input spectrogram.
+            mask_bounds: Optional tuple ``(start, end)`` describing the region to
+                mask (in pixel indices). If ``None``, a random region is masked.
+
         Returns:
             Tuple containing:
                 - Reconstructed spectrogram
                 - Mask indicating which patches were masked
         """
-        features, backward_indexes, full_mask = self.encoder(img, apply_mask=apply_mask)
+        features, backward_indexes, _ = self.encoder(img, mask_bounds=mask_bounds)
         predicted_img, mask = self.decoder(features, backward_indexes)
         return predicted_img, mask
