@@ -185,6 +185,7 @@ class ConfigManager:
             'resume': self.get('training.resume', False),
             'log_dir': self.get('paths.log_dir', None),
             'l1_weight': self.get('training.l1_weight', 0.0),
+            'mask_ratio': self.get('training.mask_ratio', 0.75),
             'patch_size': self.get('model.patch_size', 4),
             'n_mels': self.get('data.n_mels', 80),
         }

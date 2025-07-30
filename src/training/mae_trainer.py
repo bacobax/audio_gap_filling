@@ -87,8 +87,8 @@ class MAETrainer(BaseTrainer):
         )
         
         # Setup learning rate scheduler
-        total_epoch = self.config.get('training.total_epoch', 2000)
-        warmup_epoch = self.config.get('training.warmup_epoch', 200)
+        total_epoch = self.config.get('total_epoch', 2000)
+        warmup_epoch = self.config.get('warmup_epoch', 200)
         
         def lr_lambda(epoch):
             return min(
