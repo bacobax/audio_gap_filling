@@ -183,6 +183,7 @@ class ConfigManager:
             'save_every': self.get('save_every', 10),
             'resume' : self.get('resume', False),
             'log_dir' : self.get('log_dir', None),
+            'l1_weight': self.get('l1_weight', 0.0),
         }
     
     def get_data_config(self) -> Dict[str, Any]:

@@ -47,6 +47,7 @@ class MAETrainer(BaseTrainer):
         self.mask_ratio = config.get('mask_ratio', 0.75) if config else 0.75
         self.patch_size = config.get('patch_size', 4) if config else 4
         self.n_mels = config.get('n_mels', 80) if config else 80
+        self.l1_weight = config.get('l1_weight', 0.0) if config else 0.0
         
         # Setup gradient accumulation
         self.batch_size = config.get('batch_size', 4) if config else 4
@@ -97,8 +98,9 @@ class MAETrainer(BaseTrainer):
         
         self.scheduler = optim.lr_scheduler.LambdaLR(self.optimizer, lr_lambda=lr_lambda)  # type: ignore
         
-        # Setup loss function (MSE loss for reconstruction)
+        # Setup base loss functions
         self.criterion = nn.MSELoss(reduction='none')
+        self.l1_criterion = nn.L1Loss(reduction='none')
     
     def _train_epoch(self) -> Dict[str, float]:
         """
@@ -140,7 +142,12 @@ class MAETrainer(BaseTrainer):
                 self.writer.add_image('mae_predicted_train', predicted_spectrogram.squeeze(0)[0], global_step=self.current_epoch)
             
             # Compute loss (only on masked regions)
-            loss = torch.mean((predicted_spectrogram - spectrogram_slice) ** 2 * mask) / self.mask_ratio
+            mse = torch.mean((predicted_spectrogram - spectrogram_slice) ** 2 * mask) / self.mask_ratio
+            if self.l1_weight > 0:
+                l1 = torch.mean(torch.abs(predicted_spectrogram - spectrogram_slice) * mask) / self.mask_ratio
+                loss = (1 - self.l1_weight) * mse + self.l1_weight * l1
+            else:
+                loss = mse
             
             # Backward pass
             loss.backward()
@@ -207,7 +214,12 @@ class MAETrainer(BaseTrainer):
                 gap_region_target = target[:, :, :, gap_start:gap_end]
                 gap_region_pred = predicted[:, :, :, gap_start:gap_end]
                 
-                loss = torch.mean((gap_region_pred - gap_region_target) ** 2)
+                mse = torch.mean((gap_region_pred - gap_region_target) ** 2)
+                if self.l1_weight > 0:
+                    l1 = torch.mean(torch.abs(gap_region_pred - gap_region_target))
+                    loss = (1 - self.l1_weight) * mse + self.l1_weight * l1
+                else:
+                    loss = mse
                 total_loss += loss.item()
                 num_batches += 1
                 
