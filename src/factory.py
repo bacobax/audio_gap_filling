@@ -136,6 +136,7 @@ class TrainingPipeline:
         Args:
             config_path: Path to the configuration file
         """
+        self.config_path = config_path
         self.config_manager = ConfigManager(config_path)
         self.config = self.config_manager.config
 
@@ -177,10 +178,16 @@ class TrainingPipeline:
         # Training dataset
         train_config = self.config_manager.get_data_config()
         self.train_dataset = DatasetFactory.create_dataset('mel_spectrogram', train_config)
-        self.config["image_size"] = (self.config["n_mels"], self.train_dataset.get_crop_frames())
+        self.config["image_size"] = (
+            self.config_manager.get('data.n_mels', 80),
+            self.train_dataset.get_crop_frames()
+        )
         # Validation dataset
         val_config = train_config.copy()
-        val_config['test'] = (True, self.config.get('test_audio_filename', 'wav_test.wav'))
+        val_config['test'] = (
+            True,
+            self.config_manager.get('paths.test_audio_filename', 'wav_test.wav')
+        )
         self.val_dataset = DatasetFactory.create_dataset('mel_spectrogram', val_config)
         
         # Create data loaders
@@ -218,6 +225,15 @@ class TrainingPipeline:
             config=training_config,
             device=self.device
         )
+
+        # Log chosen configuration file
+        try:
+            with open(self.config_path, 'r') as f:
+                config_text = f.read()
+            self.trainer.writer.add_text('config/path', self.config_path, 0)
+            self.trainer.writer.add_text('config/file', f"```yaml\n{config_text}\n```", 0)
+        except Exception as e:
+            print(f"Warning: failed to log configuration file: {e}")
         
         # Check patch compatibility
         self.trainer.check_patch_compatibility(self.train_dataset)
@@ -234,7 +250,7 @@ class TrainingPipeline:
         if self.trainer is None:
             raise RuntimeError("Trainer not setup. Call setup_trainer() first.")
         
-        num_epochs = self.config.get('total_epoch', 8)
+        num_epochs = self.config_manager.get('training.total_epoch', 8)
         print(f"Starting training for {num_epochs} epochs...")
         
         try:
