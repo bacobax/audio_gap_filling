@@ -200,9 +200,8 @@ class MAETrainer(BaseTrainer):
                     print(f"⚠️ Skipping validation sample {i}: empty gap range")
                     continue
                 
-                # Forward pass
-                features, backward_indexes, _ = self.model.encoder(gap_slice, apply_mask=False) # type: ignore
-                predicted, mask = self.model.decoder(features, backward_indexes) # type: ignore
+                # Forward pass with masking on the real gap
+                predicted, mask = self.model(gap_slice, mask_bounds=(gap_start, gap_end))
                 
                 # Compute loss only on gap region
                 gap_region_target = target[:, :, :, gap_start:gap_end]
