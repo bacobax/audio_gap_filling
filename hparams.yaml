@@ -17,4 +17,5 @@ encoder_head: 4
 decoder_layer: 2
 decoder_head: 4
 pretrained_ViT: true
+l1_weight: 0.0
 resume: false

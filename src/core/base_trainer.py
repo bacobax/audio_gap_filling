@@ -17,10 +17,16 @@ except ImportError:
     class SummaryWriter:  # type: ignore
         def __init__(self, *args, **kwargs):
             pass
+
         def add_scalar(self, *args, **kwargs):
             pass
+
         def add_image(self, *args, **kwargs):
             pass
+
+        def add_hparams(self, *args, **kwargs):
+            pass
+
         def close(self):
             pass
 
@@ -168,6 +174,14 @@ class BaseTrainer(ABC):
             if epoch % self.config.get('save_every', 10) == 0:
                 self._save_checkpoint(f'checkpoint_epoch_{epoch}.pt', epoch, train_metrics)
         
+        # Log hyperparameters and final metrics
+        try:
+            hparams = self._prepare_hparams()
+            metrics = {'best_val_loss': self.best_val_loss}
+            self.writer.add_hparams(hparams, metrics)
+        except Exception:
+            pass
+
         return training_history
     
     def _log_metrics(self, train_metrics: Dict[str, float], val_metrics: Dict[str, float], epoch: int) -> None:
@@ -190,6 +204,16 @@ class BaseTrainer(ABC):
             'metrics': metrics,
             'config': self.config
         }, checkpoint_path)
+
+    def _prepare_hparams(self) -> Dict[str, Any]:
+        """Filter configuration values for TensorBoard hparam logging."""
+        hparams: Dict[str, Any] = {}
+        for key, value in self.config.items():
+            if isinstance(value, (int, float, bool)):
+                hparams[key] = value
+            else:
+                hparams[key] = str(value)
+        return hparams
     
     def load_checkpoint(self, checkpoint_path: str) -> int:
         """
