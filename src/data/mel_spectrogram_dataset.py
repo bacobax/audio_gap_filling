@@ -192,7 +192,7 @@ class MelSpectrogramDataset(BaseDataset):
     
     def __len__(self) -> int:
         """Return the number of samples in the dataset."""
-        return min(len(self.valid_starts), 400) if not self.test[0] else len(self.valid_starts)
+        return len(self.valid_starts)
     
     def __getitem__(self, idx: int) -> Union[torch.Tensor, Tuple[torch.Tensor, ...]]:
         """
