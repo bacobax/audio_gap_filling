@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import random
-from typing import Tuple
+from typing import Tuple, Optional
 from einops import repeat
 
 
@@ -44,13 +44,19 @@ class PatchShuffle(nn.Module):
         self.num_rows = num_rows
         self.num_cols = num_cols
     
-    def forward(self, patches: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        """
-        Forward pass for patch shuffling.
-        
+    def forward(
+        self,
+        patches: torch.Tensor,
+        bounds: Optional[torch.Tensor] = None,
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Forward pass for patch shuffling.
+
         Args:
-            patches: Input patches with shape [T, B, C] where T = num_rows * num_cols
-            
+            patches: Input patches with shape ``[T, B, C]`` where ``T = num_rows * num_cols``.
+            bounds: Optional tensor specifying the start and end column (in patch
+                indices) to mask for each sample. Shape should be ``[2, B]``.
+                If ``None``, a random start column is used.
+
         Returns:
             Tuple containing:
                 - Shuffled patches
@@ -70,10 +76,15 @@ class PatchShuffle(nn.Module):
         # Pre-compute a (r, c) grid of flattened indices
         grid = torch.arange(T, device=device).view(r, c)  # shape [r, c]
         
-        for _ in range(B):
-            # Choose random start col
-            start_col = random.randint(0, c - stripe_width)
-            end_col = start_col + stripe_width
+        for b in range(B):
+            if bounds is not None:
+                start_col = int(bounds[0, b].item())
+                end_col = int(bounds[1, b].item())
+                start_col = max(0, min(start_col, c - 1))
+                end_col = max(start_col + 1, min(end_col, c))
+            else:
+                start_col = random.randint(0, c - stripe_width)
+                end_col = start_col + stripe_width
             
             # Visible = columns outside stripe
             visible_cols_left = grid[:, :start_col].flatten()
