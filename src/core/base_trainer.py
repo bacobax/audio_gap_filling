@@ -103,7 +103,7 @@ class BaseTrainer(ABC):
     def _get_default_log_dir(self) -> str:
         """Get the default logging directory."""
         timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-        return os.path.join('runs', 'train', f'training-{timestamp}')
+        return os.path.join('runs', 'train', f'{self.config["config_filename"].split(".")[0]}-{timestamp}')
     
     @abstractmethod
     def _setup_training_components(self) -> None:

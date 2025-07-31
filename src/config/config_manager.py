@@ -29,6 +29,8 @@ class ConfigManager:
         
         if config_path:
             self.load_config(config_path)
+
+        self.config_filename = config_path.split("/")[-1]
     
     def load_config(self, config_path: str) -> Dict[str, Any]:
         """
@@ -188,6 +190,7 @@ class ConfigManager:
             'mask_ratio': self.get('training.mask_ratio', 0.75),
             'patch_size': self.get('model.patch_size', 4),
             'n_mels': self.get('data.n_mels', 80),
+            'config_filename' : self.config_filename,
         }
     
     def get_data_config(self) -> Dict[str, Any]:
