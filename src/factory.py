@@ -178,10 +178,14 @@ class TrainingPipeline:
         # Training dataset
         train_config = self.config_manager.get_data_config()
         self.train_dataset = DatasetFactory.create_dataset('mel_spectrogram', train_config)
-        self.config["image_size"] = (
+
+        # Update image size in both the pipeline config and the ConfigManager
+        image_size = (
             self.config_manager.get('data.n_mels', 80),
             self.train_dataset.get_crop_frames()
         )
+        self.config["image_size"] = image_size
+        self.config_manager.set('model.image_size', image_size)
         # Validation dataset
         val_config = train_config.copy()
         val_config['test'] = (
