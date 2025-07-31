@@ -9,6 +9,8 @@ from .config.config_manager import ConfigManager
 from .models.mae_vit import MAEViT
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
 from .training.mae_trainer import MAETrainer
+import torch.distributed as dist
+import os
 
 
 class ModelFactory:
@@ -250,7 +252,18 @@ class TrainingPipeline:
         
         Returns:
             Training history
+        
         """
+
+
+
+        # Only if dist is not initialized
+        if not dist.is_initialized():
+            os.environ['MASTER_ADDR'] = 'localhost'
+            os.environ['MASTER_PORT'] = '12355'
+            os.environ['WORLD_SIZE'] = '1'
+            os.environ['RANK'] = '0'
+            dist.init_process_group(backend="nccl", init_method="env://", world_size=1, rank=0)
         if self.trainer is None:
             raise RuntimeError("Trainer not setup. Call setup_trainer() first.")
         
