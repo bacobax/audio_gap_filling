@@ -219,3 +219,4 @@ widgetsnbextension
 wrapt==1.17.2
 zipp 
 zstandard==0.23.0
+muon-optimizer @ git+https://github.com/KellerJordan/Muon

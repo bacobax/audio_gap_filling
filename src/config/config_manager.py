@@ -185,6 +185,7 @@ class ConfigManager:
             'warmup_epoch': self.get('training.warmup_epoch', 1),
             'save_every': self.get('training.save_every', 10),
             'resume': self.get('training.resume', False),
+            'use_muon': self.get('training.use_muon', False),
             'log_dir': self.get('paths.log_dir', None),
             'l1_weight': self.get('training.l1_weight', 0.0),
             'mask_ratio': self.get('training.mask_ratio', 0.75),
