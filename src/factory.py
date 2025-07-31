@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from pprint import pprint
 from .config.config_manager import ConfigManager
 from .models.mae_vit import MAEViT
-from .models.unet_cqt_oct_with_projattention_adaLN_2 import UNet
+from .models.unet_cqt_oct_with_projattention_adaLN_2 import Unet_CQT_oct_with_attention
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
 from .data.audio_dataset import AudioFolderDataset
 from .training.mae_trainer import MAETrainer
