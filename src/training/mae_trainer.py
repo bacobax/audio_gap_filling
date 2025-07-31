@@ -79,12 +79,31 @@ class MAETrainer(BaseTrainer):
         # Scale learning rate by batch size
         scaled_lr = base_lr * self.batch_size / 256
         
-        self.optimizer = optim.AdamW(
-            self.model.parameters(),
-            lr=scaled_lr,
-            betas=(0.9, 0.95),
-            weight_decay=weight_decay
-        )
+        if self.config.get('use_muon', False):
+            try:
+                from muon import MuonWithAuxAdam
+                hidden_weights = [p for p in self.model.parameters() if p.ndim >= 2]
+                other_params = [p for p in self.model.parameters() if p.ndim < 2]
+                param_groups = [
+                    dict(params=hidden_weights, use_muon=True, lr=scaled_lr, weight_decay=weight_decay),
+                    dict(params=other_params, use_muon=False, lr=scaled_lr, betas=(0.9, 0.95), weight_decay=weight_decay),
+                ]
+                self.optimizer = MuonWithAuxAdam(param_groups)
+            except Exception as e:
+                print(f"Failed to initialize Muon optimizer: {e}. Falling back to AdamW.")
+                self.optimizer = optim.AdamW(
+                    self.model.parameters(),
+                    lr=scaled_lr,
+                    betas=(0.9, 0.95),
+                    weight_decay=weight_decay
+                )
+        else:
+            self.optimizer = optim.AdamW(
+                self.model.parameters(),
+                lr=scaled_lr,
+                betas=(0.9, 0.95),
+                weight_decay=weight_decay
+            )
         
         # Setup learning rate scheduler
         total_epoch = self.config.get('total_epoch', 2000)
