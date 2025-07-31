@@ -6,6 +6,7 @@ This script loads configuration, sets up the model, data, and trainer, and start
 """
 import sys
 import os
+import argparse
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -13,7 +14,20 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from src.factory import TrainingPipeline
 
 def main():
-    config_path = "hparams.yaml"
+    parser = argparse.ArgumentParser(description="Train MAE model")
+    parser.add_argument(
+        "--config",
+        default="default",
+        help="Name of the configuration file (without .yaml) or path to a YAML file"
+    )
+    args = parser.parse_args()
+
+    config_name = args.config
+    if config_name.endswith('.yaml'):
+        config_path = config_name
+    else:
+        config_path = os.path.join('configs', f"{config_name}.yaml")
+
     if not os.path.exists(config_path):
         print(f"Configuration file not found: {config_path}")
         return

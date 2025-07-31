@@ -44,12 +44,13 @@ class ConfigManager:
             raise FileNotFoundError(f"Configuration file not found: {config_path}")
         
         with open(config_path, 'r') as file:
-            loaded_config = yaml.safe_load(file)
-        
+            loaded_config = yaml.safe_load(file) or {}
+
         # Merge with defaults
         self.config = self._merge_configs(self.default_config, loaded_config)
-        if self.config["pretrained_ViT"]:
-            self.config["patch_size"] = 16
+        # Adjust patch size if using pretrained ViT
+        if self.get("model.pretrained_ViT", False):
+            self.set("model.patch_size", 16)
         return self.config
     
     def _merge_configs(self, default: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
@@ -159,41 +160,44 @@ class ConfigManager:
     def get_model_config(self) -> Dict[str, Any]:
         """Get model-specific configuration."""
         return {
-            'image_size': self.get('image_size', (80, 380)),
-            'patch_size': self.get('patch_size', 4),
-            'emb_dim': self.get('emb_dim', 256),
-            'encoder_layer': self.get('encoder_layer', 32),
-            'encoder_head': self.get('encoder_head', 16),
-            'decoder_layer': self.get('decoder_layer', 10),
-            'decoder_head': self.get('decoder_head', 16),
-            'mask_ratio': self.get('mask_ratio', 0.75),
-            'pretrained_ViT': self.get('pretrained_ViT', False)
+            'image_size': self.get('model.image_size', (80, 380)),
+            'patch_size': self.get('model.patch_size', 4),
+            'emb_dim': self.get('model.emb_dim', 256),
+            'encoder_layer': self.get('model.encoder_layer', 32),
+            'encoder_head': self.get('model.encoder_head', 16),
+            'decoder_layer': self.get('model.decoder_layer', 10),
+            'decoder_head': self.get('model.decoder_head', 16),
+            'mask_ratio': self.get('training.mask_ratio', 0.75),
+            'pretrained_ViT': self.get('model.pretrained_ViT', False)
         }
     
     def get_training_config(self) -> Dict[str, Any]:
         """Get training-specific configuration."""
         return {
-            'seed': self.get('seed', 42),
-            'batch_size': self.get('batch_size', 4),
-            'max_device_batch_size': self.get('max_device_batch_size', 512),
-            'base_learning_rate': self.get('base_learning_rate', 0.00015),
-            'weight_decay': self.get('weight_decay', 0.05),
-            'total_epoch': self.get('total_epoch', 8),
-            'warmup_epoch': self.get('warmup_epoch', 1),
-            'save_every': self.get('save_every', 10),
-            'resume' : self.get('resume', False),
-            'log_dir' : self.get('log_dir', None),
-            'l1_weight': self.get('l1_weight', 0.0),
+            'seed': self.get('training.seed', 42),
+            'batch_size': self.get('training.batch_size', 4),
+            'max_device_batch_size': self.get('training.max_device_batch_size', 512),
+            'base_learning_rate': self.get('training.base_learning_rate', 0.00015),
+            'weight_decay': self.get('training.weight_decay', 0.05),
+            'total_epoch': self.get('training.total_epoch', 8),
+            'warmup_epoch': self.get('training.warmup_epoch', 1),
+            'save_every': self.get('training.save_every', 10),
+            'resume': self.get('training.resume', False),
+            'log_dir': self.get('paths.log_dir', None),
+            'l1_weight': self.get('training.l1_weight', 0.0),
+            'mask_ratio': self.get('training.mask_ratio', 0.75),
+            'patch_size': self.get('model.patch_size', 4),
+            'n_mels': self.get('data.n_mels', 80),
         }
     
     def get_data_config(self) -> Dict[str, Any]:
         """Get data-specific configuration."""
         return {
-            'flac_path': self.get('audio_filename', 'gapped_audio.wav'),
-            'test_audio_filename': self.get('test_audio_filename', 'wav_test.wav'),
-            'n_mels': self.get('n_mels', 80),
-            'gap_percentage': self.get('mask_ratio', 0.75),
-            'n_fft': self.get('n_fft', 1024),
-            'hop_length': self.get('hop_length', 256),
-            'patch_size': self.get('patch_size', 16),
-        } 
+            'flac_path': self.get('paths.audio_filename', 'gapped_audio.wav'),
+            'test_audio_filename': self.get('paths.test_audio_filename', 'wav_test.wav'),
+            'n_mels': self.get('data.n_mels', 80),
+            'gap_percentage': self.get('training.mask_ratio', 0.75),
+            'n_fft': self.get('data.n_fft', 1024),
+            'hop_length': self.get('data.hop_length', 256),
+            'patch_size': self.get('model.patch_size', self.get('data.patch_size', 16)),
+        }

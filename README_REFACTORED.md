@@ -80,7 +80,7 @@ The simplest way to use the framework is through the high-level training pipelin
 from src.factory import TrainingPipeline
 
 # Create and run training pipeline
-pipeline = TrainingPipeline("hparams.yaml")
+pipeline = TrainingPipeline("configs/default.yaml")
 history = pipeline.run()
 ```
 
@@ -96,7 +96,7 @@ from src.training import MAETrainer
 from torch.utils.data import DataLoader
 
 # Load configuration
-config_manager = ConfigManager("hparams.yaml")
+config_manager = ConfigManager("configs/default.yaml")
 model_config = config_manager.get_model_config()
 data_config = config_manager.get_data_config()
 
@@ -127,35 +127,39 @@ history = trainer.train(num_epochs=10)
 
 ## ⚙️ Configuration
 
-The framework uses YAML configuration files. Here's an example `hparams.yaml`:
+The framework uses YAML configuration files. Here's an example `configs/default.yaml`:
 
 ```yaml
 # Training configuration
-seed: 42
-batch_size: 4
-max_device_batch_size: 512
-base_learning_rate: 0.00015
-weight_decay: 0.05
-total_epoch: 8
-warmup_epoch: 1
-save_every: 10
+training:
+  seed: 42
+  batch_size: 4
+  max_device_batch_size: 512
+  base_learning_rate: 0.00015
+  weight_decay: 0.05
+  total_epoch: 8
+  warmup_epoch: 1
+  save_every: 10
 
 # Model configuration
-image_size: [80, 380]
-patch_size: 4
-emb_dim: 256
-encoder_layer: 32
-encoder_head: 16
-decoder_layer: 10
-decoder_head: 16
-mask_ratio: 0.75
+model:
+  patch_size: 4
+  emb_dim: 256
+  encoder_layer: 32
+  encoder_head: 16
+  decoder_layer: 10
+  decoder_head: 16
+  pretrained_ViT: false
 
 # Data configuration
-audio_filename: gapped_audio.wav
-test_audio_filename: wav_test.wav
-n_mels: 80
-n_fft: 1024
-hop_length: 256
+paths:
+  audio_filename: gapped_audio.wav
+  test_audio_filename: wav_test.wav
+data:
+  n_mels: 80
+  n_fft: 1024
+  hop_length: 256
+  patch_size: 4
 ```
 
 ## 🔧 Adding New Components

@@ -1,0 +1,27 @@
+model:
+  emb_dim: 256
+  encoder_layer: 1
+  encoder_head: 2
+  decoder_layer: 1
+  decoder_head: 2
+  pretrained_ViT: false
+  patch_size: 4
+training:
+  seed: 0
+  batch_size: 2
+  max_device_batch_size: 2
+  base_learning_rate: 0.0001
+  weight_decay: 0.05
+  mask_ratio: 0.50
+  total_epoch: 2
+  warmup_epoch: 1
+  l1_weight: 0.0
+  resume: false
+paths:
+  model_path: vit-t-mae.pt
+  audio_filename: assets/gapped_audio.wav
+  test_audio_filename: assets/wav_test.wav
+  log_dir: runs
+
+data:
+  n_mels: 80
