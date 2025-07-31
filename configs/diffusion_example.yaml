@@ -1,0 +1,31 @@
+model:
+  type: diffusion_unet
+training:
+  trainer_type: diffusion
+  batch_size: 2
+  total_epoch: 1
+  lr: 0.0002
+  use_grad_clip: true
+  max_grad_norm: 1.0
+
+diff_params:
+  sigma_min: 0.002
+  sigma_max: 80
+  P_mean: -1.2
+  P_std: 1.2
+  ro: 7
+  ro_train: 1
+  sigma_data: 0.5
+  Schurn: 0
+  Stmin: 0
+  Stmax: 999
+  Snoise: 1
+  aweighting:
+    use_aweighting: false
+    ntaps: 101
+
+data:
+  dataset_type: audio_folder
+  folder: assets
+  sample_rate: 16000
+  segment_length: 65536

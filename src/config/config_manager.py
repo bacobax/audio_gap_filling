@@ -161,47 +161,23 @@ class ConfigManager:
     
     def get_model_config(self) -> Dict[str, Any]:
         """Get model-specific configuration."""
-        return {
-            'image_size': self.get('model.image_size', (80, 380)),
-            'patch_size': self.get('model.patch_size', 4),
-            'emb_dim': self.get('model.emb_dim', 256),
-            'encoder_layer': self.get('model.encoder_layer', 32),
-            'encoder_head': self.get('model.encoder_head', 16),
-            'decoder_layer': self.get('model.decoder_layer', 10),
-            'decoder_head': self.get('model.decoder_head', 16),
-            'mask_ratio': self.get('training.mask_ratio', 0.75),
-            'pretrained_ViT': self.get('model.pretrained_ViT', False)
-        }
+        cfg = dict(self.config.get('model', {}))
+        cfg.setdefault('type', 'mae_vit')
+        cfg.setdefault('image_size', (80, 380))
+        cfg.setdefault('patch_size', 4)
+        return cfg
     
     def get_training_config(self) -> Dict[str, Any]:
         """Get training-specific configuration."""
-        return {
-            'seed': self.get('training.seed', 42),
-            'batch_size': self.get('training.batch_size', 4),
-            'max_device_batch_size': self.get('training.max_device_batch_size', 512),
-            'base_learning_rate': self.get('training.base_learning_rate', 0.00015),
-            'weight_decay': self.get('training.weight_decay', 0.05),
-            'total_epoch': self.get('training.total_epoch', 8),
-            'warmup_epoch': self.get('training.warmup_epoch', 1),
-            'save_every': self.get('training.save_every', 10),
-            'resume': self.get('training.resume', False),
-            'use_muon': self.get('training.use_muon', False),
-            'log_dir': self.get('paths.log_dir', None),
-            'l1_weight': self.get('training.l1_weight', 0.0),
-            'mask_ratio': self.get('training.mask_ratio', 0.75),
-            'patch_size': self.get('model.patch_size', 4),
-            'n_mels': self.get('data.n_mels', 80),
-            'config_filename' : self.config_filename,
-        }
+        cfg = dict(self.config.get('training', {}))
+        cfg.setdefault('batch_size', 4)
+        cfg.setdefault('total_epoch', 1)
+        cfg.setdefault('trainer_type', 'mae')
+        cfg['config_filename'] = self.config_filename
+        return cfg
     
     def get_data_config(self) -> Dict[str, Any]:
         """Get data-specific configuration."""
-        return {
-            'flac_path': self.get('paths.audio_filename', 'gapped_audio.wav'),
-            'test_audio_filename': self.get('paths.test_audio_filename', 'wav_test.wav'),
-            'n_mels': self.get('data.n_mels', 80),
-            'gap_percentage': self.get('training.mask_ratio', 0.75),
-            'n_fft': self.get('data.n_fft', 1024),
-            'hop_length': self.get('data.hop_length', 256),
-            'patch_size': self.get('model.patch_size', self.get('data.patch_size', 16)),
-        }
+        cfg = dict(self.config.get('data', {}))
+        cfg.setdefault('dataset_type', 'mel_spectrogram')
+        return cfg
