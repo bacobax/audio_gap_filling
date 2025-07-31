@@ -11,6 +11,8 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 from tqdm import tqdm
 import os
+from muon import MuonWithAuxAdam
+
 from ..core.base_trainer import BaseTrainer
 from ..utils.math_utils import MCD
 
@@ -81,7 +83,6 @@ class MAETrainer(BaseTrainer):
         
         if self.config.get('use_muon', False):
             try:
-                from muon import MuonWithAuxAdam
                 hidden_weights = [p for p in self.model.parameters() if p.ndim >= 2]
                 other_params = [p for p in self.model.parameters() if p.ndim < 2]
                 param_groups = [
@@ -89,6 +90,7 @@ class MAETrainer(BaseTrainer):
                     dict(params=other_params, use_muon=False, lr=scaled_lr, betas=(0.9, 0.95), weight_decay=weight_decay),
                 ]
                 self.optimizer = MuonWithAuxAdam(param_groups)
+                print("muon setted")
             except Exception as e:
                 print(f"Failed to initialize Muon optimizer: {e}. Falling back to AdamW.")
                 self.optimizer = optim.AdamW(

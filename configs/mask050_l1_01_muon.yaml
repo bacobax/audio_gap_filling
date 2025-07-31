@@ -16,7 +16,7 @@ training:
   total_epoch: 15
   warmup_epoch: 1
   l1_weight: 0.1
-  use_muon: false
+  use_muon: true
   resume: false
 paths:
   model_path: vit-t-mae.pt
