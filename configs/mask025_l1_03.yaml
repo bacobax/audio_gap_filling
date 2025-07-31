@@ -21,7 +21,6 @@ paths:
   model_path: vit-t-mae.pt
   audio_filename: assets/gapped_audio.wav
   test_audio_filename: assets/wav_test.wav
-  log_dir: runs
   
 # Data settings
 data:
