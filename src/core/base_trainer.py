@@ -148,7 +148,9 @@ class BaseTrainer(ABC):
             'learning_rates': []
         }
         
-        for epoch in range(num_epochs):
+        start_epoch = self.current_epoch + 1 if self.config.get('resume', False) else 0
+
+        for epoch in range(start_epoch, num_epochs):
             self.current_epoch = epoch
             
             # Training phase
