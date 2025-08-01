@@ -60,6 +60,9 @@ class DatasetFactory:
             return MelSpectrogramDataset(config)
         elif dataset_type == 'audio_folder':
             return AudioFolderDataset(config)
+        elif dataset_type == 'gap_waveform':
+            from .data.gap_waveform_dataset import GapWaveformDataset
+            return GapWaveformDataset(config)
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
     

@@ -75,7 +75,11 @@ diff_params:
     ntaps: 101
 
 data:
-  dataset_type: audio_folder
-  folder: assets
+  dataset_type: gap_waveform
+  flac_path: assets/gapped_audio.wav
+  test_audio_filename: assets/wav_test.wav
   sample_rate: 16000
-  segment_length: 65536
+  gap_percentage: 0.75
+  n_fft: 1024
+  hop_length: 256
+  n_mels: 80
