@@ -11,12 +11,7 @@ torch.pi = torch.acos(torch.zeros(1)).item() * 2 # which is 3.1415927410125732
 from cqt_nsgt_pytorch import CQT_nsgt
 # Patch the nsgfwin function used inside cqt_nsgt_pytorch to avoid a numpy
 # casting error when clipping integer arrays.
-import cqt_nsgt_pytorch.CQT_nsgt as cqt_nsgt_module
-import cqt_nsgt_pytorch.nsgfwin as nsgfwin_module
-from utils.patched_nsgfwin import nsgfwin as patched_nsgfwin
 
-cqt_nsgt_module.nsgfwin = patched_nsgfwin
-nsgfwin_module.nsgfwin = patched_nsgfwin
 import torchaudio
 import einops
 import math
@@ -648,14 +643,16 @@ class Unet_CQT_oct_with_attention(nn.Module):
         self.device=device
         self.bins_per_oct=self.args.network.cqt.bins_per_oct
         self.num_octs=self.args.network.cqt.num_octs
-        #self.CQTransform=CQT_nsgt(self.args.network.cqt.num_octs,self.args.network.cqt.bins_per_oct, "oct",  self.args.exp.sample_rate, self.args.exp.audio_len, device=self.device)
-        if self.args.network.cqt.window=="kaiser":
-            win=("kaiser",self.args.network.cqt.beta)
-        else:
-            win=self.args.network.cqt.window
 
-        self.CQTransform=CQT_nsgt(self.args.network.cqt.num_octs, self.args.network.cqt.bins_per_oct, mode="oct",window=win,fs=self.args.exp.sample_rate, audio_len=self.args.exp.audio_len, dtype=torch.float32, device=self.device)
-
+        
+        self.CQTransform=CQT_nsgt(
+            numocts=self.args.network.cqt.num_octs,
+            binsoct=self.args.network.cqt.bins_per_oct, 
+            mode="oct",  
+            fs=self.args.exp.sample_rate, 
+            audio_len=self.args.exp.audio_len, 
+            device=self.device
+        )
 
         self.f_dim=self.fbins #assuming we have thrown away the DC component and the Nyquist frequency
 

@@ -35,11 +35,58 @@ EXTERNALS : firwin
 """
 
 import numpy as np
-from .util import hannwin, blackharr, kaiserwin
+import torch
 from math import ceil
 from warnings import warn
 from itertools import chain
-#import torch
+
+
+def hannwin(l, device="cpu"):
+    r = torch.arange(l, dtype=float, device=torch.device(device))
+    r *= np.pi * 2.0 / l
+    r = torch.cos(r)
+    r += 1.0
+    r *= 0.5
+    return r
+
+
+def kaiserwin(l, beta, device="cpu"):
+    beta = torch.tensor(beta, dtype=float, device=torch.device(device))
+    r = torch.arange(l, dtype=float, device=torch.device(device))
+    r *= np.pi * 2.0 / l
+    r = torch.cos(r)
+    r += 1.0
+    r *= 0.5
+    r = torch.sqrt(r)
+    r = torch.i0(beta * torch.sqrt(1.0 - r ** 2)) / (2.0 * torch.i0(beta))
+    r = torch.roll(r, l // 2)
+    return r
+
+
+def blackharr(n, l=None, mod=True, device="cpu"):
+    if l is None:
+        l = n
+    nn = (n // 2) * 2
+    k = torch.arange(n, device=torch.device(device))
+    if not mod:
+        bh = (
+            0.35875
+            - 0.48829 * torch.cos(k * (2 * torch.pi / nn))
+            + 0.14128 * torch.cos(k * (4 * torch.pi / nn))
+            - 0.01168 * torch.cos(k * (6 * torch.pi / nn))
+        )
+    else:
+        bh = (
+            0.35872
+            - 0.48832 * torch.cos(k * (2 * torch.pi / nn))
+            + 0.14128 * torch.cos(k * (4 * torch.pi / nn))
+            - 0.01168 * torch.cos(k * (6 * torch.pi / nn))
+        )
+    bh = torch.hstack((bh, torch.zeros(l - n, dtype=bh.dtype, device=torch.device(device))))
+    bh = torch.hstack((bh[-n // 2 :], bh[: -n // 2]))
+    return bh
+
+
 
 
 def nsgfwin(f, q, sr, Ls,  min_win=4, Qvar=1, dowarn=True, dtype=np.float64, device="cpu", window="hann"):
@@ -95,7 +142,7 @@ def nsgfwin(f, q, sr, Ls,  min_win=4, Qvar=1, dowarn=True, dtype=np.float64, dev
     # The original implementation used ``np.clip`` with ``out=M`` which fails
     # when ``M`` has an integer dtype. Using ``np.maximum`` avoids the casting
     # error by keeping the array type intact.
-    M = np.maximum(M, min_win)
+    np.maximum(M, min_win, out=M)
 
     
     if window=="hann":

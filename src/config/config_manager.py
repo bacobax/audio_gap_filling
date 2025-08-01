@@ -209,6 +209,9 @@ class ConfigManager:
             'trainer_type': self.get('training.trainer_type', 'mae'),
             'config_filename': self.config_filename,
         }
+        model_type = self.get('model.type', 'mae_vit')
+        if model_type == 'diffusion_unet':
+            cfg["diff_params"] = self.get("diff_params")
         return cfg
     
     def get_data_config(self) -> Dict[str, Any]:

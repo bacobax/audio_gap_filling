@@ -1,7 +1,9 @@
+from pprint import pprint
 import random
 from types import SimpleNamespace
 from typing import Any, Dict, Optional
 
+from easydict import EasyDict
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -25,7 +27,9 @@ class DiffusionTrainer(BaseTrainer):
 
         diff_params_cfg = self.config.get("diff_params", {})
         exp_cfg = {"sample_rate": self.config.get("sample_rate", 16000)}
-        args = SimpleNamespace(diff_params=SimpleNamespace(**diff_params_cfg), exp=SimpleNamespace(**exp_cfg))
+        args = EasyDict(diff_params=EasyDict(**diff_params_cfg), exp=EasyDict(**exp_cfg))
+        print("DIFF TRAINER ARGS")
+        pprint(args)
         self.edm = EDM(args)
 
         self.gap_min = self.config.get("gap_min_size", 2048)
