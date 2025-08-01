@@ -3,7 +3,7 @@
 ## List of YAML configuration files to use for training.
 # Modify the CONFIGS array below to specify which config files to run.
 CONFIGS=(
-    "mask025_l1_03" 
+    "mask075_l1_03" 
 )
 
 for config in "${CONFIGS[@]}"; do

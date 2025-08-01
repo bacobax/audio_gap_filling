@@ -1,8 +1,10 @@
+from pprint import pprint
 import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
 import math as m
 import torch
+from easydict import EasyDict
 #import torchaudio
 torch.pi = torch.acos(torch.zeros(1)).item() * 2 # which is 3.1415927410125732
 
@@ -615,7 +617,10 @@ class Unet_CQT_oct_with_attention(nn.Module):
             device: torch device ("cuda" or "cpu")
         """
         super(Unet_CQT_oct_with_attention, self).__init__()
+        args=EasyDict(args)
         self.args=args
+
+        pprint(self.args)
         self.depth=args.network.cqt.num_octs
         #self.depth=args.network.inner_depth+self.args.network.cqt.num_octs
         #assert self.depth==args.network.depth, "The depth of the network should be the sum of the inner depth and the number of octaves" #make sure we are aware of the depth of the network
