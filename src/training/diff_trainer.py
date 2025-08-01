@@ -43,6 +43,29 @@ class DiffusionTrainer(BaseTrainer):
         self.scheduler = None
         self.criterion = nn.MSELoss()
 
+    def _edm_inpaint(self, context: torch.Tensor, mask: torch.Tensor, steps: int = 30) -> torch.Tensor:
+        """Sample the gap region using the EDM sampler."""
+        device = context.device
+        t = self.edm.create_schedule(steps).to(device)
+        x = context + self.edm.sample_prior(context.shape, t[0])
+        for i in range(steps - 1):
+            t_i = t[i]
+            t_next = t[i + 1]
+            gamma = self.edm.get_gamma(t_i.unsqueeze(0)).to(device)
+            if gamma.item() > 0:
+                x = x + self.edm.sample_prior(x.shape, gamma * t_i)
+            den = self.edm.denoiser(x, self.model, t_i, context=context, mask=mask)
+            d = (x - den) / t_i
+            x = x + (t_next - t_i) * d
+        x = self.edm.denoiser(x, self.model, t[-1], context=context, mask=mask)
+        return context * mask + x * (1 - mask)
+
+    def _waveform_to_image(self, waveform: torch.Tensor, n_fft: int = 256, hop: int = 64) -> torch.Tensor:
+        spec = torch.stft(waveform, n_fft=n_fft, hop_length=hop, return_complex=True)
+        mag = torch.log1p(spec.abs())
+        mag = mag / (mag.max() + 1e-8)
+        return mag.unsqueeze(0)
+
     def _create_noisy_input(self, audio: torch.Tensor):
         B, T = audio.shape
         mask = torch.ones_like(audio)
@@ -82,10 +105,15 @@ class DiffusionTrainer(BaseTrainer):
         self.model.eval()
         total_loss = 0.0
         with torch.no_grad():
-            for audio in self.val_loader:
+            for i, audio in enumerate(self.val_loader):
                 audio = audio.to(self.device)
                 audio_noisy, context, mask = self._create_noisy_input(audio)
                 error, _ = self.edm.loss_fn(self.model, audio_noisy, mask=mask, context=context)
                 total_loss += error.mean().item()
+
+                if i == 0:
+                    sampled = self._edm_inpaint(context, mask)
+                    img = self._waveform_to_image(sampled[0].cpu())
+                    self.writer.add_image("val/sample", img, self.current_epoch)
         avg = total_loss / max(1, len(self.val_loader))
         return {"loss": avg}
