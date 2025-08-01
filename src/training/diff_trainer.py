@@ -60,11 +60,35 @@ class DiffusionTrainer(BaseTrainer):
         x = self.edm.denoiser(x, self.model, t[-1], context=context, mask=mask)
         return context * mask + x * (1 - mask)
 
-    def _waveform_to_image(self, waveform: torch.Tensor, n_fft: int = 256, hop: int = 64) -> torch.Tensor:
-        spec = torch.stft(waveform, n_fft=n_fft, hop_length=hop, return_complex=True)
-        mag = torch.log1p(spec.abs())
-        mag = mag / (mag.max() + 1e-8)
-        return mag.unsqueeze(0)
+    def _waveform_to_image(self, waveform: torch.Tensor) -> torch.Tensor:
+        """Convert a raw waveform to an RGB image tensor by plotting it with matplotlib.
+
+        The returned tensor has shape (3, H, W) in the [0, 1] range, so it can be
+        logged directly via ``self.writer.add_image``.
+        """
+        import io
+        import matplotlib.pyplot as plt
+        from PIL import Image
+        import torchvision.transforms as transforms
+
+        # Ensure NumPy array on CPU
+        wav_np = waveform.detach().cpu().numpy()
+
+        # Plot the waveform
+        fig = plt.figure(figsize=(10, 2))
+        plt.plot(wav_np)
+        plt.axis("off")
+
+        # Save the figure to an in-memory buffer
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", bbox_inches="tight", pad_inches=0)
+        plt.close(fig)
+        buf.seek(0)
+
+        # Convert the PNG buffer to a tensor
+        img = Image.open(buf).convert("RGB")
+        img_tensor = transforms.ToTensor()(img)  # (3, H, W), float32 in [0, 1]
+        return img_tensor
 
     def _create_noisy_input(self, audio: torch.Tensor):
         B, T = audio.shape
