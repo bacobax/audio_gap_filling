@@ -786,8 +786,16 @@ class Unet_CQT_oct_with_attention(nn.Module):
         X_bottleneck = X_bottleneck.permute(0, 2, 1)
         X_ctx_bottleneck = X_ctx_bottleneck.permute(0, 2, 1)
         # Extract gap and context indices
-        gap_mask = (mask == 0)
-        context_mask = (mask == 1)
+        # ``mask`` is defined at the original audio sampling rate (T samples).
+        # After the CQT transform the temporal dimension shrinks to
+        # ``X_bottleneck.shape[1]``.  Directly using the high resolution mask
+        # would therefore yield indices out of range.  We resample it to match
+        # the bottleneck resolution via nearest neighbour interpolation.
+        mask_ds = F.interpolate(mask.unsqueeze(1).float(),
+                                size=X_bottleneck.shape[1],
+                                mode="nearest").squeeze(1)
+        gap_mask = mask_ds == 0
+        context_mask = mask_ds == 1
         # For each sample, select gap/context time steps
         gap_feats = []
         ctx_feats = []
