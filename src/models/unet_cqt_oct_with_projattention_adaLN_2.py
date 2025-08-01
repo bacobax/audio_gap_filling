@@ -9,6 +9,14 @@ from easydict import EasyDict
 torch.pi = torch.acos(torch.zeros(1)).item() * 2 # which is 3.1415927410125732
 
 from cqt_nsgt_pytorch import CQT_nsgt
+# Patch the nsgfwin function used inside cqt_nsgt_pytorch to avoid a numpy
+# casting error when clipping integer arrays.
+import cqt_nsgt_pytorch.CQT_nsgt as cqt_nsgt_module
+import cqt_nsgt_pytorch.nsgfwin as nsgfwin_module
+from utils.patched_nsgfwin import nsgfwin as patched_nsgfwin
+
+cqt_nsgt_module.nsgfwin = patched_nsgfwin
+nsgfwin_module.nsgfwin = patched_nsgfwin
 import torchaudio
 import einops
 import math
