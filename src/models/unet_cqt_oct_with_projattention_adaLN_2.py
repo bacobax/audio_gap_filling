@@ -610,355 +610,298 @@ class UpDownResample(nn.Module):
 
 class Unet_CQT_oct_with_attention(nn.Module):
     """
-        Main U-Net model based on the CQT, modified for inpainting with cross-attention.
-        The model receives noisy audio with a gap, and the context audio. The gap region attends to the context encoding via cross-attention at the bottleneck.
+    U-Net with octave CQT encoder/decoder and a cross-attention bottleneck
+    for audio in-painting.  All tensor shapes are documented inline.
     """
     def __init__(self, args, device):
-        """
-        Args:
-            args (dictionary): hydra dictionary
-            device: torch device ("cuda" or "cpu")
-        """
-        super(Unet_CQT_oct_with_attention, self).__init__()
-        args=EasyDict(args)
-        self.args=args
+        super().__init__()
+        args = EasyDict(args)
+        self.args   = args
+        self.device = device
 
-        pprint(self.args)
-        self.depth=args.network.cqt.num_octs
-        #self.depth=args.network.inner_depth+self.args.network.cqt.num_octs
-        #assert self.depth==args.network.depth, "The depth of the network should be the sum of the inner depth and the number of octaves" #make sure we are aware of the depth of the network
+        # ---  hyper-params ---------------------------------------------------
+        self.emb_dim     = args.network.emb_dim
+        self.bins_per_oct= args.network.cqt.bins_per_oct
+        self.num_octs    = args.network.cqt.num_octs
+        self.fbins       = self.bins_per_oct * self.num_octs
 
-        init = dict(init_mode='kaiming_uniform', init_weight=np.sqrt(1/3)) #same as ADM, according to edm implementation
-        init_zero = dict(init_mode='kaiming_uniform', init_weight=1e-7) #I think it is safer to initialize the last layer with a small weight, rather than zero. Breaking symmetry and all that. 
+        # ------------ utilities ---------------------------------------------
+        init      = dict(init_mode='kaiming_uniform', init_weight=np.sqrt(1/3))
+        init_zero = dict(init_mode='kaiming_uniform', init_weight=1e-7)
 
+        # time-step embedding
+        self.embedding = RFF_MLP_Block(emb_dim=self.emb_dim, init=init)
 
-
-        self.emb_dim=args.network.emb_dim
-        self.embedding = RFF_MLP_Block(emb_dim=args.network.emb_dim, init=init)
-        self.use_norm=args.network.use_norm
-
-        #fmax=self.args.exp.sample_rate/2
-        #self.fmin=fmax/(2**self.args.cqt.numocts)
-        self.fbins=int(self.args.network.cqt.bins_per_oct*self.args.network.cqt.num_octs) 
-        self.device=device
-        self.bins_per_oct=self.args.network.cqt.bins_per_oct
-        self.num_octs=self.args.network.cqt.num_octs
-
-        
-        self.CQTransform=CQT_nsgt(
-            numocts=self.args.network.cqt.num_octs,
-            binsoct=self.args.network.cqt.bins_per_oct, 
-            mode="oct",  
-            fs=self.args.exp.sample_rate, 
-            audio_len=self.args.exp.audio_len, 
-            device=self.device
+        # CQT
+        self.CQTransform = CQT_nsgt(
+            numocts   = self.num_octs,
+            binsoct   = self.bins_per_oct,
+            mode      = "oct",
+            fs        = self.args.exp.sample_rate,
+            audio_len = self.args.exp.audio_len,
+            device    = self.device,
         )
 
-        self.f_dim=self.fbins #assuming we have thrown away the DC component and the Nyquist frequency
-
-        self.use_fencoding=self.args.network.use_fencoding
+        # optional frequency positional encoding for each octave
+        self.use_fencoding = args.network.use_fencoding
         if self.use_fencoding:
-            N_freq_encoding=32
-    
-            self.freq_encodings=nn.ModuleList([])
-            for i in range(self.num_octs):
-                self.freq_encodings.append(AddFreqEncodingRFF(self.bins_per_oct,N_freq_encoding))
-            Nin=2*N_freq_encoding+2
+            N_freq_encoding = 32
+            self.freq_encodings = nn.ModuleList([
+                AddFreqEncodingRFF(self.bins_per_oct, N_freq_encoding)
+                for _ in range(self.num_octs)
+            ])
+            Nin = 2 * N_freq_encoding + 2
         else:
-            Nin=2
+            Nin = 2  # real+imag channels only
 
-        #Encoder
-        self.Ns= self.args.network.Ns
-        self.Ss= self.args.network.Ss
+        # ---------------- encoder / decoder parameter lists ------------------
+        self.Ns          = args.network.Ns          # channels per octave
+        self.num_dils    = args.network.num_dils    # dilations per octave
+        self.attn_layers = args.network.attention_layers
+        self.attn_dict   = args.network.attention_dict
+        self.use_norm    = args.network.use_norm
 
-        self.num_dils= self.args.network.num_dils #intuition: less dilations for the first layers and more for the deeper layers
-        #self.inner_num_dils=self.args.network.inner_num_dils
-        
-        self.attention_dict=self.args.network.attention_dict
-        #self.attention_Ns=self.args.network.attention_Ns
+        self.downs      = nn.ModuleList()
+        self.middle     = nn.ModuleList()
+        self.ups        = nn.ModuleList()
 
-        self.downsamplerT=UpDownResample(down=True, mode_resample="T")
-        #self.downsamplerF=UpDownResample(down=True, mode_resample="F")
-        self.upsamplerT=UpDownResample(up=True, mode_resample="T")
-        #self.upsamplerF=UpDownResample(up=True, mode_resample="F")
+        self.downsamplerT = UpDownResample(down=True,  mode_resample="T")
+        self.upsamplerT   = UpDownResample(up=True,    mode_resample="T")
 
-        self.downs=nn.ModuleList([])
-        self.middle=nn.ModuleList([])
-        self.ups=nn.ModuleList([])
-
-        self.attention_layers=self.args.network.attention_layers
-        #sth like [0,0,0,0,0,0,1,1]
-        
+        # ---------- down path ------------------------------------------------
         for i in range(self.num_octs):
-            if i==0:
-                dim_in=self.Ns[i]
-                dim_out=self.Ns[i]
-            else:
-                dim_in=self.Ns[i-1]
-                dim_out=self.Ns[i]
-            if self.attention_layers[i]:
-                print("Attention layer at (down) octave {}".format(i))
-                attn_dict=self.attention_dict
-                #attn_dict.N=self.attention_Ns[i]
-                #assert attn_dict.N > 0
-            else:
-                attn_dict=None
+            dim_in  = self.Ns[i-1] if i else self.Ns[i]
+            dim_out = self.Ns[i]
+            attn    = self.attn_dict if self.attn_layers[i] else None
 
-            self.downs.append(
-                               nn.ModuleList([
-                                        ResnetBlock(Nin, dim_in, self.use_norm,num_dils=1, bias=False, kernel_size=(1,1), emb_dim=self.emb_dim, init=init, init_zero=init_zero),
-                                        Conv2d(2, dim_out, kernel=(5,3), bias=False, **init),
-                                        ResnetBlock(dim_in, dim_out, self.use_norm,num_dils=self.num_dils[i], bias=False , attention_dict=attn_dict, emb_dim=self.emb_dim, init=init, init_zero=init_zero, Fdim=(i+1)*self.bins_per_oct)
-                                        ]))
+            self.downs.append(nn.ModuleList([
+                ResnetBlock(Nin,      dim_in,  self.use_norm,
+                            num_dils=1, bias=False, kernel_size=(1,1),
+                            emb_dim=self.emb_dim, init=init, init_zero=init_zero),
+                Conv2d(2, dim_out, kernel=(5,3), bias=False, **init),
+                ResnetBlock(dim_in, dim_out, self.use_norm,
+                            num_dils=self.num_dils[i], bias=False,
+                            attention_dict=attn, emb_dim=self.emb_dim,
+                            init=init, init_zero=init_zero,
+                            Fdim=(i+1)*self.bins_per_oct)
+            ]))
 
-        if self.args.network.bottleneck_type=="res_dil_convs":
-            for i in range(self.args.network.num_bottleneck_layers):
-                if self.attention_layers[-1]:
-                    attn_dict=self.attention_dict
-                    #attn_dict.N=self.attention_Ns[-1]
-                    #assert attn_dict.N > 0
-                else:
-                    attn_dict=None
-    
-                self.middle.append(nn.ModuleList([
-                                ResnetBlock(self.Ns[-1], 2, use_norm=self.use_norm,num_dils= 1,bias=False, kernel_size=(1,1), proj_place="after", emb_dim=self.emb_dim, init=init, init_zero=init_zero),
-                                ResnetBlock(self.Ns[-1], self.Ns[-1], self.use_norm, num_dils=self.num_dils[-1], bias=False, emb_dim=self.emb_dim,attention_dict=attn_dict, init=init, init_zero=init_zero,
-                                Fdim=(self.num_octs)*self.bins_per_oct)]))
-        else:
-            raise NotImplementedError("bottleneck type not implemented")
-                        
+        # ---------- bottleneck ----------------------------------------------
+        if args.network.bottleneck_type != "res_dil_convs":
+            raise NotImplementedError
 
+        for _ in range(args.network.num_bottleneck_layers):
+            attn = self.attn_dict if self.attn_layers[-1] else None
+            self.middle.append(nn.ModuleList([
+                ResnetBlock(self.Ns[-1], 2, self.use_norm, num_dils=1,
+                            bias=False, kernel_size=(1,1), proj_place="after",
+                            emb_dim=self.emb_dim, init=init, init_zero=init_zero),
+                ResnetBlock(self.Ns[-1], self.Ns[-1], self.use_norm,
+                            num_dils=self.num_dils[-1], bias=False,
+                            attention_dict=attn, emb_dim=self.emb_dim,
+                            init=init, init_zero=init_zero,
+                            Fdim=self.num_octs*self.bins_per_oct)
+            ]))
 
-        #self.pyr_up_proj_first=nn.Conv2d(dim_out, 2, (5,3), padding="same", padding_mode="zeros", bias=False)
-        
-        for i in range(self.num_octs-1,-1,-1):
+        # ---------- up path --------------------------------------------------
+        for i in range(self.num_octs-1, -1, -1):
+            dim_in  = self.Ns[i]*2
+            dim_out = self.Ns[i-1] if i else self.Ns[0]
+            attn    = self.attn_dict if self.attn_layers[i] else None
 
-            if i==0:
-                dim_in=self.Ns[i]*2
-                dim_out=self.Ns[i]
-            else:
-                dim_in=self.Ns[i]*2
-                dim_out=self.Ns[i-1]
+            self.ups.append(nn.ModuleList([
+                ResnetBlock(dim_out, 2, self.use_norm, num_dils=1,
+                            bias=False, kernel_size=(1,1), proj_place="after",
+                            emb_dim=self.emb_dim, init=init, init_zero=init_zero),
+                ResnetBlock(dim_in,  dim_out, self.use_norm,
+                            num_dils=self.num_dils[i], bias=False,
+                            attention_dict=attn, emb_dim=self.emb_dim,
+                            init=init, init_zero=init_zero,
+                            Fdim=(i+1)*self.bins_per_oct)
+            ]))
 
-            if self.attention_layers[i]:
-                print("Attention layer at (up) oct layer {}".format(i))
-                attn_dict=self.attention_dict
-                #attn_dict.N=self.attention_Ns[i]
-                #assert attn_dict.N > 0
-            else:
-                attn_dict=None
+        # ---------- cross-attention in bottleneck ---------------------------
+        self.cross_attn   = CrossAttentionBlock(d_model=self.emb_dim, n_heads=4)
+        self.gap2emb      = nn.Linear(self.bins_per_oct, self.emb_dim)
+        self.emb2gap      = nn.Linear(self.emb_dim,      self.bins_per_oct)
 
-            self.ups.append(nn.ModuleList(
-                                        [
-                                        ResnetBlock(dim_out, 2, use_norm=self.use_norm,num_dils= 1,bias=False, kernel_size=(1,1), proj_place="after", emb_dim=self.emb_dim, init=init, init_zero=init_zero),
-                                        ResnetBlock(dim_in, dim_out, use_norm=self.use_norm,num_dils= self.num_dils[i],attention_dict=attn_dict, bias=False, emb_dim=self.emb_dim, init=init, init_zero=init_zero, Fdim=(i+1)*self.bins_per_oct),
-                                        ]))
-
-
-
-        #self.cropconcat = CropConcatBlock()
-
-        # Add cross-attention block at the bottleneck
-        self.cross_attn = CrossAttentionBlock(d_model=self.Ns[-1], n_heads=4)
-
-
-
+    # ------------------------------------------------------------------------
     def forward(self, audio_noisy, context, mask, sigma):
         """
-        Args:
-            audio_noisy (Tensor): Input signal with noise in the gap, shape (B,T)
-            context (Tensor): Context audio (unmasked), shape (B,T)
-            mask (Tensor): 1 for context, 0 for gap, shape (B,T)
-            sigma (Tensor): noise levels, shape (B,1)
-        Returns:
-            pred (Tensor): predicted signal in time-domain, shape (B,T)
+        B  – batch, T  – time samples, F  – freq bins per octave
         """
-        # Apply RFF embedding+MLP of the noise level
+        B, T = audio_noisy.shape
+
+        # ---------- noise scale embedding -----------------------------------
         sigma_emb = self.embedding(sigma)
 
-        # Apply CQT to the inputs
-        X_list = self.CQTransform.fwd(audio_noisy.unsqueeze(1))
-        X_list_ctx = self.CQTransform.fwd(context.unsqueeze(1))
-        # Use the deepest octave as the bottleneck feature
-        X_bottleneck = X_list[-1].squeeze(1)  # (B, F, T)
-        X_ctx_bottleneck = X_list_ctx[-1].squeeze(1)  # (B, F, T)
-        # Reshape for attention: (B, F, T) -> (B, T, F)
-        X_bottleneck = X_bottleneck.permute(0, 2, 1)
-        X_ctx_bottleneck = X_ctx_bottleneck.permute(0, 2, 1)
-        # Extract gap and context indices
-        # ``mask`` is defined at the original audio sampling rate (T samples).
-        # After the CQT transform the temporal dimension shrinks to
-        # ``X_bottleneck.shape[1]``.  Directly using the high resolution mask
-        # would therefore yield indices out of range.  We resample it to match
-        # the bottleneck resolution via nearest neighbour interpolation.
-        mask_ds = F.interpolate(mask.unsqueeze(1).float(),
-                                size=X_bottleneck.shape[1],
-                                mode="nearest").squeeze(1)
-        gap_mask = mask_ds == 0
-        context_mask = mask_ds == 1
-        # For each sample, select gap/context time steps
-        gap_feats = []
-        ctx_feats = []
-        for b in range(mask.shape[0]):
+        # ---------- CQT ------------------------------------------------------
+        X_list      = self.CQTransform.fwd(audio_noisy.unsqueeze(1))
+        X_list_ctx  = self.CQTransform.fwd(context    .unsqueeze(1))
+
+        # deepest octave ⇒ bottleneck feature
+        X_bott      = X_list     [-1].squeeze(1)       # (B, F, Tb)
+        X_ctx_bott  = X_list_ctx [-1].squeeze(1)       # (B, F, Tb)
+        X_bott      = X_bott.permute(0,2,1)            # (B, Tb, F)
+        X_ctx_bott  = X_ctx_bott.permute(0,2,1)        # (B, Tb, F)
+
+        # ---------- resample mask to Tb -------------------------------------
+        mask_ds     = F.interpolate(mask.unsqueeze(1).float(),
+                                    size=X_bott.shape[1], mode="nearest"
+                                   ).squeeze(1)        # (B, Tb)
+        gap_mask    = mask_ds == 0
+        ctx_mask    = mask_ds == 1
+
+        # ---------- build gap / ctx sequences -------------------------------
+        gap_feats, ctx_feats = [], []
+        for b in range(B):
             gap_idx = gap_mask[b].nonzero(as_tuple=True)[0]
-            ctx_idx = context_mask[b].nonzero(as_tuple=True)[0]
-            gap_feats.append(X_bottleneck[b, gap_idx])
-            ctx_feats.append(X_ctx_bottleneck[b, ctx_idx])
-        # Pad to max length in batch
-        max_gap = max([g.shape[0] for g in gap_feats])
-        max_ctx = max([c.shape[0] for c in ctx_feats])
+            ctx_idx = ctx_mask[b].nonzero(as_tuple=True)[0]
+            gap_feats.append(X_bott     [b, gap_idx])  # (Ngap, F)
+            ctx_feats.append(X_ctx_bott [b, ctx_idx])  # (Nctx, F)
+
+        max_gap = max(g.shape[0] for g in gap_feats)
+        max_ctx = max(c.shape[0] for c in ctx_feats)
         gap_feats = [F.pad(g, (0,0,0,max_gap-g.shape[0])) for g in gap_feats]
         ctx_feats = [F.pad(c, (0,0,0,max_ctx-c.shape[0])) for c in ctx_feats]
-        gap_feats = torch.stack(gap_feats, dim=0)  # (B, max_gap, F)
-        ctx_feats = torch.stack(ctx_feats, dim=0)  # (B, max_ctx, F)
-        # Cross-attention: gap attends to context
-        gap_feats_attn = self.cross_attn(gap_feats, ctx_feats)
-        # For simplicity, scatter the attended gap features back to the bottleneck
-        X_bottleneck_attn = X_bottleneck.clone()
-        for b in range(mask.shape[0]):
+        gap_feats = torch.stack(gap_feats, 0)          # (B, Ngap*, F)
+        ctx_feats = torch.stack(ctx_feats, 0)          # (B, Nctx*, F)
+
+        # --- build real features for attention ------------------------------------
+        gap_feats_real = gap_feats.real       # take only the real part
+        ctx_feats_real = ctx_feats.real
+
+        gap_feats_real = self.gap2emb(gap_feats_real)
+        ctx_feats_real = self.gap2emb(ctx_feats_real)
+
+        gap_feats_real = self.cross_attn(gap_feats_real, ctx_feats_real)
+        gap_feats_real = self.emb2gap(gap_feats_real)
+
+        # convert back to complex with zero-imag part
+        gap_feats = torch.complex(gap_feats_real, torch.zeros_like(gap_feats_real))
+
+        # ---------- scatter back into bottleneck ----------------------------
+        X_bott_attn = X_bott.clone()                   # (B, Tb, F)
+        for b in range(B):
             gap_idx = gap_mask[b].nonzero(as_tuple=True)[0]
-            X_bottleneck_attn[b, gap_idx] = gap_feats_attn[b, :gap_idx.shape[0]]
-        # Permute back to (B, F, T)
-        X_bottleneck_attn = X_bottleneck_attn.permute(0, 2, 1)
-        # Replace the bottleneck feature in X_list with the attended one
-        X_list = list(X_list)
-        X_list[-1] = X_bottleneck_attn.unsqueeze(1)
+            X_bott_attn[b, gap_idx] = gap_feats[b, :gap_idx.numel()]
+        X_list      = list(X_list)                     # make it mutable
+        X_list[-1]  = X_bott_attn.permute(0,2,1).unsqueeze(1)
 
-        
-        hs=[]
-        for i,modules in enumerate(self.downs):
-            #print("downsampler", i)
-            if i <=(self.num_octs-1):
-                C=X_list[-1-i]#get the corresponding CQT octave
-                C=C.squeeze(1)
-                C=torch.view_as_real(C)
-                C=C.permute(0,3,1,2).contiguous() # call contiguous() here?
-                if self.use_fencoding:
-                    #Cfreq=self.freq_encoding(C)
-                    C2=self.freq_encodings[i](C) #B, C + Nfreq*2, F,T
-                else:
-                    C2=C
-                    
-                init_block, pyr_down_proj, ResBlock=modules
-                C2=init_block(C2,sigma)
-            else:
-                pyr_down_proj, ResBlock=modules
-            
-            if i==0:
-                X=C2 #starting the main signal path
-                pyr=self.downsamplerT(C) #starting the auxiliary path
-            elif i<(self.num_octs-1):
-                pyr=torch.cat((self.downsamplerT(C),self.downsamplerT(pyr)),dim=2) #updating the auxiliary path
-                X=torch.cat((C2,X),dim=2) #updating the main signal path with the new octave
-            elif i==(self.num_octs-1):# last layer
-                #pyr=torch.cat((self.downsamplerF(C),self.downsamplerF(pyr)),dim=2) #updating the auxiliary path
-                pyr=torch.cat((C,pyr), dim=2) #no downsampling in the last layer
-                X=torch.cat((C2,X),dim=2) #updating the main signal path with the new octave
-            else: #last layer
-                pass
-                #pyr=pyr
-                #X=X
+        # --------------------------------------------------------------------
+        hs = []
+        X  = None
+        pyr= None
+        sigma_emb = self.embedding(sigma) 
+        # ---------------- encoder -------------------------------------------
+        for i, (init_block, pyr_down_proj, res_block) in enumerate(self.downs):
+            C   = X_list[-1-i].squeeze(1)              # (B, F_i, T_i)
+            C   = torch.view_as_real(C)                # (B, F_i, T_i, 2)
+            C   = C.permute(0,3,1,2).contiguous()      # (B, 2, F_i, T_i)
+            C2  = self.freq_encodings[i](C) if self.use_fencoding else C
+            C2  = init_block(C2, sigma_emb)
 
-            X=ResBlock(X, sigma)
+            if i == 0:
+                X   = C2
+                pyr = self.downsamplerT(C)
+            elif i < self.num_octs - 1:
+                pyr = torch.cat([self.downsamplerT(C), self.downsamplerT(pyr)],
+                                dim=2)
+                X   = torch.cat([C2, X], dim=2)
+            else:  # last octave
+                pyr = torch.cat([C, pyr], dim=2)
+                X   = torch.cat([C2, X], dim=2)
+
+            X   = res_block(X, sigma_emb)
+
+            # downsample main path except last octave
+            if i < self.num_octs - 1:
+                X = self.downsamplerT(X)
+
+            # residual combine
+            X = (X + pyr_down_proj(pyr)) / np.sqrt(2)
             hs.append(X)
 
-            #downsample the main signal path
-            #we do not need to downsample in the inner layer
-            if i<(self.num_octs-1): 
-                X=self.downsamplerT(X)
-                #apply the residual connection
-                #X=(X+pyr_down_proj(pyr))/(2**0.5) #I'll my need to put that inside a combiner block??
-            else: #last layer
-                #no downsampling in the last layer
-                pass
+        # ---------------- bottleneck layers ---------------------------------
+        for out_block, res_block in self.middle:
+            X    = res_block(X, sigma_emb)
+            Xout = out_block(X, sigma_emb)                 # first assignment
 
-            #apply the residual connection
-            X=(X+pyr_down_proj(pyr))/(2**0.5) #I'll my need to put that inside a combiner block??
-            #print("encoder ", i, X.shape, X.mean().item(), X.std().item())
+        def _match_size(t1, t2):
+            """
+            Center-crop the larger tensor so that t1 and t2 have identical
+            (F, T) shapes.  Both tensors are (B,C,F,T).
+            """
+            _, _, F1, T1 = t1.shape
+            _, _, F2, T2 = t2.shape
+            Fmin, Tmin = min(F1, F2), min(T1, T2)
+            if F1 != Fmin or T1 != Tmin:
+                dF = (F1 - Fmin) // 2
+                dT = (T1 - Tmin) // 2
+                t1 = t1[:, :, dF:dF+Fmin, dT:dT+Tmin]
+            if F2 != Fmin or T2 != Tmin:
+                dF = (F2 - Fmin) // 2
+                dT = (T2 - Tmin) // 2
+                t2 = t2[:, :, dF:dF+Fmin, dT:dT+Tmin]
+            return t1, t2
+
+        # ---------------- decoder -------------------------------------------
+        X_list_out = [None] * self.num_octs
+        for i, (out_block, res_block) in enumerate(self.ups):
+            j   = len(self.ups) - i - 1
+            skip= hs.pop()
+            X, skip = _match_size(X, skip)
+            X   = torch.cat([X, skip], dim=1)
+            X   = res_block(X, sigma_emb)
+
+            out_new = out_block(X, sigma_emb)          # fresh prediction
+            # ---> ensure Xout and out_new match in (F,T) <---
+            Xout, out_new = _match_size(Xout, out_new) #  <<< add this line
+            Xout = (Xout + out_new) / np.sqrt(2)
+
+            if j <= self.num_octs - 1:
+                # split frequency axis
+                X      =  X[:,:, self.bins_per_oct: , :]
+                Out, Xout = Xout[:,:, :self.bins_per_oct , :], Xout[:,:, self.bins_per_oct: , :]
+
+                Out  = Out.permute(0,2,3,1).contiguous()
+                Out  = torch.view_as_complex(Out)
+                X_list_out[j] = Out.unsqueeze(1)
+
+            if 0 < j <= self.num_octs - 1:
+                X    = self.upsamplerT(X)
+                Xout = self.upsamplerT(Xout)
                 
+        # ---------------- time-axis fix before inverse CQT ------------------------
+        def _match_time(x, target_len):
+            """
+            Center-crop or zero-pad complex tensor `x`
+            so that x.shape[-1] == target_len.
+            x has shape (B,1,F,T), dtype complex.
+            """
+            T = x.shape[-1]
+            if T == target_len:
+                return x
+            if T > target_len:                       # crop
+                trim = (T - target_len) // 2
+                return x[..., trim:trim+target_len]
+            else:                                    # pad
+                pad = target_len - T
+                left = pad // 2
+                right = pad - left
+                return F.pad(x, (left, right))       # PyTorch pads complex tensors
 
-        #middle layers
-        #print("bttleneck")
-        if self.args.network.bottleneck_type=="res_dil_convs":
-            for i in range(self.args.network.num_bottleneck_layers):
-                OutBlock, ResBlock =self.middle[i]
-                X=ResBlock(X, sigma)   
-                Xout=OutBlock(X,sigma)
+        # make sure every octave entry exists and has correct T
+        for i in range(self.num_octs):
+            if X_list_out[i] is None:                # safety: missing octave
+                X_list_out[i] = torch.zeros_like(X_list[i])
+            X_list_out[i] = _match_time(
+                X_list_out[i],
+                X_list[i].shape[-1]                  # original CQT frame count
+            )
 
-
-        for i,modules in enumerate(self.ups):
-            j=len(self.ups) -i-1
-            #print("upsampler", j)
-
-            OutBlock,  ResBlock=modules
-
-            skip=hs.pop()
-            X=torch.cat((X,skip),dim=1)
-            X=ResBlock(X, sigma)
-            
-            Xout=(Xout+OutBlock(X,sigma))/(2**0.5)
-
-
-            if j<=(self.num_octs-1):
-                X= X[:,:,self.bins_per_oct::,:]
-                Out, Xout= Xout[:,:,0:self.bins_per_oct,:], Xout[:,:,self.bins_per_oct::,:]
-                #pyr_out, pyr= pyr[:,:,0:self.bins_per_oct,:], pyr[:,:,self.bins_per_oct::,:]
-                #X_out=(pyr_up_proj(X_out)+pyr_out)/(2**0.5)
-
-                Out=Out.permute(0,2,3,1).contiguous() #call contiguous() here?
-                Out=torch.view_as_complex(Out)
-
-                #save output
-                X_list_out[i]=Out.unsqueeze(1)
-
-            elif j>(self.num_octs-1):
-                print("We should not be here")
-                pass
-
-            if j>0 and j<=(self.num_octs-1):
-                #pyr=self.upsampler(pyr) #call contiguous() here?
-                X=self.upsamplerT(X) #call contiguous() here?
-                Xout=self.upsamplerT(Xout) #call contiguous() here?
-
-        pred_time=self.CQTransform.bwd(X_list_out)
-        pred_time=pred_time.squeeze(1)
-        pred_time=pred_time[:,0:inputs.shape[-1]]
-        assert pred_time.shape==inputs.shape, "bad shapes"
+        # ---------------- inverse CQT ---------------------------------------
+        pred_time = self.CQTransform.bwd(X_list_out).squeeze(1)
+        pred_time = pred_time[:, :T]                   # crop to original length
+        assert pred_time.shape == audio_noisy.shape
         return pred_time
-
-            
-
-
-class CropAddBlock(nn.Module):
-
-    def forward(self,down_layer, x,  **kwargs):
-        x1_shape = down_layer.shape
-        x2_shape = x.shape
-
-        #print(x1_shape,x2_shape)
-        height_diff = (x1_shape[2] - x2_shape[2]) // 2
-        width_diff = (x1_shape[3] - x2_shape[3]) // 2
-
-
-        down_layer_cropped = down_layer[:,
-                                        :,
-                                        height_diff: (x2_shape[2] + height_diff),
-                                        width_diff: (x2_shape[3] + width_diff),:]
-        x = torch.add(down_layer_cropped, x)
-        return x
-
-class CropConcatBlock(nn.Module):
-
-    def forward(self, down_layer, x, **kwargs):
-        x1_shape = down_layer.shape
-        x2_shape = x.shape
-
-        height_diff = (x1_shape[2] - x2_shape[2]) // 2
-        width_diff = (x1_shape[3] - x2_shape[3]) // 2
-        down_layer_cropped = down_layer[:,
-                                        :,
-                                        height_diff: (x2_shape[2] + height_diff),
-                                        width_diff: (x2_shape[3] + width_diff)]
-        x = torch.cat((down_layer_cropped, x),1)
-        return x
-
