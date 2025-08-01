@@ -11,9 +11,11 @@ from .models.patch_shuffle import PatchShuffle
 
 # Data
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
+from .data.audio_dataset import AudioFolderDataset
 
 # Training
 from .training.mae_trainer import MAETrainer
+from .training.diff_trainer import DiffusionTrainer
 
 # Configuration
 from .config.config_manager import ConfigManager
@@ -37,9 +39,11 @@ __all__ = [
     
     # Data
     'MelSpectrogramDataset',
+    'AudioFolderDataset',
     
     # Training
     'MAETrainer',
+    'DiffusionTrainer',
     
     # Configuration
     'ConfigManager',

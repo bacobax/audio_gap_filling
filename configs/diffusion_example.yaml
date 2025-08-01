@@ -1,0 +1,61 @@
+model:
+  type: diffusion_unet
+  network:
+    name: "unet_cqt_oct_with_attention"
+    callable: "networks.unet_cqt_oct_with_projattention_adaLN_2.Unet_CQT_oct_with_attention"
+    use_fencoding: False
+    use_norm: True
+    filter_out_cqt_DC_Nyq: True
+    depth: 8 #total depth of the network (including the first stage)
+    emb_dim: 256 #dimensionality of the RFF embeddings
+    #dimensions of the first stage (the length of this vector should be equal to num_octs)
+    #Ns: [64, 96 ,96, 128, 128,256, 256] #it is hardcoded
+    Ns: [64, 64,96, 96, 128, 128,256, 256] #it is hardcoded
+    #Ns: [8, 8 ,8, 8, 16,16, 16] #it is hardcoded
+    attention_layers: [0, 0, 0, 0, 0, 1, 1, 1, 1] #num_octs+bottleneck
+    #attention_Ns: [0, 0, 0, 0,256 ,512,1024 ,1024]
+    #Ns: [8,8,16,16,32,32,64] 
+    Ss: [2,2,2, 2, 2, 2, 2] #downsample factors at the first stage, now it is ignored
+    num_dils: [2,3,4,5,6,7,8, 8]
+    cqt:
+        window: "kaiser"
+        beta: 1
+        num_octs: 8
+        bins_per_oct: 64 #this needs to be lower than 64, otherwise the time attention is inpractical
+
+
+    #inner_Ns: [64, 64, 64, 64]
+    #if 4x2, then down factor of 16!
+
+    bottleneck_type: "res_dil_convs"
+
+    num_bottleneck_layers: 1
+training:
+  trainer_type: diffusion
+  batch_size: 2
+  total_epoch: 1
+  lr: 0.0002
+  use_grad_clip: true
+  max_grad_norm: 1.0
+
+diff_params:
+  sigma_min: 0.002
+  sigma_max: 80
+  P_mean: -1.2
+  P_std: 1.2
+  ro: 7
+  ro_train: 1
+  sigma_data: 0.5
+  Schurn: 0
+  Stmin: 0
+  Stmax: 999
+  Snoise: 1
+  aweighting:
+    use_aweighting: false
+    ntaps: 101
+
+data:
+  dataset_type: audio_folder
+  folder: assets
+  sample_rate: 16000
+  segment_length: 65536

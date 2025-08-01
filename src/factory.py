@@ -7,8 +7,11 @@ from torch.utils.data import DataLoader
 from pprint import pprint
 from .config.config_manager import ConfigManager
 from .models.mae_vit import MAEViT
+from .models.unet_cqt_oct_with_projattention_adaLN_2 import Unet_CQT_oct_with_attention
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
+from .data.audio_dataset import AudioFolderDataset
 from .training.mae_trainer import MAETrainer
+from .training.diff_trainer import DiffusionTrainer
 import torch.distributed as dist
 import os
 
@@ -28,8 +31,11 @@ class ModelFactory:
         Returns:
             Model instance
         """
-        if model_type.lower() == 'mae_vit':
+        model_type = model_type.lower()
+        if model_type == 'mae_vit':
             return MAEViT(config)
+        elif model_type == 'diffusion_unet':
+            return Unet_CQT_oct_with_attention(config, device=config.get('device', 'cpu'))
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
@@ -49,8 +55,11 @@ class DatasetFactory:
         Returns:
             Dataset instance
         """
-        if dataset_type.lower() == 'mel_spectrogram':
+        dataset_type = dataset_type.lower()
+        if dataset_type == 'mel_spectrogram':
             return MelSpectrogramDataset(config)
+        elif dataset_type == 'audio_folder':
+            return AudioFolderDataset(config)
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
     
@@ -111,8 +120,17 @@ class TrainerFactory:
         Returns:
             Trainer instance
         """
-        if trainer_type.lower() == 'mae':
+        trainer_type = trainer_type.lower()
+        if trainer_type == 'mae':
             return MAETrainer(
+                model=model,
+                train_loader=train_loader,
+                val_loader=val_loader,
+                config=config,
+                device=device,
+            )
+        elif trainer_type == 'diffusion':
+            return DiffusionTrainer(
                 model=model,
                 train_loader=train_loader,
                 val_loader=val_loader,
@@ -167,9 +185,11 @@ class TrainingPipeline:
     def setup_model(self) -> None:
         """Setup the model."""
         model_config = self.config_manager.get_model_config()
+        model_type = model_config.get('type', 'mae_vit')
+        model_config['device'] = str(self.device)
         print("MODEL CONFIG")
         pprint(model_config)
-        self.model = ModelFactory.create_model('mae_vit', model_config)
+        self.model = ModelFactory.create_model(model_type, model_config)
         self.model.to(self.device)
         
         # Print model info
@@ -179,26 +199,31 @@ class TrainingPipeline:
         """Setup datasets and data loaders."""
         # Training dataset
         train_config = self.config_manager.get_data_config()
-        self.train_dataset = DatasetFactory.create_dataset('mel_spectrogram', train_config)
+        dataset_type = train_config.get('dataset_type', 'mel_spectrogram')
+        self.train_dataset = DatasetFactory.create_dataset(dataset_type, train_config)
 
         # Update image size in both the pipeline config and the ConfigManager
-        image_size = (
-            self.config_manager.get('data.n_mels', 80),
-            self.train_dataset.get_crop_frames()
-        )
-        self.config["image_size"] = image_size
-        self.config_manager.set('model.image_size', image_size)
+        if hasattr(self.train_dataset, 'get_crop_frames'):
+            image_size = (
+                self.config_manager.get('data.n_mels', 80),
+                self.train_dataset.get_crop_frames(),
+            )
+            self.config["image_size"] = image_size
+            self.config_manager.set('model.image_size', image_size)
         # Validation dataset
         val_config = train_config.copy()
         val_config['test'] = (
             True,
             self.config_manager.get('paths.test_audio_filename', 'wav_test.wav')
         )
-        self.val_dataset = DatasetFactory.create_dataset('mel_spectrogram', val_config)
+        self.val_dataset = DatasetFactory.create_dataset(dataset_type, val_config)
         
         # Create data loaders
         training_config = self.config_manager.get_training_config()
-        load_batch_size = min(training_config['max_device_batch_size'], training_config['batch_size'])
+        load_batch_size = min(
+            training_config.get('max_device_batch_size', training_config['batch_size']),
+            training_config['batch_size'],
+        )
         
         self.train_loader = DatasetFactory.create_dataloader(
             self.train_dataset,
@@ -223,8 +248,9 @@ class TrainingPipeline:
         assert self.model is not None, "Model not setup. Call setup_model() first."
         assert self.train_loader is not None, "Training loader not setup. Call setup_data() first."
 
+        trainer_type = training_config.get('trainer_type', 'mae')
         self.trainer = TrainerFactory.create_trainer(
-            trainer_type='mae',
+            trainer_type=trainer_type,
             model=self.model,
             train_loader=self.train_loader,
             val_loader=self.val_loader,
@@ -241,8 +267,9 @@ class TrainingPipeline:
         except Exception as e:
             print(f"Warning: failed to log configuration file: {e}")
         
-        # Check patch compatibility
-        self.trainer.check_patch_compatibility(self.train_dataset)
+        # Check patch compatibility if method is available
+        if hasattr(self.trainer, 'check_patch_compatibility'):
+            self.trainer.check_patch_compatibility(self.train_dataset)
         
         print("Trainer setup complete")
     

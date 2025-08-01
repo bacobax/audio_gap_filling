@@ -5,8 +5,34 @@ import torch
 import torch.nn as nn
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
-from timm.layers.weight_init import trunc_normal_
-from timm.models.vision_transformer import Block
+try:
+    from timm.layers.weight_init import trunc_normal_
+    from timm.models.vision_transformer import Block
+except Exception:  # pragma: no cover - allow running without timm
+    def trunc_normal_(tensor, mean=0., std=1.):
+        with torch.no_grad():
+            return tensor.normal_(mean, std)
+
+    class Block(nn.Module):  # minimal ViT block fallback
+        def __init__(self, dim, num_heads):
+            super().__init__()
+            self.attn = nn.MultiheadAttention(dim, num_heads, batch_first=True)
+            self.norm1 = nn.LayerNorm(dim)
+            self.ffn = nn.Sequential(
+                nn.Linear(dim, dim * 4),
+                nn.GELU(),
+                nn.Linear(dim * 4, dim),
+            )
+            self.norm2 = nn.LayerNorm(dim)
+
+        def forward(self, x):
+            h, _ = self.attn(x, x, x)
+            x = x + h
+            x = self.norm1(x)
+            h = self.ffn(x)
+            x = x + h
+            x = self.norm2(x)
+            return x
 from typing import Tuple, Optional
 import random
 
