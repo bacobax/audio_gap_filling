@@ -21,6 +21,7 @@ model:
       rel_pos_max_distance: 64
     bottleneck_type: res_dil_convs
     num_bottleneck_layers: 2
+
 training:
   trainer_type: diffusion
   batch_size: 2

@@ -161,6 +161,7 @@ class ConfigManager:
     
     def get_model_config(self) -> Dict[str, Any]:
         """Get model-specific configuration."""
+
         model_type = self.get('model.type', 'mae_vit')
         if model_type == 'diffusion_unet':
             cfg = {
@@ -184,6 +185,7 @@ class ConfigManager:
                 'mask_ratio': self.get('training.mask_ratio', 0.75),
                 'pretrained_ViT': self.get('model.pretrained_ViT', False),
             }
+
         return cfg
     
     def get_training_config(self) -> Dict[str, Any]:

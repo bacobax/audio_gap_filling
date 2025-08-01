@@ -13,16 +13,16 @@ training:
   base_learning_rate: 0.00015
   weight_decay: 0.05
   mask_ratio: 0.50
-  total_epoch: 15
+  total_epoch: 11
   warmup_epoch: 1
   l1_weight: 0.1
   use_muon: false
-  resume: true
+  resume: false
 paths:
   model_path: vit-t-mae.pt
   audio_filename: assets/gapped_audio.wav
   test_audio_filename: assets/wav_test.wav
-  log_dir: runs/train/mask050_l1_01-20250731-142446
+
 # Data settings
 data:
   n_mels: 80
