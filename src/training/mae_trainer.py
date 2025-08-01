@@ -11,7 +11,10 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 from tqdm import tqdm
 import os
-from muon import MuonWithAuxAdam
+try:
+    from muon import MuonWithAuxAdam  # type: ignore
+except Exception:  # pragma: no cover - optional dependency
+    MuonWithAuxAdam = None
 
 from ..core.base_trainer import BaseTrainer
 from ..utils.math_utils import MCD
@@ -81,7 +84,7 @@ class MAETrainer(BaseTrainer):
         # Scale learning rate by batch size
         scaled_lr = base_lr * self.batch_size / 256
         
-        if self.config.get('use_muon', False):
+        if self.config.get('use_muon', False) and MuonWithAuxAdam is not None:
             try:
                 hidden_weights = [p for p in self.model.parameters() if p.ndim >= 2]
                 other_params = [p for p in self.model.parameters() if p.ndim < 2]

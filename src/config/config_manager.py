@@ -161,21 +161,34 @@ class ConfigManager:
     
     def get_model_config(self) -> Dict[str, Any]:
         """Get model-specific configuration."""
-        return {
-            'image_size': self.get('model.image_size', (80, 380)),
-            'patch_size': self.get('model.patch_size', 4),
-            'emb_dim': self.get('model.emb_dim', 256),
-            'encoder_layer': self.get('model.encoder_layer', 32),
-            'encoder_head': self.get('model.encoder_head', 16),
-            'decoder_layer': self.get('model.decoder_layer', 10),
-            'decoder_head': self.get('model.decoder_head', 16),
-            'mask_ratio': self.get('training.mask_ratio', 0.75),
-            'pretrained_ViT': self.get('model.pretrained_ViT', False)
-        }
+        model_type = self.get('model.type', 'mae_vit')
+        if model_type == 'diffusion_unet':
+            cfg = {
+                'type': 'diffusion_unet',
+                'network': self.get('model.network', {}),
+                'exp': {
+                    'sample_rate': self.get('data.sample_rate', 16000),
+                    'audio_len': self.get('data.segment_length', 65536),
+                },
+            }
+        else:
+            cfg = {
+                'type': model_type,
+                'image_size': self.get('model.image_size', (80, 380)),
+                'patch_size': self.get('model.patch_size', 4),
+                'emb_dim': self.get('model.emb_dim', 256),
+                'encoder_layer': self.get('model.encoder_layer', 32),
+                'encoder_head': self.get('model.encoder_head', 16),
+                'decoder_layer': self.get('model.decoder_layer', 10),
+                'decoder_head': self.get('model.decoder_head', 16),
+                'mask_ratio': self.get('training.mask_ratio', 0.75),
+                'pretrained_ViT': self.get('model.pretrained_ViT', False),
+            }
+        return cfg
     
     def get_training_config(self) -> Dict[str, Any]:
         """Get training-specific configuration."""
-        return {
+        cfg = {
             'seed': self.get('training.seed', 42),
             'batch_size': self.get('training.batch_size', 4),
             'max_device_batch_size': self.get('training.max_device_batch_size', 512),
@@ -191,12 +204,15 @@ class ConfigManager:
             'mask_ratio': self.get('training.mask_ratio', 0.75),
             'patch_size': self.get('model.patch_size', 4),
             'n_mels': self.get('data.n_mels', 80),
-            'config_filename' : self.config_filename,
+            'trainer_type': self.get('training.trainer_type', 'mae'),
+            'config_filename': self.config_filename,
         }
+        return cfg
     
     def get_data_config(self) -> Dict[str, Any]:
         """Get data-specific configuration."""
-        return {
+        cfg = {
+            'dataset_type': self.get('data.dataset_type', 'mel_spectrogram'),
             'flac_path': self.get('paths.audio_filename', 'gapped_audio.wav'),
             'test_audio_filename': self.get('paths.test_audio_filename', 'wav_test.wav'),
             'n_mels': self.get('data.n_mels', 80),
@@ -204,4 +220,8 @@ class ConfigManager:
             'n_fft': self.get('data.n_fft', 1024),
             'hop_length': self.get('data.hop_length', 256),
             'patch_size': self.get('model.patch_size', self.get('data.patch_size', 16)),
+            'sample_rate': self.get('data.sample_rate', 16000),
+            'segment_length': self.get('data.segment_length', 65536),
+            'folder': self.get('data.folder', 'assets'),
         }
+        return cfg
