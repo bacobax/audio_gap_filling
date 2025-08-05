@@ -73,6 +73,14 @@ class MAETrainer(BaseTrainer):
 
         super().__init__(model, train_loader, val_loader, config, device, config["log_dir"])
 
+        if self.perceptual_loss:
+            self.lpips_fn = LPIPS(net='vgg').to(self.device)
+            self.lpips_fn.eval()
+            for p in self.lpips_fn.parameters():
+                p.requires_grad = False
+        else:
+            self.lpips_fn = None
+
         self.check_patch_compatibility(train_loader.dataset)
         
         self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "mae_latest.pt"))
@@ -177,6 +185,12 @@ class MAETrainer(BaseTrainer):
                 loss = (1 - self.l1_weight) * mse + self.l1_weight * l1
             else:
                 loss = mse
+
+            if self.perceptual_loss:
+                pred_lpips = (predicted_spectrogram * mask).repeat(1, 3, 1, 1)
+                target_lpips = (spectrogram_slice * mask).repeat(1, 3, 1, 1)
+                p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean() / self.mask_ratio
+                loss = loss + p_loss
             
             # Backward pass
             loss.backward()
@@ -249,6 +263,12 @@ class MAETrainer(BaseTrainer):
                     loss = (1 - self.l1_weight) * mse + self.l1_weight * l1
                 else:
                     loss = mse
+
+                if self.perceptual_loss:
+                    pred_lpips = gap_region_pred.repeat(1, 3, 1, 1)
+                    target_lpips = gap_region_target.repeat(1, 3, 1, 1)
+                    p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean()
+                    loss = loss + p_loss
                 total_loss += loss.item()
                 num_batches += 1
                 
