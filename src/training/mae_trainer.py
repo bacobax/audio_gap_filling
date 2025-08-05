@@ -11,6 +11,9 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 from tqdm import tqdm
 import os
+import lpips
+from lpips import LPIPS
+
 try:
     from muon import MuonWithAuxAdam  # type: ignore
 except Exception:  # pragma: no cover - optional dependency
@@ -47,12 +50,14 @@ class MAETrainer(BaseTrainer):
             device: Device to train on
             log_dir: Directory for logging
         """
-        
+        if config is None:
+            print(f"⚠️ No configuration provided, using default values.")
         # Extract MAE-specific configuration
         self.mask_ratio = config.get('mask_ratio', 0.75) if config else 0.75
         self.patch_size = config.get('patch_size', 4) if config else 4
         self.n_mels = config.get('n_mels', 80) if config else 80
         self.l1_weight = config.get('l1_weight', 0.0) if config else 0.0
+        self.perceptual_loss = config.get('perceptual_loss', False) if config else False
         
         # Setup gradient accumulation
         self.batch_size = config.get('batch_size', 4) if config else 4

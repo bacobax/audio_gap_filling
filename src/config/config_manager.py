@@ -207,6 +207,7 @@ class ConfigManager:
             'patch_size': self.get('model.patch_size', 4),
             'n_mels': self.get('data.n_mels', 80),
             'trainer_type': self.get('training.trainer_type', 'mae'),
+            'perceptual_loss': self.get('training.perceptual_loss', False),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')
