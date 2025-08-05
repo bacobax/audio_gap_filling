@@ -13,6 +13,7 @@ from tqdm import tqdm
 import os
 import lpips
 from lpips import LPIPS
+from ..utils.metrics import AverageMeter
 
 try:
     from muon import MuonWithAuxAdam  # type: ignore
@@ -74,6 +75,7 @@ class MAETrainer(BaseTrainer):
         super().__init__(model, train_loader, val_loader, config, device, config["log_dir"])
 
         if self.perceptual_loss:
+            print("Using LPIPS perceptual loss")
             self.lpips_fn = LPIPS(net='vgg').to(self.device)
             self.lpips_fn.eval()
             for p in self.lpips_fn.parameters():
@@ -147,7 +149,11 @@ class MAETrainer(BaseTrainer):
             Dictionary containing training metrics
         """
         self.model.train()
-        losses = []
+        total_loss = AverageMeter()
+        mse_loss = AverageMeter()
+        p_loss_meter = None
+        if self.perceptual_loss:
+            p_loss_meter = AverageMeter()
         step_count = 0
         
         pbar = tqdm(
@@ -186,11 +192,15 @@ class MAETrainer(BaseTrainer):
             else:
                 loss = mse
 
-            if self.perceptual_loss:
+            mse_loss.update(mse.item(), n=1)
+
+            if self.perceptual_loss and p_loss_meter is not None:
                 pred_lpips = (predicted_spectrogram * mask).repeat(1, 3, 1, 1)
                 target_lpips = (spectrogram_slice * mask).repeat(1, 3, 1, 1)
                 p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean() / self.mask_ratio
                 loss = loss + p_loss
+                p_loss_meter.update(p_loss.item(), n=1)
+            total_loss.update(loss.item(), n=1)
             
             # Backward pass
             loss.backward()
@@ -200,7 +210,6 @@ class MAETrainer(BaseTrainer):
                 self.optimizer.step()  # type: ignore
                 self.optimizer.zero_grad()  # type: ignore
             
-            losses.append(loss.item())
             pbar.update(1)
             pbar.set_postfix({'loss': loss.item()})
         
@@ -210,9 +219,12 @@ class MAETrainer(BaseTrainer):
         self.scheduler.step()  # type: ignore
 
         # Save latest checkpoint after every epoch
-        self._save_checkpoint("mae_latest.pt", self.current_epoch, {'loss': sum(losses) / len(losses)})
-        
-        return {'loss': sum(losses) / len(losses)}
+        self._save_checkpoint("mae_latest.pt", self.current_epoch, {'loss': total_loss.avg})
+        if p_loss_meter:
+            return {'loss': total_loss.avg, 'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg}
+        else:
+            return {'loss': total_loss.avg, 'mse': mse_loss.avg}
+
     
     def _validate_epoch(self) -> Dict[str, float]:
         """
@@ -225,9 +237,10 @@ class MAETrainer(BaseTrainer):
             return {'loss': 0.0}
         
         self.model.eval()
-        total_loss = 0.0
-        num_batches = 0
-        
+        total_loss = AverageMeter()
+        p_loss_meter = AverageMeter() if self.perceptual_loss else None
+        mse_loss = AverageMeter()
+
         with torch.no_grad():
             for i, batch in enumerate(self.val_loader):
                 # Extract data from batch
@@ -263,23 +276,26 @@ class MAETrainer(BaseTrainer):
                     loss = (1 - self.l1_weight) * mse + self.l1_weight * l1
                 else:
                     loss = mse
+                mse_loss.update(loss.item(), n=1)
 
-                if self.perceptual_loss:
+                if self.perceptual_loss and p_loss_meter is not None:
                     pred_lpips = gap_region_pred.repeat(1, 3, 1, 1)
                     target_lpips = gap_region_target.repeat(1, 3, 1, 1)
                     p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean()
                     loss = loss + p_loss
-                total_loss += loss.item()
-                num_batches += 1
-                
+                    p_loss_meter.update(p_loss.item(), n=1)
+                total_loss.update(loss.item(), n=1)
+
                 # Log first batch images
                 if i == 0:
                     self.writer.add_image('mae_original_gap', gap_slice.squeeze(0), global_step=self.current_epoch)
                     self.writer.add_image('mae_target', target.squeeze(0), global_step=self.current_epoch)
                     self.writer.add_image('mae_predicted', predicted.squeeze(0), global_step=self.current_epoch)
-        
-        avg_loss = total_loss / num_batches if num_batches > 0 else 0.0
-        return {'loss': avg_loss}
+        if p_loss_meter:
+            return {'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg, 'loss': total_loss.avg}
+        else:
+
+            return {'mse': mse_loss.avg, 'loss': total_loss.avg}
     
     def check_patch_compatibility(self, dataset) -> None:
         """

@@ -8,16 +8,17 @@ model:
   patch_size: 4
 training:
   seed: 42
-  batch_size: 4
+  batch_size: 8
   max_device_batch_size: 512
   base_learning_rate: 0.00015
   weight_decay: 0.05
   mask_ratio: 0.50
-  total_epoch: 50
+  total_epoch: 15
   warmup_epoch: 1
   l1_weight: 0.0
   use_muon: false
   resume: false
+  perceptual_loss: true
 paths:
   model_path: vit-t-mae.pt
   audio_filename: assets/gapped_audio.wav
