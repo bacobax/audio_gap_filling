@@ -74,6 +74,10 @@ diff_params:
     use_aweighting: false
     ntaps: 101
 
+paths:
+  audio_filename: assets/gapped_audio.wav
+  test_audio_filename: assets/wav_test.wav
+
 data:
   dataset_type: gap_waveform
   flac_path: assets/gapped_audio.wav
