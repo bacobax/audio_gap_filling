@@ -3,9 +3,8 @@
 ## List of YAML configuration files to use for training.
 # Modify the CONFIGS array below to specify which config files to run.
 CONFIGS=(
-    "mask050_l1_00_p1"
-    "mask050_l1_00_p1_warmup"
-    "mask050_l1_00_p05_warmup"
+
+    "diffusion_example"
 )
 
 for config in "${CONFIGS[@]}"; do

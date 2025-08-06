@@ -111,7 +111,7 @@ class DiffusionTrainer(BaseTrainer):
             audio = audio.to(self.device)
             audio_noisy, context, mask = self._create_noisy_input(audio)
             self.optimizer.zero_grad()
-            error, _ = self.edm.loss_fn(self.model, audio_noisy, mask=mask, context=context)
+            error, _ = self.edm.loss_fn(self.model, audio_noisy)
             loss = error.mean()
             loss.backward()
             if self.config.get("use_grad_clip", False):

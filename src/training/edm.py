@@ -169,7 +169,7 @@ class EDM():
         return cin*(x+noise), target, cnoise
 
 
-    def loss_fn(self, net, x, mask=None, context=None):
+    def loss_fn(self, net, x):
         """
         Loss function, which is the mean squared error between the denoised latent and the clean latent.
         If mask is provided, computes the loss only on the gap region (mask == 0).
@@ -183,7 +183,7 @@ class EDM():
 
         input, target, cnoise= self.prepare_train_preconditioning(x, sigma)
         # Pass context and mask to the network
-        estimate=net(input, context, mask, cnoise) if (context is not None and mask is not None) else net(input, cnoise)
+        estimate=net(input, cnoise)
         
         error=(estimate-target)
 
@@ -196,12 +196,8 @@ class EDM():
         if self.args.diff_params.aweighting.use_aweighting:
             error=self.AW(error)
 
-        if mask is not None:
-            error = error * (1 - mask)
-            denom = (1 - mask).sum(dim=1, keepdim=True).clamp(min=1)
-            error = error.sum(dim=1, keepdim=True) / denom
-        else:
-            error = error**2
+        
+        error = error**2
 
         return error, sigma
 

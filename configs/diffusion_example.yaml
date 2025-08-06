@@ -83,7 +83,7 @@ data:
   flac_path: assets/gapped_audio.wav
   test_audio_filename: assets/wav_test.wav
   sample_rate: 16000
-  gap_percentage: 0.75
+  gap_percentage: 0.50
   n_fft: 1024
   hop_length: 256
   n_mels: 80

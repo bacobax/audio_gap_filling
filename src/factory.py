@@ -190,6 +190,11 @@ class TrainingPipeline:
         model_config = self.config_manager.get_model_config()
         model_type = model_config.get('type', 'mae_vit')
         model_config['device'] = str(self.device)
+        first_sample = next(iter(self.train_dataset))
+        print(f"sample shape: {first_sample.shape}")
+        # take the first sample in the train dataset
+        model_config['audio_len'] = first_sample.shape[-1]
+
         print("MODEL CONFIG")
         pprint(model_config)
         self.model = ModelFactory.create_model(model_type, model_config)

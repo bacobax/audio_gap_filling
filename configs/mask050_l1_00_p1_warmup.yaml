@@ -20,11 +20,13 @@ training:
   resume: false
   perceptual_loss: true
   lambda_p: 1
-  lambda_p_warmup: 6
+  lambda_p_warmup: 8
+  resume: true
 paths:
   model_path: vit-t-mae.pt
   audio_filename: assets/gapped_audio.wav
   test_audio_filename: assets/wav_test.wav
+  log_dir: runs/train/mask050_l1_00_p1_warmup-20250806-161144
   
 # Data settings
 data:

@@ -15,11 +15,6 @@ import lpips
 from lpips import LPIPS
 from ..utils.metrics import AverageMeter
 
-try:
-    from muon import MuonWithAuxAdam  # type: ignore
-except Exception:  # pragma: no cover - optional dependency
-    MuonWithAuxAdam = None
-
 from ..core.base_trainer import BaseTrainer
 from ..utils.math_utils import MCD
 
@@ -101,31 +96,12 @@ class MAETrainer(BaseTrainer):
         # Scale learning rate by batch size
         scaled_lr = base_lr * self.batch_size / 256
 
-        if self.config.get('use_muon', False) and MuonWithAuxAdam is not None:
-            try:
-                hidden_weights = [p for p in self.model.parameters() if p.ndim >= 2]
-                other_params = [p for p in self.model.parameters() if p.ndim < 2]
-                param_groups = [
-                    dict(params=hidden_weights, use_muon=True, lr=scaled_lr, weight_decay=weight_decay),
-                    dict(params=other_params, use_muon=False, lr=scaled_lr, betas=(0.9, 0.95), weight_decay=weight_decay),
-                ]
-                self.optimizer = MuonWithAuxAdam(param_groups)
-                print("muon setted")
-            except Exception as e:
-                print(f"Failed to initialize Muon optimizer: {e}. Falling back to AdamW.")
-                self.optimizer = optim.AdamW(
-                    self.model.parameters(),
-                    lr=scaled_lr,
-                    betas=(0.9, 0.95),
-                    weight_decay=weight_decay
-                )
-        else:
-            self.optimizer = optim.AdamW(
-                self.model.parameters(),
-                lr=scaled_lr,
-                betas=(0.9, 0.95),
-                weight_decay=weight_decay
-            )
+        self.optimizer = optim.AdamW(
+            self.model.parameters(),
+            lr=scaled_lr,
+            betas=(0.9, 0.95),
+            weight_decay=weight_decay
+        )
 
         # Setup learning rate scheduler
         total_epoch = self.config.get('total_epoch', 2000)
@@ -201,15 +177,16 @@ class MAETrainer(BaseTrainer):
                 pred_lpips = (predicted_spectrogram * mask).repeat(1, 3, 1, 1)
                 target_lpips = (spectrogram_slice * mask).repeat(1, 3, 1, 1)
                 p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean() / self.mask_ratio
-                lambda_p_effective = (
+                self.lambda_p_effective = (
                     self.lambda_p
                     if self.current_epoch >= self.lambda_p_warmup
                     else self.lambda_p * self.current_epoch / max(1, self.lambda_p_warmup)
                 )
-                loss = loss + lambda_p_effective * p_loss
+                logged_total_loss = loss + p_loss
+                loss = loss + self.lambda_p_effective * p_loss
                 p_loss_meter.update(p_loss.item(), n=1)
 
-            total_loss.update(loss.item(), n=1)
+            total_loss.update(logged_total_loss.item(), n=1)
 
             # Backward pass
             loss.backward()
@@ -230,7 +207,7 @@ class MAETrainer(BaseTrainer):
         # Save latest checkpoint after every epoch
         self._save_checkpoint("mae_latest.pt", self.current_epoch, {'loss': total_loss.avg})
         if p_loss_meter:
-            return {'loss': total_loss.avg, 'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg, 'lambda_p': self.lambda_p}
+            return {'loss': total_loss.avg, 'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg, 'lambda_p': self.lambda_p_effective}
         else:
             return {'loss': total_loss.avg, 'mse': mse_loss.avg}
 
