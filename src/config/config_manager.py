@@ -208,6 +208,8 @@ class ConfigManager:
             'n_mels': self.get('data.n_mels', 80),
             'trainer_type': self.get('training.trainer_type', 'mae'),
             'perceptual_loss': self.get('training.perceptual_loss', False),
+            'lambda_p' : self.get('training.lambda_p', 0.0),
+            'lambda_p_warmup': self.get('training.lambda_p_warmup', 0.0),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')

@@ -59,13 +59,15 @@ class MAETrainer(BaseTrainer):
         self.n_mels = config.get('n_mels', 80) if config else 80
         self.l1_weight = config.get('l1_weight', 0.0) if config else 0.0
         self.perceptual_loss = config.get('perceptual_loss', False) if config else False
-        
+        self.lambda_p = config.get('lambda_p', 0.0) if config else 0.0
+        self.lambda_p_warmup = config.get('lambda_p_warmup', 0)
+
         # Setup gradient accumulation
         self.batch_size = config.get('batch_size', 4) if config else 4
         self.max_device_batch_size = config.get('max_device_batch_size', 512) if config else 512
         self.load_batch_size = min(self.max_device_batch_size, self.batch_size)
         self.steps_per_update = self.batch_size // self.load_batch_size
-        
+
         # Validate batch size compatibility
         if self.batch_size % self.load_batch_size != 0:
             raise ValueError(
@@ -75,7 +77,7 @@ class MAETrainer(BaseTrainer):
         super().__init__(model, train_loader, val_loader, config, device, config["log_dir"])
 
         if self.perceptual_loss:
-            print("Using LPIPS perceptual loss")
+            print(f"LPIPS, warmup= {self.lambda_p_warmup}, lambda_p= {self.lambda_p}")
             self.lpips_fn = LPIPS(net='vgg').to(self.device)
             self.lpips_fn.eval()
             for p in self.lpips_fn.parameters():
@@ -84,21 +86,21 @@ class MAETrainer(BaseTrainer):
             self.lpips_fn = None
 
         self.check_patch_compatibility(train_loader.dataset)
-        
+
         self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "mae_latest.pt"))
         if self.config.get("resume", False):
             self.current_epoch = self.load_checkpoint(self.checkpoint_path)
-        
-    
+
+
     def _setup_training_components(self) -> None:
         """Setup optimizer, scheduler, and loss function for MAE training."""
         # Setup optimizer
         base_lr = self.config.get('base_learning_rate', 1.5e-4)
         weight_decay = self.config.get('weight_decay', 0.05)
-        
+
         # Scale learning rate by batch size
         scaled_lr = base_lr * self.batch_size / 256
-        
+
         if self.config.get('use_muon', False) and MuonWithAuxAdam is not None:
             try:
                 hidden_weights = [p for p in self.model.parameters() if p.ndim >= 2]
@@ -124,27 +126,27 @@ class MAETrainer(BaseTrainer):
                 betas=(0.9, 0.95),
                 weight_decay=weight_decay
             )
-        
+
         # Setup learning rate scheduler
         total_epoch = self.config.get('total_epoch', 2000)
         warmup_epoch = self.config.get('warmup_epoch', 200)
-        
+
         def lr_lambda(epoch):
             return min(
                 (epoch + 1) / (warmup_epoch + 1e-8),
                 0.5 * (math.cos(epoch / total_epoch * math.pi) + 1)
             )
-        
+
         self.scheduler = optim.lr_scheduler.LambdaLR(self.optimizer, lr_lambda=lr_lambda)  # type: ignore
-        
+
         # Setup base loss functions
         self.criterion = nn.MSELoss(reduction='none')
         self.l1_criterion = nn.L1Loss(reduction='none')
-    
+
     def _train_epoch(self) -> Dict[str, float]:
         """
         Train for one epoch.
-        
+
         Returns:
             Dictionary containing training metrics
         """
@@ -155,7 +157,7 @@ class MAETrainer(BaseTrainer):
         if self.perceptual_loss:
             p_loss_meter = AverageMeter()
         step_count = 0
-        
+
         pbar = tqdm(
             total=len(self.train_loader),
             desc='Training MAE',
@@ -163,27 +165,27 @@ class MAETrainer(BaseTrainer):
             leave=False,
             dynamic_ncols=True
         )
-        
+
         for batch in self.train_loader:
             step_count += 1
-            
+
             # Extract data from batch
             if len(batch) == 9:  # Training mode
                 spectrogram_slice, start_idx, end_idx, start_sec, end_sec, _, _, start_gap_sec, end_gap_sec = batch
             else:
                 raise ValueError(f"Unexpected batch size: {len(batch)}")
-            
+
             # Move to device
             spectrogram_slice = spectrogram_slice.to(self.device)
-            
+
             # Forward pass
             predicted_spectrogram, mask = self.model(spectrogram_slice)
-            
+
             # Log first batch images
             if step_count == 1:
                 self.writer.add_image('mae_target_train', spectrogram_slice.squeeze(0)[0], global_step=self.current_epoch)
                 self.writer.add_image('mae_predicted_train', predicted_spectrogram.squeeze(0)[0], global_step=self.current_epoch)
-            
+
             # Compute loss (only on masked regions)
             mse = torch.mean((predicted_spectrogram - spectrogram_slice) ** 2 * mask) / self.mask_ratio
             if self.l1_weight > 0:
@@ -198,44 +200,50 @@ class MAETrainer(BaseTrainer):
                 pred_lpips = (predicted_spectrogram * mask).repeat(1, 3, 1, 1)
                 target_lpips = (spectrogram_slice * mask).repeat(1, 3, 1, 1)
                 p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean() / self.mask_ratio
-                loss = loss + p_loss
+                lambda_p_effective = (
+                    self.lambda_p
+                    if self.current_epoch >= self.lambda_p_warmup
+                    else self.lambda_p * self.current_epoch / max(1, self.lambda_p_warmup)
+                )
+                loss = loss + lambda_p_effective * p_loss
                 p_loss_meter.update(p_loss.item(), n=1)
+
             total_loss.update(loss.item(), n=1)
-            
+
             # Backward pass
             loss.backward()
-            
+
             # Gradient accumulation
             if step_count % self.steps_per_update == 0:
                 self.optimizer.step()  # type: ignore
                 self.optimizer.zero_grad()  # type: ignore
-            
+
             pbar.update(1)
             pbar.set_postfix({'loss': loss.item()})
-        
+
         pbar.close()
-        
+
         # Step scheduler
         self.scheduler.step()  # type: ignore
 
         # Save latest checkpoint after every epoch
         self._save_checkpoint("mae_latest.pt", self.current_epoch, {'loss': total_loss.avg})
         if p_loss_meter:
-            return {'loss': total_loss.avg, 'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg}
+            return {'loss': total_loss.avg, 'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg, 'lambda_p': self.lambda_p}
         else:
             return {'loss': total_loss.avg, 'mse': mse_loss.avg}
 
-    
+
     def _validate_epoch(self) -> Dict[str, float]:
         """
         Validate for one epoch.
-        
+
         Returns:
             Dictionary containing validation metrics
         """
         if self.val_loader is None:
             return {'loss': 0.0}
-        
+
         self.model.eval()
         total_loss = AverageMeter()
         p_loss_meter = AverageMeter() if self.perceptual_loss else None
@@ -248,28 +256,28 @@ class MAETrainer(BaseTrainer):
                     gap_slice, target, start_sec, end_sec, _, _, gap_start, gap_end = batch
                 else:
                     raise ValueError(f"Unexpected validation batch size: {len(batch)}")
-                
+
                 # Move to device
                 target = target.to(self.device)
                 gap_slice = gap_slice.to(self.device)
-                
+
                 # Handle gap indices
                 if isinstance(gap_start, torch.Tensor):
                     gap_start = gap_start.squeeze().item()
                 if isinstance(gap_end, torch.Tensor):
                     gap_end = gap_end.squeeze().item()
-                
+
                 if gap_end == gap_start:
                     print(f"⚠️ Skipping validation sample {i}: empty gap range")
                     continue
-                
+
                 # Forward pass with masking on the real gap
                 predicted, mask = self.model(gap_slice, mask_bounds=(gap_start, gap_end))
-                
+
                 # Compute loss only on gap region
                 gap_region_target = target[:, :, :, gap_start:gap_end]
                 gap_region_pred = predicted[:, :, :, gap_start:gap_end]
-                
+
                 mse = torch.mean((gap_region_pred - gap_region_target) ** 2)
                 if self.l1_weight > 0:
                     l1 = torch.mean(torch.abs(gap_region_pred - gap_region_target))
@@ -282,7 +290,12 @@ class MAETrainer(BaseTrainer):
                     pred_lpips = gap_region_pred.repeat(1, 3, 1, 1)
                     target_lpips = gap_region_target.repeat(1, 3, 1, 1)
                     p_loss = self.lpips_fn(pred_lpips, target_lpips, normalize=True).mean()
-                    loss = loss + p_loss
+                    lambda_p_effective = (
+                        self.lambda_p
+                        if self.current_epoch >= self.lambda_p_warmup
+                        else self.lambda_p * self.current_epoch / max(1, self.lambda_p_warmup)
+                    )
+                    loss = loss + lambda_p_effective * p_loss
                     p_loss_meter.update(p_loss.item(), n=1)
                 total_loss.update(loss.item(), n=1)
 
