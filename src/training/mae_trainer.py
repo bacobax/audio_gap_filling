@@ -163,7 +163,8 @@ class MAETrainer(BaseTrainer):
             desc='Training MAE',
             unit='batch',
             leave=False,
-            dynamic_ncols=True
+            dynamic_ncols=True,
+            position=1
         )
 
         for batch in self.train_loader:

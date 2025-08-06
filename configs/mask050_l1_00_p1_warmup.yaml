@@ -20,7 +20,7 @@ training:
   resume: false
   perceptual_loss: true
   lambda_p: 1
-  lambda_p_warmup: 0
+  lambda_p_warmup: 6
 paths:
   model_path: vit-t-mae.pt
   audio_filename: assets/gapped_audio.wav

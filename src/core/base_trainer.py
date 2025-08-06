@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional, Callable
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 # Handle tensorboard import
 try:
@@ -149,6 +150,7 @@ class BaseTrainer(ABC):
         }
         
         start_epoch = self.current_epoch + 1 if self.config.get('resume', False) else 0
+        pbar = tqdm(range(start_epoch, num_epochs), desc="Training Progress", unit="epoch", leave=True, position=0)
 
         for epoch in range(start_epoch, num_epochs):
             self.current_epoch = epoch
@@ -156,10 +158,16 @@ class BaseTrainer(ABC):
             # Training phase
             train_metrics = self._train_epoch()
             training_history['train_losses'].append(train_metrics.get('loss', 0.0))
-            
+
+            postfix = train_metrics
+
             # Validation phase
             if self.val_loader is not None:
                 val_metrics = self._validate_epoch()
+
+                postfix_val = {f"val_{k}": v for k, v in val_metrics.items()}
+                postfix.update(postfix_val)
+
                 training_history['val_losses'].append(val_metrics.get('loss', 0.0))
                 
                 # Log metrics
@@ -175,6 +183,9 @@ class BaseTrainer(ABC):
             # Save checkpoint periodically
             if epoch % self.config.get('save_every', 10) == 0:
                 self._save_checkpoint(f'checkpoint_epoch_{epoch}.pt', epoch, train_metrics)
+            pbar.update(1)
+            pbar.set_postfix(postfix)
+
         
         # Log hyperparameters and final metrics
         try:
