@@ -157,15 +157,12 @@ class EDM():
         #weight=self.lambda_w(sigma)
         #Is calling the denoiser here a good idea? Maybe it would be better to apply directly the preconditioning as in the paper, even though Karras et al seem to do it this way in their code
         print(x.shape)
-        noise=self.sample_prior(x.shape,sigma)
-
+        noise=self.sample_prior(x.shape, sigma)
         cskip=self.cskip(sigma)
         cout=self.cout(sigma)
         cin=self.cin(sigma)
         cnoise=self.cnoise(sigma)
-
         target=(1/cout)*(x-cskip*(x+noise))
-
         return cin*(x+noise), target, cnoise
 
 
