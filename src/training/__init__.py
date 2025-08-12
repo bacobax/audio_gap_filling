@@ -1,6 +1,3 @@
-# Training module for AI training framework
+# Minimal training package init to avoid heavy dependencies at import time.
 
-from .mae_trainer import MAETrainer
-from .diff_trainer import DiffusionTrainer
-
-__all__ = ['MAETrainer', 'DiffusionTrainer']
+__all__ = []

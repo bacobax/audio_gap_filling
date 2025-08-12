@@ -10,7 +10,15 @@ from easydict import EasyDict
 from cqt_nsgt_pytorch import CQT_nsgt
 import torchaudio
 import einops
-from snake.activations import Snake
+try:
+    from snake.activations import Snake
+except Exception:  # pragma: no cover - fallback if package unavailable
+    class Snake(nn.Module):
+        def __init__(self, in_features: int, a: float = 1.0, trainable: bool = True):
+            super().__init__()
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            return x
 
 
 

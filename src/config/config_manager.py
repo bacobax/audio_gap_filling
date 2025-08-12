@@ -172,6 +172,24 @@ class ConfigManager:
                     'audio_len': self.get('data.segment_length', 65536),
                 },
             }
+        elif model_type == 'vae':
+            cfg = {
+                'type': 'vae',
+                'input_channels': self.get('model.input_channels', 1),
+                'hidden_channels': self.get('model.hidden_channels', 64),
+                'latent_dim': self.get('model.latent_dim', 64),
+                'kernel_size': self.get('model.kernel_size', 3),
+                'num_blocks': self.get('model.num_blocks', 3),
+                'downsample_stride': self.get('model.downsample_stride', 2),
+                'decoder': {
+                    'output_channels': self.get('model.output_channels', 1),
+                    'hidden_channels': self.get('model.hidden_channels', 64),
+                    'latent_dim': self.get('model.latent_dim', 64),
+                    'kernel_size': self.get('model.kernel_size', 3),
+                    'num_blocks': self.get('model.num_blocks', 3),
+                    'upsample_stride': self.get('model.downsample_stride', 2),
+                },
+            }
         else:
             cfg = {
                 'type': model_type,
@@ -210,6 +228,9 @@ class ConfigManager:
             'perceptual_loss': self.get('training.perceptual_loss', False),
             'lambda_p' : self.get('training.lambda_p', 0.0),
             'lambda_p_warmup': self.get('training.lambda_p_warmup', 0.0),
+            'beta_kl': self.get('training.beta_kl', 1.0),
+            'lambda_adv': self.get('training.lambda_adv', 0.0),
+            'sample_rate': self.get('data.sample_rate', 16000),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')
@@ -224,7 +245,7 @@ class ConfigManager:
             'flac_path': self.get('paths.audio_filename', 'gapped_audio.wav'),
             'test_audio_filename': self.get('paths.test_audio_filename', 'wav_test.wav'),
             'n_mels': self.get('data.n_mels', 80),
-            'gap_percentage': self.get('training.mask_ratio', 0.75),
+            'gap_percentage': self.get('data.gap_percentage', self.get('training.mask_ratio', 0.75)),
             'n_fft': self.get('data.n_fft', 1024),
             'hop_length': self.get('data.hop_length', 256),
             'patch_size': self.get('model.patch_size', self.get('data.patch_size', 16)),
