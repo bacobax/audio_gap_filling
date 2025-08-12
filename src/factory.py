@@ -8,10 +8,10 @@ from pprint import pprint
 from .config.config_manager import ConfigManager
 from .models.mae_vit import MAEViT
 from .models.unet_cqt_oct_with_projattention_adaLN_2 import Unet_CQT_oct_with_attention
+from .models.VAE import VAE, Decoder
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
 from .data.audio_dataset import AudioFolderDataset
-from .training.mae_trainer import MAETrainer
-from .training.diff_trainer import DiffusionTrainer
+from .data.vae_waveform_dataset import VAEWaveformDataset
 import torch.distributed as dist
 import os
 
@@ -36,6 +36,18 @@ class ModelFactory:
             return MAEViT(config)
         elif model_type == 'diffusion_unet':
             return Unet_CQT_oct_with_attention(config, device=config.get('device', 'cpu'))
+        elif model_type == 'vae':
+            decoder_cfg = config.get('decoder', {})
+            decoder = Decoder(**decoder_cfg)
+            return VAE(
+                input_channels=config.get('input_channels', 1),
+                hidden_channels=config.get('hidden_channels', 64),
+                latent_dim=config.get('latent_dim', 64),
+                kernel_size=config.get('kernel_size', 3),
+                num_blocks=config.get('num_blocks', 3),
+                downsample_stride=config.get('downsample_stride', 2),
+                decoder=decoder,
+            )
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
@@ -63,6 +75,8 @@ class DatasetFactory:
         elif dataset_type == 'gap_waveform':
             from .data.gap_waveform_dataset import GapWaveformDataset
             return GapWaveformDataset(config)
+        elif dataset_type == 'vae_waveform':
+            return VAEWaveformDataset(config, split=config.get('split', 'train'))
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
     
@@ -125,6 +139,7 @@ class TrainerFactory:
         """
         trainer_type = trainer_type.lower()
         if trainer_type == 'mae':
+            from .training.mae_trainer import MAETrainer
             return MAETrainer(
                 model=model,
                 train_loader=train_loader,
@@ -133,7 +148,17 @@ class TrainerFactory:
                 device=device,
             )
         elif trainer_type == 'diffusion':
+            from .training.diff_trainer import DiffusionTrainer
             return DiffusionTrainer(
+                model=model,
+                train_loader=train_loader,
+                val_loader=val_loader,
+                config=config,
+                device=device,
+            )
+        elif trainer_type == 'vae':
+            from .training.vae_trainer import VAETrainer
+            return VAETrainer(
                 model=model,
                 train_loader=train_loader,
                 val_loader=val_loader,
@@ -208,9 +233,10 @@ class TrainingPipeline:
         # Training dataset
         train_config = self.config_manager.get_data_config()
         dataset_type = train_config.get('dataset_type', 'mel_spectrogram')
+        train_config['split'] = 'train'
         self.train_dataset = DatasetFactory.create_dataset(dataset_type, train_config)
 
-        # Update image size in both the pipeline config and the ConfigManager
+        # Update image size if dataset provides it
         if hasattr(self.train_dataset, 'get_crop_frames'):
             image_size = (
                 self.config_manager.get('data.n_mels', 80),
@@ -218,35 +244,38 @@ class TrainingPipeline:
             )
             self.config["image_size"] = image_size
             self.config_manager.set('model.image_size', image_size)
+
         # Validation dataset
         val_config = train_config.copy()
-        val_config['test'] = (
-            True,
-            self.config_manager.get('paths.test_audio_filename', 'wav_test.wav')
-        )
+        val_config['split'] = 'val'
+        if dataset_type != 'vae_waveform':
+            val_config['test'] = (
+                True,
+                self.config_manager.get('paths.test_audio_filename', 'wav_test.wav')
+            )
         self.val_dataset = DatasetFactory.create_dataset(dataset_type, val_config)
-        
+
         # Create data loaders
         training_config = self.config_manager.get_training_config()
         load_batch_size = min(
             training_config.get('max_device_batch_size', training_config['batch_size']),
             training_config['batch_size'],
         )
-        
+
         self.train_loader = DatasetFactory.create_dataloader(
             self.train_dataset,
             batch_size=load_batch_size,
             shuffle=True,
             num_workers=4
         )
-        
+
         self.val_loader = DatasetFactory.create_dataloader(
             self.val_dataset,
             batch_size=1,
             shuffle=False,
             num_workers=1
         )
-        
+
         print(f"Data setup complete: training and validation datasets created")
     
     def setup_trainer(self) -> None:
