@@ -19,6 +19,7 @@ training:
   perceptual_loss: false
   lambda_p: 0.0
   lambda_adv: 0.1
+  early_stop_patience: 5
 paths:
   audio_filename: assets/gapped_audio.wav
 data:
