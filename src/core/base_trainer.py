@@ -148,9 +148,13 @@ class BaseTrainer(ABC):
             'val_losses': [],
             'learning_rates': []
         }
-        
+
         start_epoch = self.current_epoch + 1 if self.config.get('resume', False) else 0
         pbar = tqdm(range(start_epoch, num_epochs), desc="Training Progress", unit="epoch", leave=True, position=0)
+
+        # Early stopping parameters
+        patience = self.config.get('early_stop_patience')
+        epochs_no_improve = 0
 
         for epoch in range(start_epoch, num_epochs):
             self.current_epoch = epoch
@@ -169,14 +173,18 @@ class BaseTrainer(ABC):
                 postfix.update(postfix_val)
 
                 training_history['val_losses'].append(val_metrics.get('loss', 0.0))
-                
+
                 # Log metrics
                 self._log_metrics(train_metrics, val_metrics, epoch)
-                
-                # Save best model
-                if val_metrics.get('loss', float('inf')) < self.best_val_loss:
-                    self.best_val_loss = val_metrics['loss']
+
+                # Save best model and track improvement
+                current_val_loss = val_metrics.get('loss', float('inf'))
+                if current_val_loss < self.best_val_loss:
+                    self.best_val_loss = current_val_loss
                     self._save_checkpoint('best_model.pt', epoch, val_metrics)
+                    epochs_no_improve = 0
+                else:
+                    epochs_no_improve += 1
             else:
                 self._log_metrics(train_metrics, {}, epoch)
             
@@ -186,7 +194,11 @@ class BaseTrainer(ABC):
             pbar.update(1)
             pbar.set_postfix(postfix)
 
-        
+            if patience is not None and epochs_no_improve >= patience:
+                print(f"Early stopping triggered after {patience} epochs without improvement.")
+                pbar.close()
+                break
+
         # Log hyperparameters and final metrics
         try:
             hparams = self._prepare_hparams()
@@ -254,4 +266,4 @@ class BaseTrainer(ABC):
     def close(self) -> None:
         """Clean up resources."""
         if hasattr(self, 'writer'):
-            self.writer.close() 
+            self.writer.close()
