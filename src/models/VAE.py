@@ -78,7 +78,7 @@ class EncoderBlock(nn.Module):
                 dilation=d
             ) for d in dilations
         ])
-
+        print(f"channels: {channels}")
         # Snake activation + strided convolution for downsampling
         self.snake = Snake1d(channels=channels, a=1.0, trainable=True)
         self.downsample = nn.Conv1d(
@@ -91,8 +91,10 @@ class EncoderBlock(nn.Module):
 
     def forward(self, x):
         x = self.residual_blocks(x)
+
         x = self.snake(x)
         x = self.downsample(x)
+
         return x
 
 
@@ -110,6 +112,7 @@ class Encoder(nn.Module):
         downsample_stride: int = 2
     ):
         super().__init__()
+        print(f"hidden channels: {hidden_channels}")
 
         self.latent_dim = latent_dim
 
@@ -148,11 +151,17 @@ class Encoder(nn.Module):
         )
 
     def forward(self, x):
+        initial_time = x.shape[-1]
         x = self.initial_conv(x)
         x = self.encoder_blocks(x)
+
         x = self.snake(x)
+        print(x.shape)
         mu = self.mu_conv(x)
+        final_time = mu.shape[-1]
         logvar = self.logvar_conv(x)
+
+        print(f"reduction factor: {initial_time / final_time}")
         return mu, logvar
 
 class VAE(nn.Module):
@@ -325,8 +334,8 @@ class Decoder(nn.Module):
 
 if __name__ == "__main__":
     x = torch.randn(2, 1, 512)  # 2 audio examples, mono, length 512
-    decoder = Decoder(output_channels=1, hidden_channels=64, latent_dim=64)
-    vae = VAE(input_channels=1, hidden_channels=64, latent_dim=64, decoder=decoder)
+    decoder = Decoder(output_channels=1, hidden_channels=128, latent_dim=128)
+    vae = VAE(input_channels=1, hidden_channels=128, latent_dim=128, decoder=decoder)
 
     x_recon, mu, log_var, z = vae(x)
 

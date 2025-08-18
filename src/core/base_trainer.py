@@ -8,29 +8,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-# Handle tensorboard import
-try:
-    from torch.utils.tensorboard.writer import SummaryWriter  # type: ignore
-    TENSORBOARD_AVAILABLE = True
-except ImportError:
-    TENSORBOARD_AVAILABLE = False
-    # Create a dummy SummaryWriter class
-    class SummaryWriter:  # type: ignore
-        def __init__(self, *args, **kwargs):
-            pass
-
-        def add_scalar(self, *args, **kwargs):
-            pass
-
-        def add_image(self, *args, **kwargs):
-            pass
-
-        def add_hparams(self, *args, **kwargs):
-            pass
-
-        def close(self):
-            pass
-
+from tensorboardX import SummaryWriter # type: ignore
 import os
 from datetime import datetime
 
