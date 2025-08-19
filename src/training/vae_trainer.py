@@ -1,4 +1,5 @@
 """Trainer for Variational Autoencoder (VAE) models."""
+import os
 from typing import Dict, Any, Optional
 import torch
 import torch.nn as nn
@@ -73,6 +74,10 @@ class VAETrainer(BaseTrainer):
         else:
             self.lpips_fn = None
             self.mel_transform = None
+
+        self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "mae_latest.pt"))
+        if self.config.get("resume", False):
+            self.current_epoch = self.load_checkpoint(self.checkpoint_path)
 
     def _setup_training_components(self) -> None:
         lr = self.config.get("base_learning_rate", 1e-3)

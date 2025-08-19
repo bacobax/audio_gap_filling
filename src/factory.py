@@ -200,13 +200,13 @@ class TrainingPipeline:
         self.train_loader = None
         self.val_loader = None
         self.trainer = None
-    
-    def _get_device(self) -> torch.device:
-        """Get the appropriate device for training."""
+
+    def _get_device(self):
+
         if torch.cuda.is_available():
             return torch.device('cuda')
         elif torch.backends.mps.is_available():
-             return torch.device('mps')
+            return torch.device('mps')
         else:
             return torch.device('cpu')
     
