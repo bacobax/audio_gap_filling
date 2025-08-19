@@ -227,6 +227,15 @@ class MAETrainer(BaseTrainer):
         p_loss_meter = AverageMeter() if self.perceptual_loss else None
         mse_loss = AverageMeter()
 
+        pbar = tqdm(
+            total=len(self.val_loader),
+            desc='Validating MAE',
+            unit='batch',
+            leave=False,
+            dynamic_ncols=True,
+            position=1
+        )
+
         with torch.no_grad():
             for i, batch in enumerate(self.val_loader):
                 # Extract data from batch
@@ -282,6 +291,12 @@ class MAETrainer(BaseTrainer):
                     self.writer.add_image('mae_original_gap', gap_slice.squeeze(0), global_step=self.current_epoch)
                     self.writer.add_image('mae_target', target.squeeze(0), global_step=self.current_epoch)
                     self.writer.add_image('mae_predicted', predicted.squeeze(0), global_step=self.current_epoch)
+
+                pbar.update(1)
+                pbar.set_postfix({'loss': loss.item()})
+
+        pbar.close()
+
         if p_loss_meter:
             return {'mse': mse_loss.avg, 'p_loss': p_loss_meter.avg, 'loss': total_loss.avg}
         else:

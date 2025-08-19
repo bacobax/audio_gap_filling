@@ -9,7 +9,7 @@ model:
 training:
   trainer_type: vae
   seed: 0
-  batch_size: 2
+  batch_size: 16
   max_device_batch_size: 2
   base_learning_rate: 0.0003
   weight_decay: 0.0
@@ -19,9 +19,12 @@ training:
   perceptual_loss: false
   lambda_p: 0.0
   lambda_adv: 0.1
-  early_stop_patience: 5
+  early_stop_patience: 3
+  resume: true
 paths:
   audio_filename: assets/gapped_audio.wav
+  log_dir: /Users/francescobassignana/Desktop/school/unitn/research_project/main/runs/train/vae-20250818-175915
+
 data:
   dataset_type: vae_waveform
   gap_percentage: 0.5

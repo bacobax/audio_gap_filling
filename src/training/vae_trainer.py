@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from typing import TYPE_CHECKING
 import torchaudio
+from tqdm import tqdm
 
 if TYPE_CHECKING:
     from lpips import LPIPS  # type: ignore
@@ -98,6 +99,15 @@ class VAETrainer(BaseTrainer):
         p_meter = AverageMeter()
         adv_meter = AverageMeter()
 
+        pbar = tqdm(
+            total=len(self.train_loader),
+            desc='Training VAE',
+            unit='batch',
+            leave=False,
+            dynamic_ncols=True,
+            position=1
+        )
+
         for batch_idx, batch in enumerate(self.train_loader):
             wave = batch
             if isinstance(batch, (list, tuple)):
@@ -139,12 +149,17 @@ class VAETrainer(BaseTrainer):
             if self.perceptual_loss:
                 p_meter.update(p_loss.item(), wave.size(0))
 
+            pbar.update(1)
+            pbar.set_postfix({'loss': loss.item()})
+
             if batch_idx == 0:
                 self.writer.add_audio('train/original', wave[0].squeeze(0), self.current_epoch, sample_rate=self.sample_rate)
                 self.writer.add_audio('train/reconstruction', recon[0].squeeze(0), self.current_epoch, sample_rate=self.sample_rate)
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
                     self.writer.add_image('train/recon_spectrogram', spec, self.current_epoch, dataformats='CHW')
+
+        pbar.close()
 
         metrics = {
             'loss': total_loss.avg,
@@ -164,6 +179,15 @@ class VAETrainer(BaseTrainer):
         kl_meter = AverageMeter()
         p_meter = AverageMeter()
         adv_meter = AverageMeter()
+
+        pbar = tqdm(
+            total=len(self.val_loader),
+            desc='Validating VAE',
+            unit='batch',
+            leave=False,
+            dynamic_ncols=True,
+            position=1
+        )
 
         for batch_idx, batch in enumerate(self.val_loader):
             wave = batch
@@ -195,6 +219,11 @@ class VAETrainer(BaseTrainer):
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
                     self.writer.add_image('val/recon_spectrogram', spec, self.current_epoch, dataformats='CHW')
+
+            pbar.update(1)
+            pbar.set_postfix({'loss': loss.item()})
+
+        pbar.close()
 
         metrics = {
             'loss': total_loss.avg,

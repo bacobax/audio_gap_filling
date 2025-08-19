@@ -151,17 +151,13 @@ class Encoder(nn.Module):
         )
 
     def forward(self, x):
-        initial_time = x.shape[-1]
         x = self.initial_conv(x)
         x = self.encoder_blocks(x)
 
         x = self.snake(x)
-        print(x.shape)
         mu = self.mu_conv(x)
-        final_time = mu.shape[-1]
         logvar = self.logvar_conv(x)
 
-        print(f"reduction factor: {initial_time / final_time}")
         return mu, logvar
 
 class VAE(nn.Module):
