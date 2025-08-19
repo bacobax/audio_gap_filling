@@ -75,7 +75,7 @@ class VAETrainer(BaseTrainer):
             self.lpips_fn = None
             self.mel_transform = None
 
-        self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "mae_latest.pt"))
+        self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "best_model.pt"))
         if self.config.get("resume", False):
             self.current_epoch = self.load_checkpoint(self.checkpoint_path)
 
