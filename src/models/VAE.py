@@ -14,11 +14,22 @@ try:
     from snake.activations import Snake
 except Exception:  # pragma: no cover - fallback if package unavailable
     class Snake(nn.Module):
+        """Fallback Snake activation with trainable frequency parameter."""
+
         def __init__(self, in_features: int, a: float = 1.0, trainable: bool = True):
             super().__init__()
+            init = torch.full((in_features,), a, dtype=torch.float32)
+            if trainable:
+                self.a = nn.Parameter(init)
+            else:
+                self.register_buffer("a", init)
 
-        def forward(self, x: torch.Tensor) -> torch.Tensor:
-            return x
+        def forward(self, x: torch.Tensor) -> torch.Tensor:  # pragma: no cover - simple formula
+            return torch.where(
+                self.a == 0,
+                x,
+                x + torch.sin(self.a * x) ** 2 / self.a
+            )
 
 
 
