@@ -100,7 +100,11 @@ class VAETrainer(BaseTrainer):
         self.beta_kl = config.get("beta_kl", 1e-4) if config else 1e-4
         self.lambda_adv = config.get("lambda_adv", 0.0) if config else 0.0
         self.lambda_fm = config.get("lambda_fm", 0.0) if config else 0.0
-        self.sample_rate = config.get("sample_rate", 44100) if config else 44100
+        dataset_sr = getattr(train_loader.dataset, "sample_rate", None)
+        if config:
+            self.sample_rate = config.get("sample_rate", dataset_sr or 44100)
+        else:
+            self.sample_rate = dataset_sr or 44100
         self.freeze_encoder_epoch = config.get("freeze_encoder_epoch") if config else None
         self.decoder_lr = config.get("decoder_learning_rate", 1.5e-4) if config else 1.5e-4
 
