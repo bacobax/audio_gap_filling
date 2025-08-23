@@ -1,6 +1,6 @@
 model:
   type: vae
-  input_channels: 2
+  input_channels: 1
   hidden_channels: 64
   latent_dim: 64
   num_blocks: 3
@@ -10,7 +10,7 @@ model:
 training:
   trainer_type: vae
   seed: 0
-  batch_size: 4
+  batch_size: 1
   max_device_batch_size: 4
   base_learning_rate: 0.00015
   disc_learning_rate: 0.0003
@@ -21,7 +21,6 @@ training:
   lambda_adv: 1.0
   lambda_fm: 1.0
   early_stop_patience: 3
-  resume: true
   freeze_encoder_epoch: 5
   decoder_batch_size: 8
   decoder_learning_rate: 0.00015
@@ -32,7 +31,6 @@ training:
 
 paths:
   audio_filename: assets/gapped_audio.wav
-  log_dir: runs/train/vae
 
 data:
   dataset_type: vae_waveform

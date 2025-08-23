@@ -66,61 +66,25 @@ class MultiScaleDiscriminator(nn.Module):
 
 
 class MultiResolutionSTFTLoss(nn.Module):
-    """Multi-resolution STFT loss operating on stereo audio.
-
-    Computes losses on mid/side and left/right representations, where the
-    left/right component is down-weighted by 0.5 compared to mid/side.
-    """
-
-    def __init__(
-        self,
-        fft_sizes: Optional[List[int]] = None,
-        hop_sizes: Optional[List[int]] = None,
-        win_lengths: Optional[List[int]] = None,
-    ) -> None:
+    def __init__(self, fft_sizes=None, hop_sizes=None, win_lengths=None):
         super().__init__()
         self.fft_sizes = fft_sizes or [512, 1024, 2048]
         self.hop_sizes = hop_sizes or [50, 120, 240]
         self.win_lengths = win_lengths or [240, 600, 1200]
 
-    def _stft(self, x: torch.Tensor, fft: int, hop: int, win: int) -> torch.Tensor:
+    def _stft(self, x, fft, hop, win):
         window = torch.hann_window(win, device=x.device)
-        return torch.stft(
-            x,
-            n_fft=fft,
-            hop_length=hop,
-            win_length=win,
-            window=window,
-            return_complex=True,
-        ).abs()
+        return torch.stft(x, n_fft=fft, hop_length=hop, win_length=win,
+                          window=window, return_complex=True).abs()
 
-    def _repr_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        # x,y: [B, 2, T]
+    def forward(self, x, y):
+        # x,y: [B, 1, T]
         loss = 0.0
-        for ch in range(x.size(1)):
-            xi = x[:, ch, :]
-            yi = y[:, ch, :]
-            for fft, hop, win in zip(self.fft_sizes, self.hop_sizes, self.win_lengths):
-                Xi = self._stft(xi, fft, hop, win)
-                Yi = self._stft(yi, fft, hop, win)
-                loss = loss + F.l1_loss(Xi, Yi)
-        return loss / (x.size(1) * len(self.fft_sizes))
-
-    def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        # x,y: [B,2,T]
-        Lx, Rx = x[:, 0, :], x[:, 1, :]
-        Ly, Ry = y[:, 0, :], y[:, 1, :]
-        Mx = (Lx + Rx) / 2
-        Sx = (Lx - Rx) / 2
-        My = (Ly + Ry) / 2
-        Sy = (Ly - Ry) / 2
-
-        ms_x = torch.stack([Mx, Sx], dim=1)
-        ms_y = torch.stack([My, Sy], dim=1)
-        loss_ms = self._repr_loss(ms_x, ms_y)
-        loss_lr = self._repr_loss(x, y)
-        return loss_ms + 0.5 * loss_lr
-
+        for fft, hop, win in zip(self.fft_sizes, self.hop_sizes, self.win_lengths):
+            X = self._stft(x.squeeze(1), fft, hop, win)
+            Y = self._stft(y.squeeze(1), fft, hop, win)
+            loss += F.l1_loss(X, Y)
+        return loss / len(self.fft_sizes)
 
 class VAETrainer(BaseTrainer):
     """Training loop for VAE models with perceptual and adversarial losses."""
@@ -290,8 +254,9 @@ class VAETrainer(BaseTrainer):
             pbar.set_postfix({'loss': loss.item()})
 
             if batch_idx == 0:
-                self.writer.add_audio('train/original', wave[0], self.current_epoch, sample_rate=self.sample_rate)
-                self.writer.add_audio('train/reconstruction', recon[0], self.current_epoch, sample_rate=self.sample_rate)
+                print(f"wave shape: {wave.shape}, recon shape: {recon.shape}")
+                self.writer.add_audio('train/original', wave[0][0], self.current_epoch, sample_rate=self.sample_rate)
+                self.writer.add_audio('train/reconstruction', recon[0][0], self.current_epoch, sample_rate=self.sample_rate)
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
                     self.writer.add_image('train/recon_spectrogram', spec.squeeze(0), self.current_epoch, dataformats='CHW')
@@ -362,8 +327,8 @@ class VAETrainer(BaseTrainer):
                 p_meter.update(p_loss.item(), wave.size(0))
 
             if batch_idx == 0:
-                self.writer.add_audio('val/original', wave[0], self.current_epoch, sample_rate=self.sample_rate)
-                self.writer.add_audio('val/reconstruction', recon[0], self.current_epoch, sample_rate=self.sample_rate)
+                self.writer.add_audio('val/original', wave[0][0], self.current_epoch, sample_rate=self.sample_rate)
+                self.writer.add_audio('val/reconstruction', recon[0][0], self.current_epoch, sample_rate=self.sample_rate)
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
                     self.writer.add_image('val/recon_spectrogram', spec.squeeze(0), self.current_epoch, dataformats='CHW')
