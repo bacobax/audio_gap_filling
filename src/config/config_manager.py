@@ -231,6 +231,7 @@ class ConfigManager:
             'beta_kl': self.get('training.beta_kl', 1.0),
             'lambda_adv': self.get('training.lambda_adv', 0.0),
             'sample_rate': self.get('data.sample_rate', 16000),
+            'mixed_precision': self.get('training.mixed_precision', None),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')

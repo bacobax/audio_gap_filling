@@ -9,15 +9,15 @@ model:
 training:
   trainer_type: vae
   seed: 0
-  batch_size: 16
+  batch_size: 2
   max_device_batch_size: 2
   base_learning_rate: 0.0003
   weight_decay: 0.0
   total_epoch: 15
   warmup_epoch: 1
   beta_kl: 1.0
-  perceptual_loss: false
-  lambda_p: 0.0
+  perceptual_loss: true
+  lambda_p: 0.5
   lambda_adv: 0.1
   early_stop_patience: 3
   resume: true

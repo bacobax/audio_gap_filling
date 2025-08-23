@@ -92,8 +92,9 @@ class VAETrainer(BaseTrainer):
         with torch.no_grad():
             spec_recon = self.mel_transform(recon).unsqueeze(1)
             spec_target = self.mel_transform(target).unsqueeze(1)
-        spec_recon = spec_recon.repeat(1, 3, 1, 1)
-        spec_target = spec_target.repeat(1, 3, 1, 1)
+
+        spec_recon = spec_recon.squeeze(1).repeat(1, 3, 1, 1)
+        spec_target = spec_target.squeeze(1).repeat(1, 3, 1, 1)
         return self.lpips_fn(spec_recon, spec_target, normalize=True).mean()
 
     def _train_epoch(self) -> Dict[str, float]:
@@ -162,7 +163,7 @@ class VAETrainer(BaseTrainer):
                 self.writer.add_audio('train/reconstruction', recon[0].squeeze(0), self.current_epoch, sample_rate=self.sample_rate)
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
-                    self.writer.add_image('train/recon_spectrogram', spec, self.current_epoch, dataformats='CHW')
+                    self.writer.add_image('train/recon_spectrogram', spec.squeeze(0), self.current_epoch, dataformats='CHW')
 
         pbar.close()
 
@@ -223,7 +224,7 @@ class VAETrainer(BaseTrainer):
                 self.writer.add_audio('val/reconstruction', recon[0].squeeze(0), self.current_epoch, sample_rate=self.sample_rate)
                 if self.mel_transform is not None:
                     spec = self.mel_transform(recon[0]).log2()[None]
-                    self.writer.add_image('val/recon_spectrogram', spec, self.current_epoch, dataformats='CHW')
+                    self.writer.add_image('val/recon_spectrogram', spec.squeeze(0), self.current_epoch, dataformats='CHW')
 
             pbar.update(1)
             pbar.set_postfix({'loss': loss.item()})
