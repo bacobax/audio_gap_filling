@@ -17,6 +17,7 @@ from ..core.base_trainer import BaseTrainer
 from ..utils.metrics import AverageMeter
 from ..models.VAE import VAE
 
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
 class DiscriminatorWithFeatures(nn.Module):
     """Convolutional discriminator that returns intermediate features."""
@@ -70,18 +71,35 @@ class MultiResolutionSTFTLoss(nn.Module):
         self.fft_sizes = fft_sizes or [512, 1024, 2048]
         self.hop_sizes = hop_sizes or [50, 120, 240]
         self.win_lengths = win_lengths or [240, 600, 1200]
+        # Anchor buffer to track current device and a cache for Hann windows
+        self.register_buffer('_dummy', torch.tensor(0.), persistent=False)
+        self._windows: Dict[int, torch.Tensor] = {}
+
+    def _get_window(self, win: int) -> torch.Tensor:
+        """Return a cached Hann window of length `win` on the module's current device."""
+        dev = DEVICE
+        print(f"DEVICE: {dev}")
+        w = self._windows.get(win)
+        if w is None or w.device != dev:
+            w = torch.hann_window(win, device=dev)
+            self._windows[win] = w
+        return w
 
     def _stft(self, x, fft, hop, win):
-        window = torch.hann_window(win, device=x.device)
-        return torch.stft(x, n_fft=fft, hop_length=hop, win_length=win,
-                          window=window, return_complex=True).abs()
+        window = self._get_window(win)
+        return torch.stft(
+            x, n_fft=fft, hop_length=hop, win_length=win,
+            window=window, return_complex=True
+        ).abs()
 
     def forward(self, x, y):
         # x,y: [B, 1, T]
         loss = 0.0
+        x_ = x.squeeze(1)
+        y_ = y.squeeze(1)
         for fft, hop, win in zip(self.fft_sizes, self.hop_sizes, self.win_lengths):
-            X = self._stft(x.squeeze(1), fft, hop, win)
-            Y = self._stft(y.squeeze(1), fft, hop, win)
+            X = self._stft(x_, fft, hop, win)
+            Y = self._stft(y_, fft, hop, win)
             loss += F.l1_loss(X, Y)
         return loss / len(self.fft_sizes)
 
@@ -103,6 +121,7 @@ class VAETrainer(BaseTrainer):
         self.freeze_encoder_epoch = config.get("freeze_encoder_epoch") if config else None
         self.decoder_lr = config.get("decoder_learning_rate", 1.5e-4) if config else 1.5e-4
         self.step_interval = config.get("step_interval", 1) if config else 1
+        self.grad_clip = (config.get("grad_clip", 1.0) if config else 1.0)
 
         super().__init__(model, train_loader, val_loader, config, device, config.get("log_dir") if config else None)
 
@@ -121,6 +140,13 @@ class VAETrainer(BaseTrainer):
             hop_sizes=mrstft_cfg.get("hop_sizes"),
             win_lengths=mrstft_cfg.get("win_lengths"),
         )
+
+        self.mel_transform_cpu = torchaudio.transforms.MelSpectrogram(
+            sample_rate=self.sample_rate,
+            n_fft=self.config.get("n_fft", 1024),
+            hop_length=self.config.get("hop_length", 256),
+            n_mels=self.config.get("n_mels", 80),
+        )  # stays on CPU
 
         # Optional perceptual loss (disabled by default)
         self.perceptual_loss = config.get("perceptual_loss", False) if config else False
@@ -229,8 +255,8 @@ class VAETrainer(BaseTrainer):
             position=1
         )
 
-        self.optimizer.zero_grad()
-        self.optimizer_d.zero_grad()
+        self.optimizer.zero_grad(set_to_none=True)
+        self.optimizer_d.zero_grad(set_to_none=True)
 
         for batch_idx, batch in enumerate(self.train_loader):
             wave = batch
@@ -280,10 +306,15 @@ class VAETrainer(BaseTrainer):
             (d_loss / self.step_interval).backward()
 
             if (batch_idx + 1) % self.step_interval == 0 or (batch_idx + 1) == len(self.train_loader):
+                # Optional gradient clipping to stabilize/limit grad memory
+                if self.grad_clip is not None and self.grad_clip > 0:
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=self.grad_clip)
+                    torch.nn.utils.clip_grad_norm_(self.discriminator.parameters(), max_norm=self.grad_clip)
+
                 self.optimizer.step()
-                self.optimizer.zero_grad()
+                self.optimizer.zero_grad(set_to_none=True)
                 self.optimizer_d.step()
-                self.optimizer_d.zero_grad()
+                self.optimizer_d.zero_grad(set_to_none=True)
 
             total_loss.update(loss.item(), wave.size(0))
             recon_meter.update(recon_loss.item(), wave.size(0))
@@ -298,13 +329,15 @@ class VAETrainer(BaseTrainer):
             self.global_step += 1
 
             if batch_idx == 0:
-                print(f"wave shape: {wave.shape}, recon shape: {recon.shape}")
-                self.writer.add_audio('train/original', wave[0][0], self.current_epoch, sample_rate=self.sample_rate)
-                self.writer.add_audio('train/reconstruction', recon[0][0], self.current_epoch, sample_rate=self.sample_rate)
-                if self.mel_transform is not None:
-                    spec = self.mel_transform(recon[0]).log2()[None]
-                    self.writer.add_image('train/recon_spectrogram', spec.squeeze(0), self.current_epoch, dataformats='CHW')
-
+                with torch.no_grad():
+                    print(f"wave shape: {wave.shape}, recon shape: {recon.shape}")
+                    self.writer.add_audio('train/original', wave[0, 0].detach().float().cpu(), self.current_epoch, sample_rate=self.sample_rate)
+                    self.writer.add_audio('train/reconstruction', recon[0, 0].detach().float().cpu(),self.current_epoch, sample_rate=self.sample_rate)
+                    if self.mel_transform is not None:
+                        # Use a CPU transform for logging (see #2)
+                        spec = self.mel_transform_cpu(recon[0, 0].detach().cpu()).clamp_min(1e-9).log2()
+                        # [n_mels, time] -> [C,H,W] expected by add_image (use 1 channel)
+                        self.writer.add_image('train/recon_spectrogram', spec.unsqueeze(0), self.current_epoch, dataformats='CHW')  # 1 x H x W
         pbar.close()
 
         metrics = {

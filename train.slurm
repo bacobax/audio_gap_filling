@@ -4,7 +4,7 @@
 #SBATCH -N 1                     # 1 node
 #SBATCH -n 1                     # 1 task
 #SBATCH -c 4                     # 4 CPU cores
-#SBATCH --gres=gpu:1             # 1 GPU
+#SBATCH --gres=gpu:2             # 2 GPUs
 #SBATCH --mem=16G                # 16 GB RAM
 #SBATCH -t 02:00:00              # Time limit (2 hours)
 #SBATCH -o logs/%x_%j.out        # Stdout/stderr log file
