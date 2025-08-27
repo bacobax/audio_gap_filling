@@ -8,6 +8,8 @@
 #SBATCH --mem=16G                # 16 GB RAM
 #SBATCH -t 02:00:00              # Time limit (2 hours)
 #SBATCH -o logs/%x_%j.out        # Stdout/stderr log file
+#SBATCH --mail-type=BEGIN,END,FAIL      
+#SBATCH --mail-user=francesco.bassignana@studenti.unitn.it  
 
 mkdir -p logs
 
