@@ -29,8 +29,11 @@ training:
     fft_sizes: [512, 1024, 2048]
     hop_sizes: [50, 120, 240]
     win_lengths: [240, 600, 1200]
+
 paths:
   audio_filename: assets/gapped_audio.wav
+  log_dir: /home/francesco.bassignana/audio_gap_filling/runs/vae_cluster
+
 
 data:
   dataset_type: vae_waveform
