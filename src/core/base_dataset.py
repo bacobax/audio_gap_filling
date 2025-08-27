@@ -25,8 +25,11 @@ class BaseDataset(Dataset, ABC):
         """
         super().__init__()
         self.config = config
+        self.sample_rate = config.get('sample_rate', 16000)
+        print(f"SAMPLE RATE {self.sample_rate}")
         self._validate_config()
         self._setup_dataset()
+
     
     @abstractmethod
     def _validate_config(self) -> None:
@@ -95,4 +98,5 @@ class BaseDataset(Dataset, ABC):
             "length": len(self),
             "sample_shape": self.get_sample_shape(),
             "config": self.config
-        } 
+        }
+

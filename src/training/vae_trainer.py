@@ -11,8 +11,7 @@ from typing import TYPE_CHECKING
 import torchaudio
 from tqdm import tqdm
 
-if TYPE_CHECKING:  # pragma: no cover - optional import
-    from lpips import LPIPS  # type: ignore
+from lpips import LPIPS  # type: ignore
 
 from ..core.base_trainer import BaseTrainer
 from ..utils.metrics import AverageMeter
@@ -113,6 +112,7 @@ class VAETrainer(BaseTrainer):
             self.discriminator.parameters(),
             lr=config.get("disc_learning_rate", 3e-4) if config else 3e-4,
         )
+        self.scheduler_d: Optional[torch.optim.lr_scheduler._LRScheduler] = None
 
         mrstft_cfg = config.get("mrstft", {}) if config else {}
         self.recon_loss_fn = MultiResolutionSTFTLoss(
@@ -150,6 +150,35 @@ class VAETrainer(BaseTrainer):
         weight_decay = self.config.get("weight_decay", 0.0)
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, weight_decay=weight_decay)
         self.bce = nn.BCEWithLogitsLoss()
+
+    def _extra_state_to_save(self) -> Dict[str, Any]:
+        """Extend BaseTrainer checkpoint with discriminator and its optimizer/scheduler."""
+        return {
+            'discriminator_state_dict': self.discriminator.state_dict() if hasattr(self, 'discriminator') else None,
+            'optimizer_d_state_dict': self.optimizer_d.state_dict() if hasattr(self, 'optimizer_d') and self.optimizer_d is not None else None,
+            'scheduler_d_state_dict': self.scheduler_d.state_dict() if hasattr(self, 'scheduler_d') and self.scheduler_d is not None else None,
+        }
+
+    def _load_extra_state(self, checkpoint: Dict[str, Any]) -> None:
+        """Restore discriminator and its optimizer/scheduler from checkpoint if present."""
+        disc_sd = checkpoint.get('discriminator_state_dict')
+        if disc_sd is not None and hasattr(self, 'discriminator'):
+            try:
+                self.discriminator.load_state_dict(disc_sd)
+            except Exception:
+                pass
+        optd_sd = checkpoint.get('optimizer_d_state_dict')
+        if optd_sd is not None and hasattr(self, 'optimizer_d') and self.optimizer_d is not None:
+            try:
+                self.optimizer_d.load_state_dict(optd_sd)
+            except Exception:
+                pass
+        sched_d_sd = checkpoint.get('scheduler_d_state_dict')
+        if sched_d_sd is not None and hasattr(self, 'scheduler_d') and self.scheduler_d is not None:
+            try:
+                self.scheduler_d.load_state_dict(sched_d_sd)
+            except Exception:
+                pass
 
     # --------------------------- training helpers ---------------------------
     def _compute_perceptual(self, recon: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
@@ -252,6 +281,7 @@ class VAETrainer(BaseTrainer):
 
             pbar.update(1)
             pbar.set_postfix({'loss': loss.item()})
+            self.global_step += 1
 
             if batch_idx == 0:
                 print(f"wave shape: {wave.shape}, recon shape: {recon.shape}")

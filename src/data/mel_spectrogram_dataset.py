@@ -98,7 +98,7 @@ class MelSpectrogramDataset(BaseDataset):
         if not os.path.isfile(path):
             raise FileNotFoundError(path)
         
-        wave, sr = librosa.load(path, sr=16000, mono=True, dtype=np.float32)
+        wave, sr = librosa.load(path, sr=self.sample_rate, mono=True, dtype=np.float32)
         return wave, sr
     
     def _compute_mel_spectrogram(self, audio: np.ndarray) -> np.ndarray:

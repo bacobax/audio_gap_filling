@@ -259,5 +259,6 @@ class ConfigManager:
             'sample_rate': self.get('data.sample_rate', 16000),
             'segment_length': self.get('data.segment_length', 65536),
             'folder': self.get('data.folder', 'assets'),
+            'batch_size': self.get('training.batch_size', 4),
         }
         return cfg

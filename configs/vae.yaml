@@ -28,11 +28,10 @@ training:
     fft_sizes: [512, 1024, 2048]
     hop_sizes: [50, 120, 240]
     win_lengths: [240, 600, 1200]
-
 paths:
   audio_filename: assets/gapped_audio.wav
 
 data:
   dataset_type: vae_waveform
   gap_percentage: 0.5
-  sample_rate: 44100
+  sample_rate: 22050
