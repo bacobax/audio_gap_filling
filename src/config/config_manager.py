@@ -230,6 +230,12 @@ class ConfigManager:
             'lambda_p_warmup': self.get('training.lambda_p_warmup', 0.0),
             'beta_kl': self.get('training.beta_kl', 1.0),
             'lambda_adv': self.get('training.lambda_adv', 0.0),
+            'lambda_fm': self.get('training.lambda_fm', 0.0),
+            'disc_learning_rate': self.get('training.disc_learning_rate', 0.0003),
+            'freeze_encoder_epoch': self.get('training.freeze_encoder_epoch', None),
+            'decoder_batch_size': self.get('training.decoder_batch_size', None),
+            'decoder_learning_rate': self.get('training.decoder_learning_rate', self.get('training.base_learning_rate', 0.00015)),
+            'mrstft': self.get('training.mrstft', {}),
             'sample_rate': self.get('data.sample_rate', 16000),
             'mixed_precision': self.get('training.mixed_precision', None),
             'config_filename': self.config_filename,
@@ -253,5 +259,6 @@ class ConfigManager:
             'sample_rate': self.get('data.sample_rate', 16000),
             'segment_length': self.get('data.segment_length', 65536),
             'folder': self.get('data.folder', 'assets'),
+            'batch_size': self.get('training.batch_size', 4),
         }
         return cfg
