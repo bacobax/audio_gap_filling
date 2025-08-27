@@ -11,7 +11,8 @@ training:
   trainer_type: vae
   seed: 0
   batch_size: 1
-  max_device_batch_size: 1
+  max_device_batch_size: 4
+  step_interval: 1
   base_learning_rate: 0.00015
   disc_learning_rate: 0.0003
   weight_decay: 0.0

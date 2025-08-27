@@ -102,6 +102,7 @@ class VAETrainer(BaseTrainer):
         self.sample_rate = config.get("sample_rate", 44100) if config else 44100
         self.freeze_encoder_epoch = config.get("freeze_encoder_epoch") if config else None
         self.decoder_lr = config.get("decoder_learning_rate", 1.5e-4) if config else 1.5e-4
+        self.step_interval = config.get("step_interval", 1) if config else 1
 
         super().__init__(model, train_loader, val_loader, config, device, config.get("log_dir") if config else None)
 
@@ -228,6 +229,9 @@ class VAETrainer(BaseTrainer):
             position=1
         )
 
+        self.optimizer.zero_grad()
+        self.optimizer_d.zero_grad()
+
         for batch_idx, batch in enumerate(self.train_loader):
             wave = batch
             if isinstance(batch, (list, tuple)):
@@ -241,9 +245,17 @@ class VAETrainer(BaseTrainer):
             recon_loss = self.recon_loss_fn(recon, wave)
             kl_loss = self.model.kl_loss(mu, logvar, reduction="mean")
             p_loss = self._compute_perceptual(recon, wave)
+
+            # Freeze discriminator parameters for generator update
+            for p in self.discriminator.parameters():
+                p.requires_grad_(False)
             pred_fake, feats_fake = self.discriminator(recon)
+            for p in self.discriminator.parameters():
+                p.requires_grad_(True)
+
             with torch.no_grad():
                 _, feats_real = self.discriminator(wave)
+
             adv_loss = sum(self.bce(p, torch.ones_like(p)) for p in pred_fake) / len(pred_fake)
             fm_loss = 0.0
             for fr, ff in zip(feats_real, feats_fake):
@@ -255,9 +267,7 @@ class VAETrainer(BaseTrainer):
             if self.perceptual_loss:
                 loss = loss + self.lambda_p * p_loss
 
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
+            (loss / self.step_interval).backward()
 
             # Update discriminator
             with torch.no_grad():
@@ -267,9 +277,13 @@ class VAETrainer(BaseTrainer):
             real_loss = sum(self.bce(pr, torch.ones_like(pr)) for pr in pred_real_det) / len(pred_real_det)
             fake_loss = sum(self.bce(pf, torch.zeros_like(pf)) for pf in pred_fake_det) / len(pred_fake_det)
             d_loss = 0.5 * (real_loss + fake_loss)
-            self.optimizer_d.zero_grad()
-            d_loss.backward()
-            self.optimizer_d.step()
+            (d_loss / self.step_interval).backward()
+
+            if (batch_idx + 1) % self.step_interval == 0 or (batch_idx + 1) == len(self.train_loader):
+                self.optimizer.step()
+                self.optimizer.zero_grad()
+                self.optimizer_d.step()
+                self.optimizer_d.zero_grad()
 
             total_loss.update(loss.item(), wave.size(0))
             recon_meter.update(recon_loss.item(), wave.size(0))
