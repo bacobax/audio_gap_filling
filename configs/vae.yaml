@@ -30,6 +30,7 @@ training:
     hop_sizes: [50, 120, 240]
     win_lengths: [240, 600, 1200]
   resume: true
+  checkpoint_path: /home/francesco.bassignana/audio_gap_filling/runs/vae_cluster/checkpoint_epoch_10.pt
 
 paths:
   audio_filename: assets/gapped_audio.wav
