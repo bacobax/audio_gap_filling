@@ -169,6 +169,7 @@ class VAETrainer(BaseTrainer):
 
         self.checkpoint_path = self.config.get("checkpoint_path", os.path.join(self.log_dir, "best_model.pt"))
         if self.config.get("resume", False):
+            print(f"CHECKPOINT path: {self.checkpoint_path}")
             self.current_epoch = self.load_checkpoint(self.checkpoint_path)
 
     def _setup_training_components(self) -> None:

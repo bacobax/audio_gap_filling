@@ -29,6 +29,7 @@ training:
     fft_sizes: [512, 1024, 2048]
     hop_sizes: [50, 120, 240]
     win_lengths: [240, 600, 1200]
+  resume: true
 
 paths:
   audio_filename: assets/gapped_audio.wav

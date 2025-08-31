@@ -1,0 +1,121 @@
+Starting training with configuration: vae_x16
+{'data': {'dataset_type': 'vae_waveform',
+          'gap_percentage': 0.5,
+          'sample_rate': 22050},
+ 'model': {'downsample_stride': 2,
+           'hidden_channels': 64,
+           'input_channels': 1,
+           'kernel_size': 3,
+           'latent_dim': 64,
+           'num_blocks': 4,
+           'type': 'vae'},
+ 'paths': {'audio_filename': 'assets/gapped_audio.wav',
+           'log_dir': 'runs/vae_x16'},
+ 'training': {'base_learning_rate': 0.00015,
+              'batch_size': 1,
+              'beta_kl': 0.0001,
+              'decoder_batch_size': 1,
+              'decoder_learning_rate': 0.00015,
+              'disc_learning_rate': 0.0003,
+              'early_stop_patience': 3,
+              'freeze_encoder_epoch': 5,
+              'lambda_adv': 1.0,
+              'lambda_fm': 1.0,
+              'max_device_batch_size': 1,
+              'mrstft': {'fft_sizes': [512, 1024, 2048],
+                         'hop_sizes': [50, 120, 240],
+                         'win_lengths': [240, 600, 1200]},
+              'resume': True,
+              'seed': 0,
+              'step_interval': 4,
+              'total_epoch': 15,
+              'trainer_type': 'vae',
+              'warmup_epoch': 1,
+              'weight_decay': 0.0}}
+Using device: cuda
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'train',
+ 'test_audio_filename': 'wav_test.wav'}
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'val',
+ 'test_audio_filename': 'wav_test.wav'}
+Data setup complete: training and validation datasets created
+sample shape: torch.Size([442368])
+MODEL CONFIG
+{'audio_len': 442368,
+ 'decoder': {'hidden_channels': 64,
+             'kernel_size': 3,
+             'latent_dim': 64,
+             'num_blocks': 4,
+             'output_channels': 1,
+             'upsample_stride': 2},
+ 'device': 'cuda',
+ 'downsample_stride': 2,
+ 'hidden_channels': 64,
+ 'input_channels': 1,
+ 'kernel_size': 3,
+ 'latent_dim': 64,
+ 'num_blocks': 4,
+ 'type': 'vae'}
+hidden channels: 64
+channels: 64
+channels: 64
+channels: 64
+channels: 64
+Model created successfully
+Traceback (most recent call last):
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 869, in _check_seekable
+    f.seek(f.tell())
+AttributeError: 'NoneType' object has no attribute 'seek'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 41, in <module>
+    main() 
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 37, in main
+    pipeline.setup_trainer()
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 289, in setup_trainer
+    self.trainer = TrainerFactory.create_trainer(
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 161, in create_trainer
+    return VAETrainer(
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/vae_trainer.py", line 172, in __init__
+    self.current_epoch = self.load_checkpoint(self.checkpoint_path)
+  File "/home/francesco.bassignana/audio_gap_filling/src/core/base_trainer.py", line 263, in load_checkpoint
+    checkpoint = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 764, in _open_file_like
+    return _open_buffer_reader(name_or_buffer)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 749, in __init__
+    _check_seekable(buffer)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 872, in _check_seekable
+    raise_err_msg(["seek", "tell"], e)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/serialization.py", line 865, in raise_err_msg
+    raise type(e)(msg)
+AttributeError: 'NoneType' object has no attribute 'seek'. You can only torch.load from a file that is seekable. Please pre-load the data into a buffer like io.BytesIO and try to load from it instead.
+Training failed for config: vae_x16

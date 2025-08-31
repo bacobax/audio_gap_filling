@@ -239,7 +239,6 @@ class ConfigManager:
             'mrstft': self.get('training.mrstft', {}),
             'sample_rate': self.get('data.sample_rate', 16000),
             'mixed_precision': self.get('training.mixed_precision', None),
-            'checkpoint_path': self.get('training.checkpoint_path', None),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')
