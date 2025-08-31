@@ -53,18 +53,19 @@ class DiffusionTrainer(BaseTrainer):
         self.vae = VAE(**vae_cfg).to(self.device)
         # Optionally load pretrained weights if provided
         ckpt_path = vae_cfg.get('checkpoint', None)
-        if ckpt_path is not None:
-            try:
-                if not os.path.isfile(ckpt_path):
-                    raise FileNotFoundError(f"VAE checkpoint not found: {ckpt_path}")
-                ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
-                state = ckpt.get('model_state_dict', ckpt)
-                missing, unexpected = self.vae.load_state_dict(state, strict=False)
-                if len(missing) > 0 or len(unexpected) > 0:
-                    warnings.warn(f"Loaded VAE with missing keys: {missing} and unexpected keys: {unexpected}")
-                print(f"Loaded VAE weights from: {ckpt_path}")
-            except Exception as e:
-                warnings.warn(f"Failed to load VAE checkpoint '{ckpt_path}': {e}")
+        if ckpt_path:
+            if os.path.isfile(ckpt_path):
+                try:
+                    ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
+                    state = ckpt.get('model_state_dict', ckpt)
+                    missing, unexpected = self.vae.load_state_dict(state, strict=False)
+                    if len(missing) > 0 or len(unexpected) > 0:
+                        warnings.warn(f"Loaded VAE with missing keys: {missing} and unexpected keys: {unexpected}")
+                    print(f"Loaded VAE weights from: {ckpt_path}")
+                except Exception as e:
+                    warnings.warn(f"Failed to load VAE checkpoint '{ckpt_path}': {e}")
+            else:
+                print(f"Info: VAE checkpoint not found at '{ckpt_path}', skipping pretrained load.")
         self.vae.eval()
         for p in self.vae.parameters():
             p.requires_grad_(False)
@@ -155,14 +156,25 @@ class DiffusionTrainer(BaseTrainer):
     def _train_epoch(self) -> Dict[str, float]:
         self.model.train()
         total_loss = total_mask = total_ctx = 0.0
-        scaler = torch.cuda.amp.GradScaler(enabled=torch.cuda.is_available())
+        # AMP scaler (new API); fall back works if disabled
+        device_type = 'cuda' if torch.cuda.is_available() else 'cpu'
+        try:
+            scaler = torch.amp.GradScaler(device_type, enabled=(device_type == 'cuda'))
+        except Exception:
+            scaler = torch.cuda.amp.GradScaler(enabled=torch.cuda.is_available())
         for batch in self.train_loader:
             audio = batch.to(self.device)  # [B, T]
             x_t, x_known, mask, t, v_target, clap_vec = self._prepare_batch(audio)
 
             self.optimizer.zero_grad(set_to_none=True)
 
-            with torch.cuda.amp.autocast(enabled=torch.cuda.is_available()):
+            # Autocast using new API when available
+            try:
+                autocast_ctx = torch.amp.autocast(device_type, enabled=(device_type == 'cuda'))
+            except Exception:
+                autocast_ctx = torch.cuda.amp.autocast(enabled=torch.cuda.is_available())
+
+            with autocast_ctx:
                 v_pred = self.model(
                     x_t,
                     x_known,
@@ -175,7 +187,9 @@ class DiffusionTrainer(BaseTrainer):
                 )
                 loss, masked, ctx = self._compute_loss(v_pred, v_target, mask)
 
-            scaler.scale(loss).step(self.optimizer)
+            # Backprop and optimizer step
+            scaler.scale(loss).backward()
+            scaler.step(self.optimizer)
             scaler.update()
             if self.scheduler is not None:
                 self.scheduler.step()
