@@ -16,6 +16,7 @@ paths:
   test_audio_filename: assets/wav_test.wav
   # Set CLAP checkpoint if available
   clap_checkpoint: pretrained/music_audioset_epoch_15_esc_90.14.pt
+  log_dir: runs/train/diffusion-20250831-222904
 
 data:
   dataset_type: gap_waveform
@@ -58,7 +59,7 @@ training:
     # Optional: path to pretrained VAE weights
     # If provided, the encoder/decoder weights will be loaded (strict=False)
     checkpoint: pretrained/vae_checkpoint.pt
-
+  resume: true
   # CLAP conditioner (optional). Set checkpoint to enable
   clap:
     checkpoint: pretrained/music_audioset_epoch_15_esc_90.14.pt

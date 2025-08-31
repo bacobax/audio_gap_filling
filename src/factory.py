@@ -260,7 +260,8 @@ class TrainingPipeline:
         # Validation dataset
         val_config = train_config.copy()
         val_config['split'] = 'val'
-        if dataset_type != 'vae_waveform':
+        # Only enable special single-window test mode for mel_spectrogram validation
+        if dataset_type == 'mel_spectrogram':
             val_config['test'] = (
                 True,
                 self.config_manager.get('paths.test_audio_filename', 'wav_test.wav')
