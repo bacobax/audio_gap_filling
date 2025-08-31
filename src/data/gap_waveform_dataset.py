@@ -24,6 +24,12 @@ class GapWaveformDataset(MelSpectrogramDataset):
             pad = self.crop_samples - self.wave.shape[0]
             self.wave = np.pad(self.wave, (0, pad), mode="constant")
 
+    def __len__(self) -> int:  # type: ignore[override]
+        starts = len(self.valid_starts)
+        max_samples = 1500 * self.config["batch_size"]
+        return min(starts, max_samples)
+
+
     def __getitem__(self, idx: int) -> torch.Tensor:  # type: ignore[override]
         start = random.choice(self.valid_starts)
         start_sample = start * self.hop_length

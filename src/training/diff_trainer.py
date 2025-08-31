@@ -10,7 +10,7 @@ from ..models.VAE import VAE
 from ..models.conditioner import CLAPAudioConditioner
 from ..utils.diffusion_schedules import cosine_alpha_sigma
 import os
-
+from tqdm import tqdm
 
 class DiffusionTrainer(BaseTrainer):
     """
@@ -162,7 +162,17 @@ class DiffusionTrainer(BaseTrainer):
             scaler = torch.amp.GradScaler(device_type, enabled=(device_type == 'cuda'))
         except Exception:
             scaler = torch.cuda.amp.GradScaler(enabled=torch.cuda.is_available())
-        for batch in self.train_loader:
+
+
+        pbar = tqdm(
+            total=len(self.train_loader),
+            desc='Training UNET for Diffusion',
+            unit='batch',
+            leave=False,
+            dynamic_ncols=True,
+            position=1
+        )
+        for batch_idx, batch in enumerate(self.train_loader):
             audio = batch.to(self.device)  # [B, T]
             x_t, x_known, mask, t, v_target, clap_vec = self._prepare_batch(audio)
 
@@ -197,6 +207,8 @@ class DiffusionTrainer(BaseTrainer):
             total_loss += loss.item()
             total_mask += masked.item()
             total_ctx += ctx.item()
+            pbar.set_postfix(loss=loss.item(), masked_loss=masked.item(), context_loss=ctx.item())
+            pbar.update(1)
 
             self.global_step += 1
             self.writer.add_scalar('train/loss_step', loss.item(), self.global_step)

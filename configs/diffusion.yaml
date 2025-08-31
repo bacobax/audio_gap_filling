@@ -30,9 +30,10 @@ data:
 training:
   trainer_type: diffusion
   seed: 42
-  batch_size: 4
+  batch_size: 1
   max_device_batch_size: 4
-  total_epoch: 10
+  total_epoch: 30
+  early_stop_patience: 3
 
   # Optim
   lr: 5.0e-5

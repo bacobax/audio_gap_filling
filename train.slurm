@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J vae_train             # Job name
+#SBATCH -J diff_train             # Job name
 #SBATCH -p edu-medium            # Partition (queue)
 #SBATCH -N 1                     # 1 node
 #SBATCH -n 1                     # 1 task

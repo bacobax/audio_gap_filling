@@ -1,0 +1,145 @@
+Starting training with configuration: diffusion
+/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py:67: UserWarning: Failed to load VAE checkpoint 'pretrained/vae_checkpoint.pt': VAE checkpoint not found: pretrained/vae_checkpoint.pt
+  warnings.warn(f"Failed to load VAE checkpoint '{ckpt_path}': {e}")
+/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py:88: UserWarning: CLAP conditioner unavailable ([Errno 2] No such file or directory: 'pretrained/music_audioset_epoch_15_esc_90.14.pt'). Proceeding without CLAP context.
+  warnings.warn(f"CLAP conditioner unavailable ({e}). Proceeding without CLAP context.")
+{'data': {'dataset_type': 'gap_waveform',
+          'gap_percentage': [0.2, 0.6],
+          'hop_length': 256,
+          'n_fft': 1024,
+          'n_mels': 80,
+          'sample_rate': 16000,
+          'segment_length': 65536},
+ 'model': {'network': {'channels_per_scale': [128, 256, 384, 512, 768],
+                       'cond_dim': 256,
+                       'gradient_checkpointing': True,
+                       'in_channels': 129,
+                       'latents_channels': 64,
+                       'n_heads': 8,
+                       'num_res_blocks': 2,
+                       'self_attn_scales': [3, 4]},
+           'type': 'diffusion_unet'},
+ 'paths': {'audio_filename': 'assets/gapped_audio.wav',
+           'clap_checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
+           'test_audio_filename': 'assets/wav_test.wav'},
+ 'training': {'batch_size': 4,
+              'cfg_dropout_p': 0.15,
+              'clap': {'audio_model_type': 'HTSAT-base',
+                       'checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
+                       'enable_fusion': True},
+              'lambda_ctx': 0.1,
+              'lr': 5e-05,
+              'max_device_batch_size': 4,
+              'seed': 42,
+              'total_epoch': 10,
+              'total_steps': 100000,
+              'trainer_type': 'diffusion',
+              'vae': {'checkpoint': 'pretrained/vae_checkpoint.pt',
+                      'downsample_stride': 2,
+                      'hidden_channels': 64,
+                      'input_channels': 1,
+                      'kernel_size': 3,
+                      'latent_dim': 64,
+                      'num_blocks': 3},
+              'warmup_steps': 2000,
+              'weight_decay': 0.001}}
+Using device: cuda
+SAMPLE RATE 16000
+DATASET CONFIG
+{'batch_size': 4,
+ 'dataset_type': 'gap_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': [0.2, 0.6],
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 16000,
+ 'segment_length': 65536,
+ 'split': 'train',
+ 'test_audio_filename': 'assets/wav_test.wav'}
+SAMPLE RATE 16000
+DATASET CONFIG
+{'batch_size': 4,
+ 'dataset_type': 'gap_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': [0.2, 0.6],
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 16000,
+ 'segment_length': 65536,
+ 'split': 'val',
+ 'test': (True, 'assets/wav_test.wav'),
+ 'test_audio_filename': 'assets/wav_test.wav'}
+Data setup complete: training and validation datasets created
+sample shape: torch.Size([741376])
+MODEL CONFIG
+{'audio_len': 741376,
+ 'device': 'cuda',
+ 'exp': {'audio_len': 65536, 'sample_rate': 16000},
+ 'network': {'channels_per_scale': [128, 256, 384, 512, 768],
+             'cond_dim': 256,
+             'gradient_checkpointing': True,
+             'in_channels': 129,
+             'latents_channels': 64,
+             'n_heads': 8,
+             'num_res_blocks': 2,
+             'self_attn_scales': [3, 4]},
+ 'type': 'diffusion_unet'}
+Model created successfully
+hidden channels: 64
+channels: 64
+channels: 64
+channels: 64
+Trainer setup complete
+Starting training for 10 epochs...
+Training Progress:   0%|          | 0/10 [00:00<?, ?epoch/s]/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py:158: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(enabled=torch.cuda.is_available())
+/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py:165: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=torch.cuda.is_available()):
+Traceback (most recent call last):
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 41, in <module>
+    main() 
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 38, in main
+    pipeline.train()
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 350, in train
+    history = self.trainer.train(num_epochs)
+  File "/home/francesco.bassignana/audio_gap_filling/src/core/base_trainer.py", line 144, in train
+    train_metrics = self._train_epoch()
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py", line 166, in _train_epoch
+    v_pred = self.model(
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/francesco.bassignana/audio_gap_filling/src/models/inpaint_unet_1d.py", line 305, in forward
+    h = self._maybe_ckpt(rb, h, cond_vec)
+  File "/home/francesco.bassignana/audio_gap_filling/src/models/inpaint_unet_1d.py", line 244, in _maybe_ckpt
+    return torch.utils.checkpoint.checkpoint(fn, *args, use_reentrant=False)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/_compile.py", line 53, in inner
+    return disable_fn(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 929, in _fn
+    return fn(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/utils/checkpoint.py", line 495, in checkpoint
+    ret = function(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/francesco.bassignana/audio_gap_filling/src/models/inpaint_unet_1d.py", line 64, in forward
+    x = self.norm1(x)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/normalization.py", line 313, in forward
+    return F.group_norm(input, self.num_groups, self.weight, self.bias, self.eps)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/functional.py", line 2960, in group_norm
+    return torch.group_norm(
+RuntimeError: Expected weight to be a vector of size equal to the number of channels in input, but got weight of shape [256] and input of shape [4, 128, 23168]
+Training Progress:   0%|          | 0/10 [00:04<?, ?epoch/s]
+slurmstepd: error: *** JOB 63790 ON edu01 CANCELLED AT 2025-08-31T19:32:27 ***
