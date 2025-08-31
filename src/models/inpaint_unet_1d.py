@@ -132,18 +132,18 @@ class CrossAttention1D(nn.Module):
 
 
 class Downsample1D(nn.Module):
-    def __init__(self, channels: int):
+    def __init__(self, in_channels: int, out_channels: int):
         super().__init__()
-        self.conv = nn.Conv1d(channels, channels, kernel_size=4, stride=2, padding=1)
+        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=4, stride=2, padding=1)
 
     def forward(self, x):
         return self.conv(x)
 
 
 class Upsample1D(nn.Module):
-    def __init__(self, channels: int):
+    def __init__(self, in_channels: int, out_channels: int):
         super().__init__()
-        self.conv = nn.ConvTranspose1d(channels, channels, kernel_size=4, stride=2, padding=1)
+        self.conv = nn.ConvTranspose1d(in_channels, out_channels, kernel_size=4, stride=2, padding=1)
 
     def forward(self, x):
         return self.conv(x)
@@ -202,7 +202,9 @@ class InpaintUNet1D(nn.Module):
 
         prev_c = c0
         skip_channels = []
+        n_scales = len(channels_per_scale)
         for i, c in enumerate(channels_per_scale):
+            # Current scale channels are prev_c (equals channels_per_scale[i])
             res = nn.ModuleList([ResidualBlock1D(prev_c, cond_dim) for _ in range(num_res_blocks)])
             self.down_blocks.append(res)
             # cross-attn per scale
@@ -213,9 +215,10 @@ class InpaintUNet1D(nn.Module):
             else:
                 self.self_attn.append(nn.Identity())
             skip_channels.append(prev_c)
-            if i < len(channels_per_scale) - 1:
-                self.downsamples.append(Downsample1D(prev_c))
-                prev_c = c
+            if i < n_scales - 1:
+                next_c = channels_per_scale[i + 1]
+                self.downsamples.append(Downsample1D(prev_c, next_c))
+                prev_c = next_c
 
         # Bottleneck
         self.bottleneck = nn.ModuleList([ResidualBlock1D(prev_c, cond_dim) for _ in range(num_res_blocks)])
@@ -223,13 +226,13 @@ class InpaintUNet1D(nn.Module):
 
         # Upsampling
         for i in reversed(range(len(channels_per_scale))):
-            c = skip_channels[i]
-            # merge skip
-            block = nn.ModuleList([ResidualBlock1D(prev_c + c, cond_dim) for _ in range(num_res_blocks)])
+            c = skip_channels[i]  # target channels after upsample and for skip
+            # Residual blocks operate after concatenation: channels = c (upsampled) + c (skip) = 2c
+            block = nn.ModuleList([ResidualBlock1D(c + c, cond_dim) for _ in range(num_res_blocks)])
             self.up_blocks.append(block)
-            self.upsamples.append(Upsample1D(prev_c))
+            self.upsamples.append(Upsample1D(prev_c, c))
             self.self_attn.append(nn.Identity())  # placeholder to keep indexing aligned
-            prev_c = prev_c + c
+            prev_c = c + c
 
         # Final projection to latents channels
         self.out = nn.Sequential(
