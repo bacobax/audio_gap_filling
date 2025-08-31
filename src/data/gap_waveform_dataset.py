@@ -28,7 +28,7 @@ class GapWaveformDataset(MelSpectrogramDataset):
         starts = len(self.valid_starts)
         step_interval = int(self.config.get("step_interval", 1))
         max_samples = 1500 * self.config["batch_size"] * max(1, step_interval)
-        return min(len(starts), max_samples)
+        return min(starts, max_samples)
 
 
 

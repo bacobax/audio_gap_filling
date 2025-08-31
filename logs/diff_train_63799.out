@@ -1,959 +1,0 @@
-Starting training with configuration: diffusion
-{'data': {'dataset_type': 'gap_waveform',
-          'gap_percentage': [0.2, 0.6],
-          'hop_length': 256,
-          'n_fft': 1024,
-          'n_mels': 80,
-          'sample_rate': 16000,
-          'segment_length': 65536},
- 'model': {'network': {'channels_per_scale': [128, 256, 384, 512, 768],
-                       'cond_dim': 256,
-                       'gradient_checkpointing': True,
-                       'in_channels': 129,
-                       'latents_channels': 64,
-                       'n_heads': 8,
-                       'num_res_blocks': 2,
-                       'self_attn_scales': [3, 4]},
-           'type': 'diffusion_unet'},
- 'paths': {'audio_filename': 'assets/gapped_audio.wav',
-           'clap_checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
-           'test_audio_filename': 'assets/wav_test.wav'},
- 'training': {'batch_size': 1,
-              'cfg_dropout_p': 0.15,
-              'clap': {'audio_model_type': 'HTSAT-base',
-                       'checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
-                       'enable_fusion': True},
-              'lambda_ctx': 0.1,
-              'lr': 5e-05,
-              'max_device_batch_size': 4,
-              'seed': 42,
-              'total_epoch': 10,
-              'total_steps': 100000,
-              'trainer_type': 'diffusion',
-              'vae': {'checkpoint': 'pretrained/vae_checkpoint.pt',
-                      'downsample_stride': 2,
-                      'hidden_channels': 64,
-                      'input_channels': 1,
-                      'kernel_size': 3,
-                      'latent_dim': 64,
-                      'num_blocks': 3},
-              'warmup_steps': 2000,
-              'weight_decay': 0.001}}
-Using device: cuda
-SAMPLE RATE 16000
-DATASET CONFIG
-{'batch_size': 1,
- 'dataset_type': 'gap_waveform',
- 'flac_path': 'assets/gapped_audio.wav',
- 'folder': 'assets',
- 'gap_percentage': [0.2, 0.6],
- 'hop_length': 256,
- 'n_fft': 1024,
- 'n_mels': 80,
- 'patch_size': 16,
- 'sample_rate': 16000,
- 'segment_length': 65536,
- 'split': 'train',
- 'test_audio_filename': 'assets/wav_test.wav'}
-SAMPLE RATE 16000
-DATASET CONFIG
-{'batch_size': 1,
- 'dataset_type': 'gap_waveform',
- 'flac_path': 'assets/gapped_audio.wav',
- 'folder': 'assets',
- 'gap_percentage': [0.2, 0.6],
- 'hop_length': 256,
- 'n_fft': 1024,
- 'n_mels': 80,
- 'patch_size': 16,
- 'sample_rate': 16000,
- 'segment_length': 65536,
- 'split': 'val',
- 'test': (True, 'assets/wav_test.wav'),
- 'test_audio_filename': 'assets/wav_test.wav'}
-Data setup complete: training and validation datasets created
-sample shape: torch.Size([286720])
-MODEL CONFIG
-{'audio_len': 286720,
- 'device': 'cuda',
- 'exp': {'audio_len': 65536, 'sample_rate': 16000},
- 'network': {'channels_per_scale': [128, 256, 384, 512, 768],
-             'cond_dim': 256,
-             'gradient_checkpointing': True,
-             'in_channels': 129,
-             'latents_channels': 64,
-             'n_heads': 8,
-             'num_res_blocks': 2,
-             'self_attn_scales': [3, 4]},
- 'type': 'diffusion_unet'}
-Model created successfully
-hidden channels: 64
-channels: 64
-channels: 64
-channels: 64
-Info: VAE checkpoint not found at 'pretrained/vae_checkpoint.pt', skipping pretrained load.
-Trainer setup complete
-Starting training for 10 epochs...
-Training Progress:   0%|          | 0/10 [00:00<?, ?epoch/s]
-Training UNET for Diffusion:   0%|          | 0/1500 [00:00<?, ?batch/s][A/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torchaudio/transforms/_transforms.py:581: UserWarning: Argument 'onesided' has been deprecated and has no influence on the behavior of this module.
-  warnings.warn(
-
-Training UNET for Diffusion:   0%|          | 0/1500 [00:01<?, ?batch/s, context_loss=0.799, loss=0.381, masked_loss=0.301][A
-Training UNET for Diffusion:   0%|          | 1/1500 [00:01<31:11,  1.25s/batch, context_loss=0.799, loss=0.381, masked_loss=0.301][A
-Training UNET for Diffusion:   0%|          | 1/1500 [00:01<31:11,  1.25s/batch, context_loss=0.843, loss=0.34, masked_loss=0.256] [A
-Training UNET for Diffusion:   0%|          | 2/1500 [00:01<16:35,  1.51batch/s, context_loss=0.843, loss=0.34, masked_loss=0.256][A
-Training UNET for Diffusion:   0%|          | 2/1500 [00:01<16:35,  1.51batch/s, context_loss=0.604, loss=0.557, masked_loss=0.497][A
-Training UNET for Diffusion:   0%|          | 3/1500 [00:01<11:54,  2.10batch/s, context_loss=0.604, loss=0.557, masked_loss=0.497][A
-Training UNET for Diffusion:   0%|          | 3/1500 [00:02<11:54,  2.10batch/s, context_loss=0.835, loss=0.348, masked_loss=0.264][A
-Training UNET for Diffusion:   0%|          | 4/1500 [00:02<09:44,  2.56batch/s, context_loss=0.835, loss=0.348, masked_loss=0.264][A
-Training UNET for Diffusion:   0%|          | 4/1500 [00:02<09:44,  2.56batch/s, context_loss=0.692, loss=0.477, masked_loss=0.408][A
-Training UNET for Diffusion:   0%|          | 5/1500 [00:02<08:30,  2.93batch/s, context_loss=0.692, loss=0.477, masked_loss=0.408][A
-Training UNET for Diffusion:   0%|          | 5/1500 [00:02<08:30,  2.93batch/s, context_loss=0.513, loss=0.641, masked_loss=0.59] [A
-Training UNET for Diffusion:   0%|          | 6/1500 [00:02<07:45,  3.21batch/s, context_loss=0.513, loss=0.641, masked_loss=0.59][A
-Training UNET for Diffusion:   0%|          | 6/1500 [00:02<07:45,  3.21batch/s, context_loss=0.808, loss=0.374, masked_loss=0.293][A
-Training UNET for Diffusion:   0%|          | 7/1500 [00:02<07:17,  3.42batch/s, context_loss=0.808, loss=0.374, masked_loss=0.293][A
-Training UNET for Diffusion:   0%|          | 7/1500 [00:03<07:17,  3.42batch/s, context_loss=0.659, loss=0.508, masked_loss=0.442][A
-Training UNET for Diffusion:   1%|          | 8/1500 [00:03<06:58,  3.57batch/s, context_loss=0.659, loss=0.508, masked_loss=0.442][A
-Training UNET for Diffusion:   1%|          | 8/1500 [00:03<06:58,  3.57batch/s, context_loss=0.754, loss=0.421, masked_loss=0.346][A
-Training UNET for Diffusion:   1%|          | 9/1500 [00:03<06:45,  3.67batch/s, context_loss=0.754, loss=0.421, masked_loss=0.346][A
-Training UNET for Diffusion:   1%|          | 9/1500 [00:03<06:45,  3.67batch/s, context_loss=0.705, loss=0.467, masked_loss=0.396][A
-Training UNET for Diffusion:   1%|          | 10/1500 [00:03<06:37,  3.75batch/s, context_loss=0.705, loss=0.467, masked_loss=0.396][A
-Training UNET for Diffusion:   1%|          | 10/1500 [00:03<06:37,  3.75batch/s, context_loss=0.682, loss=0.484, masked_loss=0.416][A
-Training UNET for Diffusion:   1%|          | 11/1500 [00:03<06:31,  3.80batch/s, context_loss=0.682, loss=0.484, masked_loss=0.416][A
-Training UNET for Diffusion:   1%|          | 11/1500 [00:04<06:31,  3.80batch/s, context_loss=0.493, loss=0.659, masked_loss=0.61] [A
-Training UNET for Diffusion:   1%|          | 12/1500 [00:04<06:27,  3.84batch/s, context_loss=0.493, loss=0.659, masked_loss=0.61][A
-Training UNET for Diffusion:   1%|          | 12/1500 [00:04<06:27,  3.84batch/s, context_loss=0.584, loss=0.575, masked_loss=0.517][A
-Training UNET for Diffusion:   1%|          | 13/1500 [00:04<06:23,  3.87batch/s, context_loss=0.584, loss=0.575, masked_loss=0.517][A
-Training UNET for Diffusion:   1%|          | 13/1500 [00:04<06:23,  3.87batch/s, context_loss=0.572, loss=0.586, masked_loss=0.528][A
-Training UNET for Diffusion:   1%|          | 14/1500 [00:04<06:21,  3.89batch/s, context_loss=0.572, loss=0.586, masked_loss=0.528][A
-Training UNET for Diffusion:   1%|          | 14/1500 [00:04<06:21,  3.89batch/s, context_loss=0.602, loss=0.554, masked_loss=0.494][A
-Training UNET for Diffusion:   1%|          | 15/1500 [00:04<06:20,  3.90batch/s, context_loss=0.602, loss=0.554, masked_loss=0.494][A
-Training UNET for Diffusion:   1%|          | 15/1500 [00:05<06:20,  3.90batch/s, context_loss=0.518, loss=0.632, masked_loss=0.58] [A
-Training UNET for Diffusion:   1%|          | 16/1500 [00:05<06:19,  3.91batch/s, context_loss=0.518, loss=0.632, masked_loss=0.58][A
-Training UNET for Diffusion:   1%|          | 16/1500 [00:05<06:19,  3.91batch/s, context_loss=0.718, loss=0.447, masked_loss=0.376][A
-Training UNET for Diffusion:   1%|          | 17/1500 [00:05<06:18,  3.92batch/s, context_loss=0.718, loss=0.447, masked_loss=0.376][A
-Training UNET for Diffusion:   1%|          | 17/1500 [00:05<06:18,  3.92batch/s, context_loss=0.575, loss=0.578, masked_loss=0.521][A
-Training UNET for Diffusion:   1%|          | 18/1500 [00:05<06:17,  3.92batch/s, context_loss=0.575, loss=0.578, masked_loss=0.521][A
-Training UNET for Diffusion:   1%|          | 18/1500 [00:05<06:17,  3.92batch/s, context_loss=0.642, loss=0.516, masked_loss=0.452][A
-Training UNET for Diffusion:   1%|▏         | 19/1500 [00:05<06:17,  3.93batch/s, context_loss=0.642, loss=0.516, masked_loss=0.452][A
-Training UNET for Diffusion:   1%|▏         | 19/1500 [00:06<06:17,  3.93batch/s, context_loss=0.722, loss=0.443, masked_loss=0.371][A
-Training UNET for Diffusion:   1%|▏         | 20/1500 [00:06<06:16,  3.93batch/s, context_loss=0.722, loss=0.443, masked_loss=0.371][A
-Training UNET for Diffusion:   1%|▏         | 20/1500 [00:06<06:16,  3.93batch/s, context_loss=0.644, loss=0.51, masked_loss=0.446] [A
-Training UNET for Diffusion:   1%|▏         | 21/1500 [00:06<06:16,  3.93batch/s, context_loss=0.644, loss=0.51, masked_loss=0.446][A
-Training UNET for Diffusion:   1%|▏         | 21/1500 [00:06<06:16,  3.93batch/s, context_loss=0.767, loss=0.399, masked_loss=0.322][A
-Training UNET for Diffusion:   1%|▏         | 22/1500 [00:06<06:15,  3.93batch/s, context_loss=0.767, loss=0.399, masked_loss=0.322][A
-Training UNET for Diffusion:   1%|▏         | 22/1500 [00:06<06:15,  3.93batch/s, context_loss=0.718, loss=0.444, masked_loss=0.372][A
-Training UNET for Diffusion:   2%|▏         | 23/1500 [00:06<06:15,  3.93batch/s, context_loss=0.718, loss=0.444, masked_loss=0.372][A
-Training UNET for Diffusion:   2%|▏         | 23/1500 [00:07<06:15,  3.93batch/s, context_loss=0.526, loss=0.618, masked_loss=0.565][A
-Training UNET for Diffusion:   2%|▏         | 24/1500 [00:07<06:15,  3.93batch/s, context_loss=0.526, loss=0.618, masked_loss=0.565][A
-Training UNET for Diffusion:   2%|▏         | 24/1500 [00:07<06:15,  3.93batch/s, context_loss=0.525, loss=0.621, masked_loss=0.569][A
-Training UNET for Diffusion:   2%|▏         | 25/1500 [00:07<06:14,  3.94batch/s, context_loss=0.525, loss=0.621, masked_loss=0.569][A
-Training UNET for Diffusion:   2%|▏         | 25/1500 [00:07<06:14,  3.94batch/s, context_loss=0.825, loss=0.341, masked_loss=0.258][A
-Training UNET for Diffusion:   2%|▏         | 26/1500 [00:07<06:14,  3.94batch/s, context_loss=0.825, loss=0.341, masked_loss=0.258][A
-Training UNET for Diffusion:   2%|▏         | 26/1500 [00:07<06:14,  3.94batch/s, context_loss=0.843, loss=0.327, masked_loss=0.243][A
-Training UNET for Diffusion:   2%|▏         | 27/1500 [00:07<06:14,  3.94batch/s, context_loss=0.843, loss=0.327, masked_loss=0.243][A
-Training UNET for Diffusion:   2%|▏         | 27/1500 [00:08<06:14,  3.94batch/s, context_loss=0.665, loss=0.486, masked_loss=0.419][A
-Training UNET for Diffusion:   2%|▏         | 28/1500 [00:08<06:13,  3.94batch/s, context_loss=0.665, loss=0.486, masked_loss=0.419][A
-Training UNET for Diffusion:   2%|▏         | 28/1500 [00:08<06:13,  3.94batch/s, context_loss=0.554, loss=0.584, masked_loss=0.528][A
-Training UNET for Diffusion:   2%|▏         | 29/1500 [00:08<06:13,  3.94batch/s, context_loss=0.554, loss=0.584, masked_loss=0.528][A
-Training UNET for Diffusion:   2%|▏         | 29/1500 [00:08<06:13,  3.94batch/s, context_loss=0.614, loss=0.53, masked_loss=0.469] [A
-Training UNET for Diffusion:   2%|▏         | 30/1500 [00:08<06:13,  3.94batch/s, context_loss=0.614, loss=0.53, masked_loss=0.469][A
-Training UNET for Diffusion:   2%|▏         | 30/1500 [00:08<06:13,  3.94batch/s, context_loss=0.583, loss=0.562, masked_loss=0.504][A
-Training UNET for Diffusion:   2%|▏         | 31/1500 [00:08<06:13,  3.94batch/s, context_loss=0.583, loss=0.562, masked_loss=0.504][A
-Training UNET for Diffusion:   2%|▏         | 31/1500 [00:09<06:13,  3.94batch/s, context_loss=0.632, loss=0.509, masked_loss=0.446][A
-Training UNET for Diffusion:   2%|▏         | 32/1500 [00:09<06:12,  3.94batch/s, context_loss=0.632, loss=0.509, masked_loss=0.446][A
-Training UNET for Diffusion:   2%|▏         | 32/1500 [00:09<06:12,  3.94batch/s, context_loss=0.49, loss=0.639, masked_loss=0.59]  [A
-Training UNET for Diffusion:   2%|▏         | 33/1500 [00:09<06:12,  3.93batch/s, context_loss=0.49, loss=0.639, masked_loss=0.59][A
-Training UNET for Diffusion:   2%|▏         | 33/1500 [00:09<06:12,  3.93batch/s, context_loss=0.77, loss=0.384, masked_loss=0.307][A
-Training UNET for Diffusion:   2%|▏         | 34/1500 [00:09<06:13,  3.93batch/s, context_loss=0.77, loss=0.384, masked_loss=0.307][A
-Training UNET for Diffusion:   2%|▏         | 34/1500 [00:09<06:13,  3.93batch/s, context_loss=0.504, loss=0.626, masked_loss=0.576][A
-Training UNET for Diffusion:   2%|▏         | 35/1500 [00:09<06:17,  3.88batch/s, context_loss=0.504, loss=0.626, masked_loss=0.576][A
-Training UNET for Diffusion:   2%|▏         | 35/1500 [00:10<06:17,  3.88batch/s, context_loss=0.606, loss=0.529, masked_loss=0.468][A
-Training UNET for Diffusion:   2%|▏         | 36/1500 [00:10<06:15,  3.90batch/s, context_loss=0.606, loss=0.529, masked_loss=0.468][A
-Training UNET for Diffusion:   2%|▏         | 36/1500 [00:10<06:15,  3.90batch/s, context_loss=0.596, loss=0.534, masked_loss=0.475][A
-Training UNET for Diffusion:   2%|▏         | 37/1500 [00:10<06:14,  3.91batch/s, context_loss=0.596, loss=0.534, masked_loss=0.475][A
-Training UNET for Diffusion:   2%|▏         | 37/1500 [00:10<06:14,  3.91batch/s, context_loss=0.759, loss=0.383, masked_loss=0.307][A
-Training UNET for Diffusion:   3%|▎         | 38/1500 [00:10<06:13,  3.92batch/s, context_loss=0.759, loss=0.383, masked_loss=0.307][A
-Training UNET for Diffusion:   3%|▎         | 38/1500 [00:10<06:13,  3.92batch/s, context_loss=0.843, loss=0.306, masked_loss=0.222][A
-Training UNET for Diffusion:   3%|▎         | 39/1500 [00:10<06:12,  3.92batch/s, context_loss=0.843, loss=0.306, masked_loss=0.222][A
-Training UNET for Diffusion:   3%|▎         | 39/1500 [00:11<06:12,  3.92batch/s, context_loss=0.864, loss=0.292, masked_loss=0.205][A
-Training UNET for Diffusion:   3%|▎         | 40/1500 [00:11<06:11,  3.93batch/s, context_loss=0.864, loss=0.292, masked_loss=0.205][A
-Training UNET for Diffusion:   3%|▎         | 40/1500 [00:11<06:11,  3.93batch/s, context_loss=0.646, loss=0.495, masked_loss=0.43] [A
-Training UNET for Diffusion:   3%|▎         | 41/1500 [00:11<06:11,  3.93batch/s, context_loss=0.646, loss=0.495, masked_loss=0.43][A
-Training UNET for Diffusion:   3%|▎         | 41/1500 [00:11<06:11,  3.93batch/s, context_loss=0.84, loss=0.312, masked_loss=0.228][A
-Training UNET for Diffusion:   3%|▎         | 42/1500 [00:11<06:10,  3.93batch/s, context_loss=0.84, loss=0.312, masked_loss=0.228][A
-Training UNET for Diffusion:   3%|▎         | 42/1500 [00:11<06:10,  3.93batch/s, context_loss=0.726, loss=0.406, masked_loss=0.334][A
-Training UNET for Diffusion:   3%|▎         | 43/1500 [00:11<06:10,  3.93batch/s, context_loss=0.726, loss=0.406, masked_loss=0.334][A
-Training UNET for Diffusion:   3%|▎         | 43/1500 [00:12<06:10,  3.93batch/s, context_loss=0.651, loss=0.474, masked_loss=0.409][A
-Training UNET for Diffusion:   3%|▎         | 44/1500 [00:12<06:10,  3.94batch/s, context_loss=0.651, loss=0.474, masked_loss=0.409][A
-Training UNET for Diffusion:   3%|▎         | 44/1500 [00:12<06:10,  3.94batch/s, context_loss=0.748, loss=0.383, masked_loss=0.308][A
-Training UNET for Diffusion:   3%|▎         | 45/1500 [00:12<06:09,  3.94batch/s, context_loss=0.748, loss=0.383, masked_loss=0.308][A
-Training UNET for Diffusion:   3%|▎         | 45/1500 [00:12<06:09,  3.94batch/s, context_loss=0.757, loss=0.379, masked_loss=0.303][A
-Training UNET for Diffusion:   3%|▎         | 46/1500 [00:12<06:09,  3.93batch/s, context_loss=0.757, loss=0.379, masked_loss=0.303][A
-Training UNET for Diffusion:   3%|▎         | 46/1500 [00:12<06:09,  3.93batch/s, context_loss=0.814, loss=0.319, masked_loss=0.237][A
-Training UNET for Diffusion:   3%|▎         | 47/1500 [00:12<06:09,  3.93batch/s, context_loss=0.814, loss=0.319, masked_loss=0.237][A
-Training UNET for Diffusion:   3%|▎         | 47/1500 [00:13<06:09,  3.93batch/s, context_loss=0.756, loss=0.371, masked_loss=0.295][A
-Training UNET for Diffusion:   3%|▎         | 48/1500 [00:13<06:09,  3.93batch/s, context_loss=0.756, loss=0.371, masked_loss=0.295][A
-Training UNET for Diffusion:   3%|▎         | 48/1500 [00:13<06:09,  3.93batch/s, context_loss=0.661, loss=0.466, masked_loss=0.4]  [A
-Training UNET for Diffusion:   3%|▎         | 49/1500 [00:13<06:08,  3.94batch/s, context_loss=0.661, loss=0.466, masked_loss=0.4][A
-Training UNET for Diffusion:   3%|▎         | 49/1500 [00:13<06:08,  3.94batch/s, context_loss=0.638, loss=0.476, masked_loss=0.413][A
-Training UNET for Diffusion:   3%|▎         | 50/1500 [00:13<06:08,  3.94batch/s, context_loss=0.638, loss=0.476, masked_loss=0.413][A
-Training UNET for Diffusion:   3%|▎         | 50/1500 [00:13<06:08,  3.94batch/s, context_loss=0.847, loss=0.291, masked_loss=0.206][A
-Training UNET for Diffusion:   3%|▎         | 51/1500 [00:13<06:08,  3.94batch/s, context_loss=0.847, loss=0.291, masked_loss=0.206][A
-Training UNET for Diffusion:   3%|▎         | 51/1500 [00:14<06:08,  3.94batch/s, context_loss=0.521, loss=0.585, masked_loss=0.533][A
-Training UNET for Diffusion:   3%|▎         | 52/1500 [00:14<06:08,  3.93batch/s, context_loss=0.521, loss=0.585, masked_loss=0.533][A
-Training UNET for Diffusion:   3%|▎         | 52/1500 [00:14<06:08,  3.93batch/s, context_loss=0.756, loss=0.374, masked_loss=0.299][A
-Training UNET for Diffusion:   4%|▎         | 53/1500 [00:14<06:07,  3.94batch/s, context_loss=0.756, loss=0.374, masked_loss=0.299][A
-Training UNET for Diffusion:   4%|▎         | 53/1500 [00:14<06:07,  3.94batch/s, context_loss=0.636, loss=0.475, masked_loss=0.412][A
-Training UNET for Diffusion:   4%|▎         | 54/1500 [00:14<06:07,  3.93batch/s, context_loss=0.636, loss=0.475, masked_loss=0.412][A
-Training UNET for Diffusion:   4%|▎         | 54/1500 [00:14<06:07,  3.93batch/s, context_loss=0.769, loss=0.352, masked_loss=0.275][A
-Training UNET for Diffusion:   4%|▎         | 55/1500 [00:14<06:07,  3.93batch/s, context_loss=0.769, loss=0.352, masked_loss=0.275][A
-Training UNET for Diffusion:   4%|▎         | 55/1500 [00:15<06:07,  3.93batch/s, context_loss=0.791, loss=0.331, masked_loss=0.252][A
-Training UNET for Diffusion:   4%|▎         | 56/1500 [00:15<06:07,  3.93batch/s, context_loss=0.791, loss=0.331, masked_loss=0.252][A
-Training UNET for Diffusion:   4%|▎         | 56/1500 [00:15<06:07,  3.93batch/s, context_loss=0.701, loss=0.41, masked_loss=0.339] [A
-Training UNET for Diffusion:   4%|▍         | 57/1500 [00:15<06:07,  3.93batch/s, context_loss=0.701, loss=0.41, masked_loss=0.339][A
-Training UNET for Diffusion:   4%|▍         | 57/1500 [00:15<06:07,  3.93batch/s, context_loss=0.511, loss=0.587, masked_loss=0.536][A
-Training UNET for Diffusion:   4%|▍         | 58/1500 [00:15<06:06,  3.93batch/s, context_loss=0.511, loss=0.587, masked_loss=0.536][A
-Training UNET for Diffusion:   4%|▍         | 58/1500 [00:16<06:06,  3.93batch/s, context_loss=0.763, loss=0.356, masked_loss=0.28] [A
-Training UNET for Diffusion:   4%|▍         | 59/1500 [00:16<06:06,  3.93batch/s, context_loss=0.763, loss=0.356, masked_loss=0.28][A
-Training UNET for Diffusion:   4%|▍         | 59/1500 [00:16<06:06,  3.93batch/s, context_loss=0.573, loss=0.526, masked_loss=0.469][A
-Training UNET for Diffusion:   4%|▍         | 60/1500 [00:16<06:06,  3.93batch/s, context_loss=0.573, loss=0.526, masked_loss=0.469][A
-Training UNET for Diffusion:   4%|▍         | 60/1500 [00:16<06:06,  3.93batch/s, context_loss=0.484, loss=0.615, masked_loss=0.566][A
-Training UNET for Diffusion:   4%|▍         | 61/1500 [00:16<06:05,  3.93batch/s, context_loss=0.484, loss=0.615, masked_loss=0.566][A
-Training UNET for Diffusion:   4%|▍         | 61/1500 [00:16<06:05,  3.93batch/s, context_loss=0.72, loss=0.397, masked_loss=0.325] [A
-Training UNET for Diffusion:   4%|▍         | 62/1500 [00:16<06:05,  3.93batch/s, context_loss=0.72, loss=0.397, masked_loss=0.325][A
-Training UNET for Diffusion:   4%|▍         | 62/1500 [00:17<06:05,  3.93batch/s, context_loss=0.614, loss=0.483, masked_loss=0.422][A
-Training UNET for Diffusion:   4%|▍         | 63/1500 [00:17<06:05,  3.93batch/s, context_loss=0.614, loss=0.483, masked_loss=0.422][A
-Training UNET for Diffusion:   4%|▍         | 63/1500 [00:17<06:05,  3.93batch/s, context_loss=0.769, loss=0.343, masked_loss=0.266][A
-Training UNET for Diffusion:   4%|▍         | 64/1500 [00:17<06:04,  3.94batch/s, context_loss=0.769, loss=0.343, masked_loss=0.266][A
-Training UNET for Diffusion:   4%|▍         | 64/1500 [00:17<06:04,  3.94batch/s, context_loss=0.71, loss=0.397, masked_loss=0.326] [A
-Training UNET for Diffusion:   4%|▍         | 65/1500 [00:17<06:04,  3.94batch/s, context_loss=0.71, loss=0.397, masked_loss=0.326][A
-Training UNET for Diffusion:   4%|▍         | 65/1500 [00:17<06:04,  3.94batch/s, context_loss=0.476, loss=0.609, masked_loss=0.561][A
-Training UNET for Diffusion:   4%|▍         | 66/1500 [00:17<06:04,  3.93batch/s, context_loss=0.476, loss=0.609, masked_loss=0.561][A
-Training UNET for Diffusion:   4%|▍         | 66/1500 [00:18<06:04,  3.93batch/s, context_loss=0.659, loss=0.445, masked_loss=0.379][A
-Training UNET for Diffusion:   4%|▍         | 67/1500 [00:18<06:04,  3.93batch/s, context_loss=0.659, loss=0.445, masked_loss=0.379][A
-Training UNET for Diffusion:   4%|▍         | 67/1500 [00:18<06:04,  3.93batch/s, context_loss=0.491, loss=0.607, masked_loss=0.558][A
-Training UNET for Diffusion:   5%|▍         | 68/1500 [00:18<06:03,  3.93batch/s, context_loss=0.491, loss=0.607, masked_loss=0.558][A
-Training UNET for Diffusion:   5%|▍         | 68/1500 [00:18<06:03,  3.93batch/s, context_loss=0.449, loss=0.636, masked_loss=0.591][A
-Training UNET for Diffusion:   5%|▍         | 69/1500 [00:18<06:03,  3.94batch/s, context_loss=0.449, loss=0.636, masked_loss=0.591][A
-Training UNET for Diffusion:   5%|▍         | 69/1500 [00:18<06:03,  3.94batch/s, context_loss=0.825, loss=0.285, masked_loss=0.202][A
-Training UNET for Diffusion:   5%|▍         | 70/1500 [00:18<06:03,  3.93batch/s, context_loss=0.825, loss=0.285, masked_loss=0.202][A
-Training UNET for Diffusion:   5%|▍         | 70/1500 [00:19<06:03,  3.93batch/s, context_loss=0.594, loss=0.499, masked_loss=0.439][A
-Training UNET for Diffusion:   5%|▍         | 71/1500 [00:19<06:03,  3.93batch/s, context_loss=0.594, loss=0.499, masked_loss=0.439][A
-Training UNET for Diffusion:   5%|▍         | 71/1500 [00:19<06:03,  3.93batch/s, context_loss=0.558, loss=0.529, masked_loss=0.473][A
-Training UNET for Diffusion:   5%|▍         | 72/1500 [00:19<06:03,  3.93batch/s, context_loss=0.558, loss=0.529, masked_loss=0.473][A
-Training UNET for Diffusion:   5%|▍         | 72/1500 [00:19<06:03,  3.93batch/s, context_loss=0.791, loss=0.314, masked_loss=0.235][A
-Training UNET for Diffusion:   5%|▍         | 73/1500 [00:19<06:03,  3.93batch/s, context_loss=0.791, loss=0.314, masked_loss=0.235][A
-Training UNET for Diffusion:   5%|▍         | 73/1500 [00:19<06:03,  3.93batch/s, context_loss=0.45, loss=0.628, masked_loss=0.583] [A
-Training UNET for Diffusion:   5%|▍         | 74/1500 [00:19<06:03,  3.93batch/s, context_loss=0.45, loss=0.628, masked_loss=0.583][A
-Training UNET for Diffusion:   5%|▍         | 74/1500 [00:20<06:03,  3.93batch/s, context_loss=0.652, loss=0.445, masked_loss=0.38][A
-Training UNET for Diffusion:   5%|▌         | 75/1500 [00:20<06:02,  3.93batch/s, context_loss=0.652, loss=0.445, masked_loss=0.38][A
-Training UNET for Diffusion:   5%|▌         | 75/1500 [00:20<06:02,  3.93batch/s, context_loss=0.478, loss=0.606, masked_loss=0.559][A
-Training UNET for Diffusion:   5%|▌         | 76/1500 [00:20<06:02,  3.93batch/s, context_loss=0.478, loss=0.606, masked_loss=0.559][A
-Training UNET for Diffusion:   5%|▌         | 76/1500 [00:20<06:02,  3.93batch/s, context_loss=0.632, loss=0.458, masked_loss=0.395][A
-Training UNET for Diffusion:   5%|▌         | 77/1500 [00:20<06:02,  3.93batch/s, context_loss=0.632, loss=0.458, masked_loss=0.395][A
-Training UNET for Diffusion:   5%|▌         | 77/1500 [00:20<06:02,  3.93batch/s, context_loss=0.691, loss=0.403, masked_loss=0.334][A
-Training UNET for Diffusion:   5%|▌         | 78/1500 [00:20<06:02,  3.93batch/s, context_loss=0.691, loss=0.403, masked_loss=0.334][A
-Training UNET for Diffusion:   5%|▌         | 78/1500 [00:21<06:02,  3.93batch/s, context_loss=0.782, loss=0.324, masked_loss=0.245][A
-Training UNET for Diffusion:   5%|▌         | 79/1500 [00:21<06:01,  3.93batch/s, context_loss=0.782, loss=0.324, masked_loss=0.245][A
-Training UNET for Diffusion:   5%|▌         | 79/1500 [00:21<06:01,  3.93batch/s, context_loss=0.756, loss=0.35, masked_loss=0.275] [A
-Training UNET for Diffusion:   5%|▌         | 80/1500 [00:21<06:01,  3.93batch/s, context_loss=0.756, loss=0.35, masked_loss=0.275][A
-Training UNET for Diffusion:   5%|▌         | 80/1500 [00:21<06:01,  3.93batch/s, context_loss=0.782, loss=0.317, masked_loss=0.239][A
-Training UNET for Diffusion:   5%|▌         | 81/1500 [00:21<06:01,  3.93batch/s, context_loss=0.782, loss=0.317, masked_loss=0.239][A
-Training UNET for Diffusion:   5%|▌         | 81/1500 [00:21<06:01,  3.93batch/s, context_loss=0.556, loss=0.522, masked_loss=0.466][A
-Training UNET for Diffusion:   5%|▌         | 82/1500 [00:21<06:01,  3.92batch/s, context_loss=0.556, loss=0.522, masked_loss=0.466][A
-Training UNET for Diffusion:   5%|▌         | 82/1500 [00:22<06:01,  3.92batch/s, context_loss=0.693, loss=0.397, masked_loss=0.327][A
-Training UNET for Diffusion:   6%|▌         | 83/1500 [00:22<06:01,  3.93batch/s, context_loss=0.693, loss=0.397, masked_loss=0.327][A
-Training UNET for Diffusion:   6%|▌         | 83/1500 [00:22<06:01,  3.93batch/s, context_loss=0.777, loss=0.322, masked_loss=0.245][A
-Training UNET for Diffusion:   6%|▌         | 84/1500 [00:22<06:00,  3.93batch/s, context_loss=0.777, loss=0.322, masked_loss=0.245][A
-Training UNET for Diffusion:   6%|▌         | 84/1500 [00:22<06:00,  3.93batch/s, context_loss=0.515, loss=0.56, masked_loss=0.509] [A
-Training UNET for Diffusion:   6%|▌         | 85/1500 [00:22<06:00,  3.93batch/s, context_loss=0.515, loss=0.56, masked_loss=0.509][A
-Training UNET for Diffusion:   6%|▌         | 85/1500 [00:22<06:00,  3.93batch/s, context_loss=0.63, loss=0.45, masked_loss=0.387] [A
-Training UNET for Diffusion:   6%|▌         | 86/1500 [00:22<06:00,  3.93batch/s, context_loss=0.63, loss=0.45, masked_loss=0.387][A
-Training UNET for Diffusion:   6%|▌         | 86/1500 [00:23<06:00,  3.93batch/s, context_loss=0.749, loss=0.35, masked_loss=0.275][A
-Training UNET for Diffusion:   6%|▌         | 87/1500 [00:23<06:00,  3.92batch/s, context_loss=0.749, loss=0.35, masked_loss=0.275][A
-Training UNET for Diffusion:   6%|▌         | 87/1500 [00:23<06:00,  3.92batch/s, context_loss=0.519, loss=0.553, masked_loss=0.502][A
-Training UNET for Diffusion:   6%|▌         | 88/1500 [00:23<05:59,  3.92batch/s, context_loss=0.519, loss=0.553, masked_loss=0.502][A
-Training UNET for Diffusion:   6%|▌         | 88/1500 [00:23<05:59,  3.92batch/s, context_loss=0.448, loss=0.619, masked_loss=0.574][A
-Training UNET for Diffusion:   6%|▌         | 89/1500 [00:23<05:59,  3.93batch/s, context_loss=0.448, loss=0.619, masked_loss=0.574][A
-Training UNET for Diffusion:   6%|▌         | 89/1500 [00:23<05:59,  3.93batch/s, context_loss=0.677, loss=0.413, masked_loss=0.345][A
-Training UNET for Diffusion:   6%|▌         | 90/1500 [00:23<05:59,  3.92batch/s, context_loss=0.677, loss=0.413, masked_loss=0.345][A
-Training UNET for Diffusion:   6%|▌         | 90/1500 [00:24<05:59,  3.92batch/s, context_loss=0.677, loss=0.417, masked_loss=0.349][A
-Training UNET for Diffusion:   6%|▌         | 91/1500 [00:24<05:59,  3.92batch/s, context_loss=0.677, loss=0.417, masked_loss=0.349][A
-Training UNET for Diffusion:   6%|▌         | 91/1500 [00:24<05:59,  3.92batch/s, context_loss=0.452, loss=0.611, masked_loss=0.566][A
-Training UNET for Diffusion:   6%|▌         | 92/1500 [00:24<05:59,  3.92batch/s, context_loss=0.452, loss=0.611, masked_loss=0.566][A
-Training UNET for Diffusion:   6%|▌         | 92/1500 [00:24<05:59,  3.92batch/s, context_loss=0.663, loss=0.421, masked_loss=0.355][A
-Training UNET for Diffusion:   6%|▌         | 93/1500 [00:24<05:58,  3.92batch/s, context_loss=0.663, loss=0.421, masked_loss=0.355][A
-Training UNET for Diffusion:   6%|▌         | 93/1500 [00:24<05:58,  3.92batch/s, context_loss=0.607, loss=0.473, masked_loss=0.412][A
-Training UNET for Diffusion:   6%|▋         | 94/1500 [00:24<05:58,  3.92batch/s, context_loss=0.607, loss=0.473, masked_loss=0.412][A
-Training UNET for Diffusion:   6%|▋         | 94/1500 [00:25<05:58,  3.92batch/s, context_loss=0.631, loss=0.446, masked_loss=0.383][A
-Training UNET for Diffusion:   6%|▋         | 95/1500 [00:25<05:57,  3.93batch/s, context_loss=0.631, loss=0.446, masked_loss=0.383][A
-Training UNET for Diffusion:   6%|▋         | 95/1500 [00:25<05:57,  3.93batch/s, context_loss=0.448, loss=0.614, masked_loss=0.57] [A
-Training UNET for Diffusion:   6%|▋         | 96/1500 [00:25<05:57,  3.93batch/s, context_loss=0.448, loss=0.614, masked_loss=0.57][A
-Training UNET for Diffusion:   6%|▋         | 96/1500 [00:25<05:57,  3.93batch/s, context_loss=0.441, loss=0.625, masked_loss=0.581][A
-Training UNET for Diffusion:   6%|▋         | 97/1500 [00:25<05:56,  3.93batch/s, context_loss=0.441, loss=0.625, masked_loss=0.581][A
-Training UNET for Diffusion:   6%|▋         | 97/1500 [00:25<05:56,  3.93batch/s, context_loss=0.639, loss=0.44, masked_loss=0.376] [A
-Training UNET for Diffusion:   7%|▋         | 98/1500 [00:25<05:56,  3.93batch/s, context_loss=0.639, loss=0.44, masked_loss=0.376][A
-Training UNET for Diffusion:   7%|▋         | 98/1500 [00:26<05:56,  3.93batch/s, context_loss=0.415, loss=0.642, masked_loss=0.601][A
-Training UNET for Diffusion:   7%|▋         | 99/1500 [00:26<05:56,  3.93batch/s, context_loss=0.415, loss=0.642, masked_loss=0.601][A
-Training UNET for Diffusion:   7%|▋         | 99/1500 [00:26<05:56,  3.93batch/s, context_loss=0.751, loss=0.344, masked_loss=0.269][A
-Training UNET for Diffusion:   7%|▋         | 100/1500 [00:26<05:55,  3.93batch/s, context_loss=0.751, loss=0.344, masked_loss=0.269][A
-Training UNET for Diffusion:   7%|▋         | 100/1500 [00:26<05:55,  3.93batch/s, context_loss=0.433, loss=0.624, masked_loss=0.581][A
-Training UNET for Diffusion:   7%|▋         | 101/1500 [00:26<05:55,  3.93batch/s, context_loss=0.433, loss=0.624, masked_loss=0.581][A
-Training UNET for Diffusion:   7%|▋         | 101/1500 [00:26<05:55,  3.93batch/s, context_loss=0.456, loss=0.604, masked_loss=0.558][A
-Training UNET for Diffusion:   7%|▋         | 102/1500 [00:26<05:55,  3.93batch/s, context_loss=0.456, loss=0.604, masked_loss=0.558][A
-Training UNET for Diffusion:   7%|▋         | 102/1500 [00:27<05:55,  3.93batch/s, context_loss=0.661, loss=0.418, masked_loss=0.352][A
-Training UNET for Diffusion:   7%|▋         | 103/1500 [00:27<05:55,  3.93batch/s, context_loss=0.661, loss=0.418, masked_loss=0.352][A
-Training UNET for Diffusion:   7%|▋         | 103/1500 [00:27<05:55,  3.93batch/s, context_loss=0.732, loss=0.353, masked_loss=0.28] [A
-Training UNET for Diffusion:   7%|▋         | 104/1500 [00:27<05:54,  3.93batch/s, context_loss=0.732, loss=0.353, masked_loss=0.28][A
-Training UNET for Diffusion:   7%|▋         | 104/1500 [00:27<05:54,  3.93batch/s, context_loss=0.715, loss=0.367, masked_loss=0.295][A
-Training UNET for Diffusion:   7%|▋         | 105/1500 [00:27<05:54,  3.93batch/s, context_loss=0.715, loss=0.367, masked_loss=0.295][A
-Training UNET for Diffusion:   7%|▋         | 105/1500 [00:27<05:54,  3.93batch/s, context_loss=0.62, loss=0.465, masked_loss=0.403] [A
-Training UNET for Diffusion:   7%|▋         | 106/1500 [00:27<05:54,  3.93batch/s, context_loss=0.62, loss=0.465, masked_loss=0.403][A
-Training UNET for Diffusion:   7%|▋         | 106/1500 [00:28<05:54,  3.93batch/s, context_loss=0.72, loss=0.363, masked_loss=0.291][A
-Training UNET for Diffusion:   7%|▋         | 107/1500 [00:28<05:54,  3.93batch/s, context_loss=0.72, loss=0.363, masked_loss=0.291][A
-Training UNET for Diffusion:   7%|▋         | 107/1500 [00:28<05:54,  3.93batch/s, context_loss=0.598, loss=0.477, masked_loss=0.417][A
-Training UNET for Diffusion:   7%|▋         | 108/1500 [00:28<05:54,  3.93batch/s, context_loss=0.598, loss=0.477, masked_loss=0.417][A
-Training UNET for Diffusion:   7%|▋         | 108/1500 [00:28<05:54,  3.93batch/s, context_loss=0.69, loss=0.391, masked_loss=0.322] [A
-Training UNET for Diffusion:   7%|▋         | 109/1500 [00:28<05:53,  3.93batch/s, context_loss=0.69, loss=0.391, masked_loss=0.322][A
-Training UNET for Diffusion:   7%|▋         | 109/1500 [00:28<05:53,  3.93batch/s, context_loss=0.578, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:   7%|▋         | 110/1500 [00:28<05:53,  3.93batch/s, context_loss=0.578, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:   7%|▋         | 110/1500 [00:29<05:53,  3.93batch/s, context_loss=0.806, loss=0.285, masked_loss=0.204][A
-Training UNET for Diffusion:   7%|▋         | 111/1500 [00:29<05:53,  3.93batch/s, context_loss=0.806, loss=0.285, masked_loss=0.204][A
-Training UNET for Diffusion:   7%|▋         | 111/1500 [00:29<05:53,  3.93batch/s, context_loss=0.517, loss=0.547, masked_loss=0.495][A
-Training UNET for Diffusion:   7%|▋         | 112/1500 [00:29<05:53,  3.93batch/s, context_loss=0.517, loss=0.547, masked_loss=0.495][A
-Training UNET for Diffusion:   7%|▋         | 112/1500 [00:29<05:53,  3.93batch/s, context_loss=0.742, loss=0.341, masked_loss=0.267][A
-Training UNET for Diffusion:   8%|▊         | 113/1500 [00:29<05:53,  3.93batch/s, context_loss=0.742, loss=0.341, masked_loss=0.267][A
-Training UNET for Diffusion:   8%|▊         | 113/1500 [00:30<05:53,  3.93batch/s, context_loss=0.667, loss=0.408, masked_loss=0.341][A
-Training UNET for Diffusion:   8%|▊         | 114/1500 [00:30<05:53,  3.93batch/s, context_loss=0.667, loss=0.408, masked_loss=0.341][A
-Training UNET for Diffusion:   8%|▊         | 114/1500 [00:30<05:53,  3.93batch/s, context_loss=0.77, loss=0.325, masked_loss=0.248] [A
-Training UNET for Diffusion:   8%|▊         | 115/1500 [00:30<05:52,  3.93batch/s, context_loss=0.77, loss=0.325, masked_loss=0.248][A
-Training UNET for Diffusion:   8%|▊         | 115/1500 [00:30<05:52,  3.93batch/s, context_loss=0.521, loss=0.541, masked_loss=0.489][A
-Training UNET for Diffusion:   8%|▊         | 116/1500 [00:30<05:52,  3.93batch/s, context_loss=0.521, loss=0.541, masked_loss=0.489][A
-Training UNET for Diffusion:   8%|▊         | 116/1500 [00:30<05:52,  3.93batch/s, context_loss=0.655, loss=0.427, masked_loss=0.362][A
-Training UNET for Diffusion:   8%|▊         | 117/1500 [00:30<05:51,  3.93batch/s, context_loss=0.655, loss=0.427, masked_loss=0.362][A
-Training UNET for Diffusion:   8%|▊         | 117/1500 [00:31<05:51,  3.93batch/s, context_loss=0.763, loss=0.32, masked_loss=0.244] [A
-Training UNET for Diffusion:   8%|▊         | 118/1500 [00:31<05:51,  3.93batch/s, context_loss=0.763, loss=0.32, masked_loss=0.244][A
-Training UNET for Diffusion:   8%|▊         | 118/1500 [00:31<05:51,  3.93batch/s, context_loss=0.505, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:   8%|▊         | 119/1500 [00:31<05:51,  3.93batch/s, context_loss=0.505, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:   8%|▊         | 119/1500 [00:31<05:51,  3.93batch/s, context_loss=0.789, loss=0.298, masked_loss=0.219][A
-Training UNET for Diffusion:   8%|▊         | 120/1500 [00:31<05:51,  3.93batch/s, context_loss=0.789, loss=0.298, masked_loss=0.219][A
-Training UNET for Diffusion:   8%|▊         | 120/1500 [00:31<05:51,  3.93batch/s, context_loss=0.789, loss=0.297, masked_loss=0.218][A
-Training UNET for Diffusion:   8%|▊         | 121/1500 [00:31<05:51,  3.93batch/s, context_loss=0.789, loss=0.297, masked_loss=0.218][A
-Training UNET for Diffusion:   8%|▊         | 121/1500 [00:32<05:51,  3.93batch/s, context_loss=0.717, loss=0.367, masked_loss=0.295][A
-Training UNET for Diffusion:   8%|▊         | 122/1500 [00:32<05:51,  3.92batch/s, context_loss=0.717, loss=0.367, masked_loss=0.295][A
-Training UNET for Diffusion:   8%|▊         | 122/1500 [00:32<05:51,  3.92batch/s, context_loss=0.554, loss=0.518, masked_loss=0.463][A
-Training UNET for Diffusion:   8%|▊         | 123/1500 [00:32<05:51,  3.92batch/s, context_loss=0.554, loss=0.518, masked_loss=0.463][A
-Training UNET for Diffusion:   8%|▊         | 123/1500 [00:32<05:51,  3.92batch/s, context_loss=0.776, loss=0.308, masked_loss=0.231][A
-Training UNET for Diffusion:   8%|▊         | 124/1500 [00:32<05:50,  3.93batch/s, context_loss=0.776, loss=0.308, masked_loss=0.231][A
-Training UNET for Diffusion:   8%|▊         | 124/1500 [00:32<05:50,  3.93batch/s, context_loss=0.629, loss=0.447, masked_loss=0.384][A
-Training UNET for Diffusion:   8%|▊         | 125/1500 [00:32<05:49,  3.93batch/s, context_loss=0.629, loss=0.447, masked_loss=0.384][A
-Training UNET for Diffusion:   8%|▊         | 125/1500 [00:33<05:49,  3.93batch/s, context_loss=0.724, loss=0.355, masked_loss=0.282][A
-Training UNET for Diffusion:   8%|▊         | 126/1500 [00:33<05:49,  3.93batch/s, context_loss=0.724, loss=0.355, masked_loss=0.282][A
-Training UNET for Diffusion:   8%|▊         | 126/1500 [00:33<05:49,  3.93batch/s, context_loss=0.48, loss=0.587, masked_loss=0.539] [A
-Training UNET for Diffusion:   8%|▊         | 127/1500 [00:33<05:49,  3.93batch/s, context_loss=0.48, loss=0.587, masked_loss=0.539][A
-Training UNET for Diffusion:   8%|▊         | 127/1500 [00:33<05:49,  3.93batch/s, context_loss=0.554, loss=0.517, masked_loss=0.462][A
-Training UNET for Diffusion:   9%|▊         | 128/1500 [00:33<05:49,  3.93batch/s, context_loss=0.554, loss=0.517, masked_loss=0.462][A
-Training UNET for Diffusion:   9%|▊         | 128/1500 [00:33<05:49,  3.93batch/s, context_loss=0.806, loss=0.287, masked_loss=0.207][A
-Training UNET for Diffusion:   9%|▊         | 129/1500 [00:33<05:48,  3.93batch/s, context_loss=0.806, loss=0.287, masked_loss=0.207][A
-Training UNET for Diffusion:   9%|▊         | 129/1500 [00:34<05:48,  3.93batch/s, context_loss=0.484, loss=0.57, masked_loss=0.522] [A
-Training UNET for Diffusion:   9%|▊         | 130/1500 [00:34<05:48,  3.93batch/s, context_loss=0.484, loss=0.57, masked_loss=0.522][A
-Training UNET for Diffusion:   9%|▊         | 130/1500 [00:34<05:48,  3.93batch/s, context_loss=0.48, loss=0.576, masked_loss=0.528][A
-Training UNET for Diffusion:   9%|▊         | 131/1500 [00:34<05:48,  3.92batch/s, context_loss=0.48, loss=0.576, masked_loss=0.528][A
-Training UNET for Diffusion:   9%|▊         | 131/1500 [00:34<05:48,  3.92batch/s, context_loss=0.527, loss=0.539, masked_loss=0.486][A
-Training UNET for Diffusion:   9%|▉         | 132/1500 [00:34<05:48,  3.93batch/s, context_loss=0.527, loss=0.539, masked_loss=0.486][A
-Training UNET for Diffusion:   9%|▉         | 132/1500 [00:34<05:48,  3.93batch/s, context_loss=0.582, loss=0.484, masked_loss=0.425][A
-Training UNET for Diffusion:   9%|▉         | 133/1500 [00:34<05:47,  3.93batch/s, context_loss=0.582, loss=0.484, masked_loss=0.425][A
-Training UNET for Diffusion:   9%|▉         | 133/1500 [00:35<05:47,  3.93batch/s, context_loss=0.707, loss=0.369, masked_loss=0.298][A
-Training UNET for Diffusion:   9%|▉         | 134/1500 [00:35<05:47,  3.93batch/s, context_loss=0.707, loss=0.369, masked_loss=0.298][A
-Training UNET for Diffusion:   9%|▉         | 134/1500 [00:35<05:47,  3.93batch/s, context_loss=0.447, loss=0.605, masked_loss=0.56] [A
-Training UNET for Diffusion:   9%|▉         | 135/1500 [00:35<05:47,  3.93batch/s, context_loss=0.447, loss=0.605, masked_loss=0.56][A
-Training UNET for Diffusion:   9%|▉         | 135/1500 [00:35<05:47,  3.93batch/s, context_loss=0.413, loss=0.635, masked_loss=0.594][A
-Training UNET for Diffusion:   9%|▉         | 136/1500 [00:35<05:46,  3.93batch/s, context_loss=0.413, loss=0.635, masked_loss=0.594][A
-Training UNET for Diffusion:   9%|▉         | 136/1500 [00:35<05:46,  3.93batch/s, context_loss=0.582, loss=0.481, masked_loss=0.422][A
-Training UNET for Diffusion:   9%|▉         | 137/1500 [00:35<05:46,  3.93batch/s, context_loss=0.582, loss=0.481, masked_loss=0.422][A
-Training UNET for Diffusion:   9%|▉         | 137/1500 [00:36<05:46,  3.93batch/s, context_loss=0.408, loss=0.639, masked_loss=0.598][A
-Training UNET for Diffusion:   9%|▉         | 138/1500 [00:36<05:46,  3.93batch/s, context_loss=0.408, loss=0.639, masked_loss=0.598][A
-Training UNET for Diffusion:   9%|▉         | 138/1500 [00:36<05:46,  3.93batch/s, context_loss=0.495, loss=0.562, masked_loss=0.512][A
-Training UNET for Diffusion:   9%|▉         | 139/1500 [00:36<05:45,  3.93batch/s, context_loss=0.495, loss=0.562, masked_loss=0.512][A
-Training UNET for Diffusion:   9%|▉         | 139/1500 [00:36<05:45,  3.93batch/s, context_loss=0.456, loss=0.601, masked_loss=0.556][A
-Training UNET for Diffusion:   9%|▉         | 140/1500 [00:36<05:45,  3.93batch/s, context_loss=0.456, loss=0.601, masked_loss=0.556][A
-Training UNET for Diffusion:   9%|▉         | 140/1500 [00:36<05:45,  3.93batch/s, context_loss=0.749, loss=0.336, masked_loss=0.261][A
-Training UNET for Diffusion:   9%|▉         | 141/1500 [00:36<05:45,  3.94batch/s, context_loss=0.749, loss=0.336, masked_loss=0.261][A
-Training UNET for Diffusion:   9%|▉         | 141/1500 [00:37<05:45,  3.94batch/s, context_loss=0.719, loss=0.356, masked_loss=0.284][A
-Training UNET for Diffusion:   9%|▉         | 142/1500 [00:37<05:45,  3.93batch/s, context_loss=0.719, loss=0.356, masked_loss=0.284][A
-Training UNET for Diffusion:   9%|▉         | 142/1500 [00:37<05:45,  3.93batch/s, context_loss=0.71, loss=0.366, masked_loss=0.295] [A
-Training UNET for Diffusion:  10%|▉         | 143/1500 [00:37<05:44,  3.93batch/s, context_loss=0.71, loss=0.366, masked_loss=0.295][A
-Training UNET for Diffusion:  10%|▉         | 143/1500 [00:37<05:44,  3.93batch/s, context_loss=0.595, loss=0.468, masked_loss=0.408][A
-Training UNET for Diffusion:  10%|▉         | 144/1500 [00:37<05:44,  3.93batch/s, context_loss=0.595, loss=0.468, masked_loss=0.408][A
-Training UNET for Diffusion:  10%|▉         | 144/1500 [00:37<05:44,  3.93batch/s, context_loss=0.433, loss=0.616, masked_loss=0.573][A
-Training UNET for Diffusion:  10%|▉         | 145/1500 [00:37<05:44,  3.94batch/s, context_loss=0.433, loss=0.616, masked_loss=0.573][A
-Training UNET for Diffusion:  10%|▉         | 145/1500 [00:38<05:44,  3.94batch/s, context_loss=0.637, loss=0.432, masked_loss=0.368][A
-Training UNET for Diffusion:  10%|▉         | 146/1500 [00:38<05:44,  3.93batch/s, context_loss=0.637, loss=0.432, masked_loss=0.368][A
-Training UNET for Diffusion:  10%|▉         | 146/1500 [00:38<05:44,  3.93batch/s, context_loss=0.583, loss=0.482, masked_loss=0.423][A
-Training UNET for Diffusion:  10%|▉         | 147/1500 [00:38<05:43,  3.93batch/s, context_loss=0.583, loss=0.482, masked_loss=0.423][A
-Training UNET for Diffusion:  10%|▉         | 147/1500 [00:38<05:43,  3.93batch/s, context_loss=0.688, loss=0.385, masked_loss=0.316][A
-Training UNET for Diffusion:  10%|▉         | 148/1500 [00:38<05:43,  3.93batch/s, context_loss=0.688, loss=0.385, masked_loss=0.316][A
-Training UNET for Diffusion:  10%|▉         | 148/1500 [00:38<05:43,  3.93batch/s, context_loss=0.671, loss=0.404, masked_loss=0.337][A
-Training UNET for Diffusion:  10%|▉         | 149/1500 [00:38<05:43,  3.93batch/s, context_loss=0.671, loss=0.404, masked_loss=0.337][A
-Training UNET for Diffusion:  10%|▉         | 149/1500 [00:39<05:43,  3.93batch/s, context_loss=0.659, loss=0.41, masked_loss=0.344] [A
-Training UNET for Diffusion:  10%|█         | 150/1500 [00:39<05:43,  3.93batch/s, context_loss=0.659, loss=0.41, masked_loss=0.344][A
-Training UNET for Diffusion:  10%|█         | 150/1500 [00:39<05:43,  3.93batch/s, context_loss=0.676, loss=0.395, masked_loss=0.328][A
-Training UNET for Diffusion:  10%|█         | 151/1500 [00:39<05:43,  3.92batch/s, context_loss=0.676, loss=0.395, masked_loss=0.328][A
-Training UNET for Diffusion:  10%|█         | 151/1500 [00:39<05:43,  3.92batch/s, context_loss=0.435, loss=0.613, masked_loss=0.57] [A
-Training UNET for Diffusion:  10%|█         | 152/1500 [00:39<05:44,  3.92batch/s, context_loss=0.435, loss=0.613, masked_loss=0.57][A
-Training UNET for Diffusion:  10%|█         | 152/1500 [00:39<05:44,  3.92batch/s, context_loss=0.674, loss=0.396, masked_loss=0.329][A
-Training UNET for Diffusion:  10%|█         | 153/1500 [00:39<05:44,  3.91batch/s, context_loss=0.674, loss=0.396, masked_loss=0.329][A
-Training UNET for Diffusion:  10%|█         | 153/1500 [00:40<05:44,  3.91batch/s, context_loss=0.603, loss=0.462, masked_loss=0.401][A
-Training UNET for Diffusion:  10%|█         | 154/1500 [00:40<05:44,  3.91batch/s, context_loss=0.603, loss=0.462, masked_loss=0.401][A
-Training UNET for Diffusion:  10%|█         | 154/1500 [00:40<05:44,  3.91batch/s, context_loss=0.502, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:  10%|█         | 155/1500 [00:40<05:43,  3.92batch/s, context_loss=0.502, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:  10%|█         | 155/1500 [00:40<05:43,  3.92batch/s, context_loss=0.709, loss=0.363, masked_loss=0.292][A
-Training UNET for Diffusion:  10%|█         | 156/1500 [00:40<05:42,  3.92batch/s, context_loss=0.709, loss=0.363, masked_loss=0.292][A
-Training UNET for Diffusion:  10%|█         | 156/1500 [00:40<05:42,  3.92batch/s, context_loss=0.633, loss=0.433, masked_loss=0.37] [A
-Training UNET for Diffusion:  10%|█         | 157/1500 [00:40<05:42,  3.92batch/s, context_loss=0.633, loss=0.433, masked_loss=0.37][A
-Training UNET for Diffusion:  10%|█         | 157/1500 [00:41<05:42,  3.92batch/s, context_loss=0.483, loss=0.569, masked_loss=0.52][A
-Training UNET for Diffusion:  11%|█         | 158/1500 [00:41<05:41,  3.93batch/s, context_loss=0.483, loss=0.569, masked_loss=0.52][A
-Training UNET for Diffusion:  11%|█         | 158/1500 [00:41<05:41,  3.93batch/s, context_loss=0.598, loss=0.472, masked_loss=0.412][A
-Training UNET for Diffusion:  11%|█         | 159/1500 [00:41<05:41,  3.93batch/s, context_loss=0.598, loss=0.472, masked_loss=0.412][A
-Training UNET for Diffusion:  11%|█         | 159/1500 [00:41<05:41,  3.93batch/s, context_loss=0.581, loss=0.481, masked_loss=0.422][A
-Training UNET for Diffusion:  11%|█         | 160/1500 [00:41<05:40,  3.93batch/s, context_loss=0.581, loss=0.481, masked_loss=0.422][A
-Training UNET for Diffusion:  11%|█         | 160/1500 [00:41<05:40,  3.93batch/s, context_loss=0.736, loss=0.347, masked_loss=0.274][A
-Training UNET for Diffusion:  11%|█         | 161/1500 [00:41<05:40,  3.93batch/s, context_loss=0.736, loss=0.347, masked_loss=0.274][A
-Training UNET for Diffusion:  11%|█         | 161/1500 [00:42<05:40,  3.93batch/s, context_loss=0.792, loss=0.29, masked_loss=0.211] [A
-Training UNET for Diffusion:  11%|█         | 162/1500 [00:42<05:40,  3.93batch/s, context_loss=0.792, loss=0.29, masked_loss=0.211][A
-Training UNET for Diffusion:  11%|█         | 162/1500 [00:42<05:40,  3.93batch/s, context_loss=0.412, loss=0.633, masked_loss=0.591][A
-Training UNET for Diffusion:  11%|█         | 163/1500 [00:42<05:39,  3.93batch/s, context_loss=0.412, loss=0.633, masked_loss=0.591][A
-Training UNET for Diffusion:  11%|█         | 163/1500 [00:42<05:39,  3.93batch/s, context_loss=0.736, loss=0.341, masked_loss=0.268][A
-Training UNET for Diffusion:  11%|█         | 164/1500 [00:42<05:39,  3.93batch/s, context_loss=0.736, loss=0.341, masked_loss=0.268][A
-Training UNET for Diffusion:  11%|█         | 164/1500 [00:42<05:39,  3.93batch/s, context_loss=0.431, loss=0.623, masked_loss=0.58] [A
-Training UNET for Diffusion:  11%|█         | 165/1500 [00:42<05:39,  3.94batch/s, context_loss=0.431, loss=0.623, masked_loss=0.58][A
-Training UNET for Diffusion:  11%|█         | 165/1500 [00:43<05:39,  3.94batch/s, context_loss=0.524, loss=0.531, masked_loss=0.478][A
-Training UNET for Diffusion:  11%|█         | 166/1500 [00:43<05:38,  3.94batch/s, context_loss=0.524, loss=0.531, masked_loss=0.478][A
-Training UNET for Diffusion:  11%|█         | 166/1500 [00:43<05:38,  3.94batch/s, context_loss=0.449, loss=0.599, masked_loss=0.554][A
-Training UNET for Diffusion:  11%|█         | 167/1500 [00:43<05:38,  3.93batch/s, context_loss=0.449, loss=0.599, masked_loss=0.554][A
-Training UNET for Diffusion:  11%|█         | 167/1500 [00:43<05:38,  3.93batch/s, context_loss=0.588, loss=0.48, masked_loss=0.421] [A
-Training UNET for Diffusion:  11%|█         | 168/1500 [00:43<05:38,  3.93batch/s, context_loss=0.588, loss=0.48, masked_loss=0.421][A
-Training UNET for Diffusion:  11%|█         | 168/1500 [00:44<05:38,  3.93batch/s, context_loss=0.59, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  11%|█▏        | 169/1500 [00:44<05:38,  3.93batch/s, context_loss=0.59, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  11%|█▏        | 169/1500 [00:44<05:38,  3.93batch/s, context_loss=0.512, loss=0.542, masked_loss=0.491][A
-Training UNET for Diffusion:  11%|█▏        | 170/1500 [00:44<06:43,  3.30batch/s, context_loss=0.512, loss=0.542, masked_loss=0.491][A
-Training UNET for Diffusion:  11%|█▏        | 170/1500 [00:44<06:43,  3.30batch/s, context_loss=0.631, loss=0.435, masked_loss=0.372][A
-Training UNET for Diffusion:  11%|█▏        | 171/1500 [00:44<06:23,  3.46batch/s, context_loss=0.631, loss=0.435, masked_loss=0.372][A
-Training UNET for Diffusion:  11%|█▏        | 171/1500 [00:44<06:23,  3.46batch/s, context_loss=0.551, loss=0.507, masked_loss=0.452][A
-Training UNET for Diffusion:  11%|█▏        | 172/1500 [00:44<06:09,  3.59batch/s, context_loss=0.551, loss=0.507, masked_loss=0.452][A
-Training UNET for Diffusion:  11%|█▏        | 172/1500 [00:45<06:09,  3.59batch/s, context_loss=0.491, loss=0.566, masked_loss=0.517][A
-Training UNET for Diffusion:  12%|█▏        | 173/1500 [00:45<05:59,  3.69batch/s, context_loss=0.491, loss=0.566, masked_loss=0.517][A
-Training UNET for Diffusion:  12%|█▏        | 173/1500 [00:45<05:59,  3.69batch/s, context_loss=0.75, loss=0.332, masked_loss=0.257] [A
-Training UNET for Diffusion:  12%|█▏        | 174/1500 [00:45<05:53,  3.75batch/s, context_loss=0.75, loss=0.332, masked_loss=0.257][A
-Training UNET for Diffusion:  12%|█▏        | 174/1500 [00:45<05:53,  3.75batch/s, context_loss=0.677, loss=0.396, masked_loss=0.328][A
-Training UNET for Diffusion:  12%|█▏        | 175/1500 [00:45<05:48,  3.81batch/s, context_loss=0.677, loss=0.396, masked_loss=0.328][A
-Training UNET for Diffusion:  12%|█▏        | 175/1500 [00:45<05:48,  3.81batch/s, context_loss=0.775, loss=0.306, masked_loss=0.228][A
-Training UNET for Diffusion:  12%|█▏        | 176/1500 [00:45<05:44,  3.84batch/s, context_loss=0.775, loss=0.306, masked_loss=0.228][A
-Training UNET for Diffusion:  12%|█▏        | 176/1500 [00:46<05:44,  3.84batch/s, context_loss=0.553, loss=0.504, masked_loss=0.449][A
-Training UNET for Diffusion:  12%|█▏        | 177/1500 [00:46<05:42,  3.87batch/s, context_loss=0.553, loss=0.504, masked_loss=0.449][A
-Training UNET for Diffusion:  12%|█▏        | 177/1500 [00:46<05:42,  3.87batch/s, context_loss=0.65, loss=0.419, masked_loss=0.354] [A
-Training UNET for Diffusion:  12%|█▏        | 178/1500 [00:46<05:40,  3.88batch/s, context_loss=0.65, loss=0.419, masked_loss=0.354][A
-Training UNET for Diffusion:  12%|█▏        | 178/1500 [00:46<05:40,  3.88batch/s, context_loss=0.765, loss=0.314, masked_loss=0.238][A
-Training UNET for Diffusion:  12%|█▏        | 179/1500 [00:46<05:39,  3.89batch/s, context_loss=0.765, loss=0.314, masked_loss=0.238][A
-Training UNET for Diffusion:  12%|█▏        | 179/1500 [00:46<05:39,  3.89batch/s, context_loss=0.546, loss=0.509, masked_loss=0.455][A
-Training UNET for Diffusion:  12%|█▏        | 180/1500 [00:46<05:39,  3.89batch/s, context_loss=0.546, loss=0.509, masked_loss=0.455][A
-Training UNET for Diffusion:  12%|█▏        | 180/1500 [00:47<05:39,  3.89batch/s, context_loss=0.588, loss=0.474, masked_loss=0.415][A
-Training UNET for Diffusion:  12%|█▏        | 181/1500 [00:47<05:38,  3.90batch/s, context_loss=0.588, loss=0.474, masked_loss=0.415][A
-Training UNET for Diffusion:  12%|█▏        | 181/1500 [00:47<05:38,  3.90batch/s, context_loss=0.662, loss=0.41, masked_loss=0.343] [A
-Training UNET for Diffusion:  12%|█▏        | 182/1500 [00:47<05:37,  3.91batch/s, context_loss=0.662, loss=0.41, masked_loss=0.343][A
-Training UNET for Diffusion:  12%|█▏        | 182/1500 [00:47<05:37,  3.91batch/s, context_loss=0.57, loss=0.49, masked_loss=0.433] [A
-Training UNET for Diffusion:  12%|█▏        | 183/1500 [00:47<05:36,  3.92batch/s, context_loss=0.57, loss=0.49, masked_loss=0.433][A
-Training UNET for Diffusion:  12%|█▏        | 183/1500 [00:47<05:36,  3.92batch/s, context_loss=0.453, loss=0.594, masked_loss=0.549][A
-Training UNET for Diffusion:  12%|█▏        | 184/1500 [00:47<05:35,  3.92batch/s, context_loss=0.453, loss=0.594, masked_loss=0.549][A
-Training UNET for Diffusion:  12%|█▏        | 184/1500 [00:48<05:35,  3.92batch/s, context_loss=0.442, loss=0.603, masked_loss=0.559][A
-Training UNET for Diffusion:  12%|█▏        | 185/1500 [00:48<05:35,  3.92batch/s, context_loss=0.442, loss=0.603, masked_loss=0.559][A
-Training UNET for Diffusion:  12%|█▏        | 185/1500 [00:48<05:35,  3.92batch/s, context_loss=0.525, loss=0.529, masked_loss=0.476][A
-Training UNET for Diffusion:  12%|█▏        | 186/1500 [00:48<05:34,  3.93batch/s, context_loss=0.525, loss=0.529, masked_loss=0.476][A
-Training UNET for Diffusion:  12%|█▏        | 186/1500 [00:48<05:34,  3.93batch/s, context_loss=0.735, loss=0.341, masked_loss=0.267][A
-Training UNET for Diffusion:  12%|█▏        | 187/1500 [00:48<05:34,  3.93batch/s, context_loss=0.735, loss=0.341, masked_loss=0.267][A
-Training UNET for Diffusion:  12%|█▏        | 187/1500 [00:49<05:34,  3.93batch/s, context_loss=0.696, loss=0.375, masked_loss=0.306][A
-Training UNET for Diffusion:  13%|█▎        | 188/1500 [00:49<05:33,  3.93batch/s, context_loss=0.696, loss=0.375, masked_loss=0.306][A
-Training UNET for Diffusion:  13%|█▎        | 188/1500 [00:49<05:33,  3.93batch/s, context_loss=0.756, loss=0.328, masked_loss=0.252][A
-Training UNET for Diffusion:  13%|█▎        | 189/1500 [00:49<05:33,  3.93batch/s, context_loss=0.756, loss=0.328, masked_loss=0.252][A
-Training UNET for Diffusion:  13%|█▎        | 189/1500 [00:49<05:33,  3.93batch/s, context_loss=0.76, loss=0.324, masked_loss=0.248] [A
-Training UNET for Diffusion:  13%|█▎        | 190/1500 [00:49<05:33,  3.93batch/s, context_loss=0.76, loss=0.324, masked_loss=0.248][A
-Training UNET for Diffusion:  13%|█▎        | 190/1500 [00:49<05:33,  3.93batch/s, context_loss=0.515, loss=0.537, masked_loss=0.486][A
-Training UNET for Diffusion:  13%|█▎        | 191/1500 [00:49<05:33,  3.93batch/s, context_loss=0.515, loss=0.537, masked_loss=0.486][A
-Training UNET for Diffusion:  13%|█▎        | 191/1500 [00:50<05:33,  3.93batch/s, context_loss=0.442, loss=0.605, masked_loss=0.56] [A
-Training UNET for Diffusion:  13%|█▎        | 192/1500 [00:50<05:32,  3.93batch/s, context_loss=0.442, loss=0.605, masked_loss=0.56][A
-Training UNET for Diffusion:  13%|█▎        | 192/1500 [00:50<05:32,  3.93batch/s, context_loss=0.574, loss=0.485, masked_loss=0.427][A
-Training UNET for Diffusion:  13%|█▎        | 193/1500 [00:50<05:32,  3.93batch/s, context_loss=0.574, loss=0.485, masked_loss=0.427][A
-Training UNET for Diffusion:  13%|█▎        | 193/1500 [00:50<05:32,  3.93batch/s, context_loss=0.721, loss=0.352, masked_loss=0.28] [A
-Training UNET for Diffusion:  13%|█▎        | 194/1500 [00:50<05:32,  3.93batch/s, context_loss=0.721, loss=0.352, masked_loss=0.28][A
-Training UNET for Diffusion:  13%|█▎        | 194/1500 [00:50<05:32,  3.93batch/s, context_loss=0.471, loss=0.584, masked_loss=0.537][A
-Training UNET for Diffusion:  13%|█▎        | 195/1500 [00:50<05:31,  3.93batch/s, context_loss=0.471, loss=0.584, masked_loss=0.537][A
-Training UNET for Diffusion:  13%|█▎        | 195/1500 [00:51<05:31,  3.93batch/s, context_loss=0.437, loss=0.609, masked_loss=0.566][A
-Training UNET for Diffusion:  13%|█▎        | 196/1500 [00:51<05:31,  3.93batch/s, context_loss=0.437, loss=0.609, masked_loss=0.566][A
-Training UNET for Diffusion:  13%|█▎        | 196/1500 [00:51<05:31,  3.93batch/s, context_loss=0.726, loss=0.349, masked_loss=0.276][A
-Training UNET for Diffusion:  13%|█▎        | 197/1500 [00:51<05:31,  3.93batch/s, context_loss=0.726, loss=0.349, masked_loss=0.276][A
-Training UNET for Diffusion:  13%|█▎        | 197/1500 [00:51<05:31,  3.93batch/s, context_loss=0.597, loss=0.465, masked_loss=0.405][A
-Training UNET for Diffusion:  13%|█▎        | 198/1500 [00:51<05:31,  3.93batch/s, context_loss=0.597, loss=0.465, masked_loss=0.405][A
-Training UNET for Diffusion:  13%|█▎        | 198/1500 [00:51<05:31,  3.93batch/s, context_loss=0.435, loss=0.611, masked_loss=0.568][A
-Training UNET for Diffusion:  13%|█▎        | 199/1500 [00:51<05:31,  3.93batch/s, context_loss=0.435, loss=0.611, masked_loss=0.568][A
-Training UNET for Diffusion:  13%|█▎        | 199/1500 [00:52<05:31,  3.93batch/s, context_loss=0.695, loss=0.378, masked_loss=0.308][A
-Training UNET for Diffusion:  13%|█▎        | 200/1500 [00:52<05:30,  3.93batch/s, context_loss=0.695, loss=0.378, masked_loss=0.308][A
-Training UNET for Diffusion:  13%|█▎        | 200/1500 [00:52<05:30,  3.93batch/s, context_loss=0.577, loss=0.482, masked_loss=0.425][A
-Training UNET for Diffusion:  13%|█▎        | 201/1500 [00:52<05:30,  3.93batch/s, context_loss=0.577, loss=0.482, masked_loss=0.425][A
-Training UNET for Diffusion:  13%|█▎        | 201/1500 [00:52<05:30,  3.93batch/s, context_loss=0.433, loss=0.612, masked_loss=0.569][A
-Training UNET for Diffusion:  13%|█▎        | 202/1500 [00:52<05:30,  3.93batch/s, context_loss=0.433, loss=0.612, masked_loss=0.569][A
-Training UNET for Diffusion:  13%|█▎        | 202/1500 [00:52<05:30,  3.93batch/s, context_loss=0.609, loss=0.453, masked_loss=0.392][A
-Training UNET for Diffusion:  14%|█▎        | 203/1500 [00:52<05:30,  3.93batch/s, context_loss=0.609, loss=0.453, masked_loss=0.392][A
-Training UNET for Diffusion:  14%|█▎        | 203/1500 [00:53<05:30,  3.93batch/s, context_loss=0.639, loss=0.427, masked_loss=0.363][A
-Training UNET for Diffusion:  14%|█▎        | 204/1500 [00:53<05:29,  3.93batch/s, context_loss=0.639, loss=0.427, masked_loss=0.363][A
-Training UNET for Diffusion:  14%|█▎        | 204/1500 [00:53<05:29,  3.93batch/s, context_loss=0.504, loss=0.547, masked_loss=0.497][A
-Training UNET for Diffusion:  14%|█▎        | 205/1500 [00:53<05:29,  3.93batch/s, context_loss=0.504, loss=0.547, masked_loss=0.497][A
-Training UNET for Diffusion:  14%|█▎        | 205/1500 [00:53<05:29,  3.93batch/s, context_loss=0.768, loss=0.312, masked_loss=0.235][A
-Training UNET for Diffusion:  14%|█▎        | 206/1500 [00:53<05:29,  3.93batch/s, context_loss=0.768, loss=0.312, masked_loss=0.235][A
-Training UNET for Diffusion:  14%|█▎        | 206/1500 [00:53<05:29,  3.93batch/s, context_loss=0.614, loss=0.448, masked_loss=0.387][A
-Training UNET for Diffusion:  14%|█▍        | 207/1500 [00:53<05:29,  3.93batch/s, context_loss=0.614, loss=0.448, masked_loss=0.387][A
-Training UNET for Diffusion:  14%|█▍        | 207/1500 [00:54<05:29,  3.93batch/s, context_loss=0.535, loss=0.521, masked_loss=0.467][A
-Training UNET for Diffusion:  14%|█▍        | 208/1500 [00:54<05:28,  3.93batch/s, context_loss=0.535, loss=0.521, masked_loss=0.467][A
-Training UNET for Diffusion:  14%|█▍        | 208/1500 [00:54<05:28,  3.93batch/s, context_loss=0.776, loss=0.303, masked_loss=0.226][A
-Training UNET for Diffusion:  14%|█▍        | 209/1500 [00:54<05:28,  3.93batch/s, context_loss=0.776, loss=0.303, masked_loss=0.226][A
-Training UNET for Diffusion:  14%|█▍        | 209/1500 [00:54<05:28,  3.93batch/s, context_loss=0.503, loss=0.548, masked_loss=0.497][A
-Training UNET for Diffusion:  14%|█▍        | 210/1500 [00:54<05:28,  3.93batch/s, context_loss=0.503, loss=0.548, masked_loss=0.497][A
-Training UNET for Diffusion:  14%|█▍        | 210/1500 [00:54<05:28,  3.93batch/s, context_loss=0.774, loss=0.304, masked_loss=0.226][A
-Training UNET for Diffusion:  14%|█▍        | 211/1500 [00:54<05:28,  3.93batch/s, context_loss=0.774, loss=0.304, masked_loss=0.226][A
-Training UNET for Diffusion:  14%|█▍        | 211/1500 [00:55<05:28,  3.93batch/s, context_loss=0.569, loss=0.493, masked_loss=0.436][A
-Training UNET for Diffusion:  14%|█▍        | 212/1500 [00:55<05:28,  3.93batch/s, context_loss=0.569, loss=0.493, masked_loss=0.436][A
-Training UNET for Diffusion:  14%|█▍        | 212/1500 [00:55<05:28,  3.93batch/s, context_loss=0.795, loss=0.286, masked_loss=0.206][A
-Training UNET for Diffusion:  14%|█▍        | 213/1500 [00:55<05:27,  3.93batch/s, context_loss=0.795, loss=0.286, masked_loss=0.206][A
-Training UNET for Diffusion:  14%|█▍        | 213/1500 [00:55<05:27,  3.93batch/s, context_loss=0.739, loss=0.336, masked_loss=0.262][A
-Training UNET for Diffusion:  14%|█▍        | 214/1500 [00:55<05:27,  3.93batch/s, context_loss=0.739, loss=0.336, masked_loss=0.262][A
-Training UNET for Diffusion:  14%|█▍        | 214/1500 [00:55<05:27,  3.93batch/s, context_loss=0.548, loss=0.512, masked_loss=0.457][A
-Training UNET for Diffusion:  14%|█▍        | 215/1500 [00:55<05:27,  3.93batch/s, context_loss=0.548, loss=0.512, masked_loss=0.457][A
-Training UNET for Diffusion:  14%|█▍        | 215/1500 [00:56<05:27,  3.93batch/s, context_loss=0.784, loss=0.296, masked_loss=0.217][A
-Training UNET for Diffusion:  14%|█▍        | 216/1500 [00:56<05:26,  3.93batch/s, context_loss=0.784, loss=0.296, masked_loss=0.217][A
-Training UNET for Diffusion:  14%|█▍        | 216/1500 [00:56<05:26,  3.93batch/s, context_loss=0.556, loss=0.501, masked_loss=0.446][A
-Training UNET for Diffusion:  14%|█▍        | 217/1500 [00:56<05:26,  3.93batch/s, context_loss=0.556, loss=0.501, masked_loss=0.446][A
-Training UNET for Diffusion:  14%|█▍        | 217/1500 [00:56<05:26,  3.93batch/s, context_loss=0.442, loss=0.606, masked_loss=0.562][A
-Training UNET for Diffusion:  15%|█▍        | 218/1500 [00:56<05:26,  3.93batch/s, context_loss=0.442, loss=0.606, masked_loss=0.562][A
-Training UNET for Diffusion:  15%|█▍        | 218/1500 [00:56<05:26,  3.93batch/s, context_loss=0.717, loss=0.355, masked_loss=0.283][A
-Training UNET for Diffusion:  15%|█▍        | 219/1500 [00:56<05:26,  3.93batch/s, context_loss=0.717, loss=0.355, masked_loss=0.283][A
-Training UNET for Diffusion:  15%|█▍        | 219/1500 [00:57<05:26,  3.93batch/s, context_loss=0.641, loss=0.424, masked_loss=0.36] [A
-Training UNET for Diffusion:  15%|█▍        | 220/1500 [00:57<05:25,  3.93batch/s, context_loss=0.641, loss=0.424, masked_loss=0.36][A
-Training UNET for Diffusion:  15%|█▍        | 220/1500 [00:57<05:25,  3.93batch/s, context_loss=0.784, loss=0.294, masked_loss=0.216][A
-Training UNET for Diffusion:  15%|█▍        | 221/1500 [00:57<05:25,  3.93batch/s, context_loss=0.784, loss=0.294, masked_loss=0.216][A
-Training UNET for Diffusion:  15%|█▍        | 221/1500 [00:57<05:25,  3.93batch/s, context_loss=0.543, loss=0.513, masked_loss=0.459][A
-Training UNET for Diffusion:  15%|█▍        | 222/1500 [00:57<05:25,  3.93batch/s, context_loss=0.543, loss=0.513, masked_loss=0.459][A
-Training UNET for Diffusion:  15%|█▍        | 222/1500 [00:57<05:25,  3.93batch/s, context_loss=0.619, loss=0.442, masked_loss=0.38] [A
-Training UNET for Diffusion:  15%|█▍        | 223/1500 [00:57<05:25,  3.93batch/s, context_loss=0.619, loss=0.442, masked_loss=0.38][A
-Training UNET for Diffusion:  15%|█▍        | 223/1500 [00:58<05:25,  3.93batch/s, context_loss=0.655, loss=0.413, masked_loss=0.347][A
-Training UNET for Diffusion:  15%|█▍        | 224/1500 [00:58<05:24,  3.93batch/s, context_loss=0.655, loss=0.413, masked_loss=0.347][A
-Training UNET for Diffusion:  15%|█▍        | 224/1500 [00:58<05:24,  3.93batch/s, context_loss=0.642, loss=0.426, masked_loss=0.362][A
-Training UNET for Diffusion:  15%|█▌        | 225/1500 [00:58<05:24,  3.93batch/s, context_loss=0.642, loss=0.426, masked_loss=0.362][A
-Training UNET for Diffusion:  15%|█▌        | 225/1500 [00:58<05:24,  3.93batch/s, context_loss=0.414, loss=0.628, masked_loss=0.586][A
-Training UNET for Diffusion:  15%|█▌        | 226/1500 [00:58<05:24,  3.93batch/s, context_loss=0.414, loss=0.628, masked_loss=0.586][A
-Training UNET for Diffusion:  15%|█▌        | 226/1500 [00:58<05:24,  3.93batch/s, context_loss=0.677, loss=0.392, masked_loss=0.325][A
-Training UNET for Diffusion:  15%|█▌        | 227/1500 [00:58<05:24,  3.93batch/s, context_loss=0.677, loss=0.392, masked_loss=0.325][A
-Training UNET for Diffusion:  15%|█▌        | 227/1500 [00:59<05:24,  3.93batch/s, context_loss=0.564, loss=0.495, masked_loss=0.439][A
-Training UNET for Diffusion:  15%|█▌        | 228/1500 [00:59<05:23,  3.93batch/s, context_loss=0.564, loss=0.495, masked_loss=0.439][A
-Training UNET for Diffusion:  15%|█▌        | 228/1500 [00:59<05:23,  3.93batch/s, context_loss=0.439, loss=0.612, masked_loss=0.568][A
-Training UNET for Diffusion:  15%|█▌        | 229/1500 [00:59<05:23,  3.93batch/s, context_loss=0.439, loss=0.612, masked_loss=0.568][A
-Training UNET for Diffusion:  15%|█▌        | 229/1500 [00:59<05:23,  3.93batch/s, context_loss=0.637, loss=0.427, masked_loss=0.363][A
-Training UNET for Diffusion:  15%|█▌        | 230/1500 [00:59<05:23,  3.93batch/s, context_loss=0.637, loss=0.427, masked_loss=0.363][A
-Training UNET for Diffusion:  15%|█▌        | 230/1500 [00:59<05:23,  3.93batch/s, context_loss=0.798, loss=0.289, masked_loss=0.209][A
-Training UNET for Diffusion:  15%|█▌        | 231/1500 [00:59<05:23,  3.93batch/s, context_loss=0.798, loss=0.289, masked_loss=0.209][A
-Training UNET for Diffusion:  15%|█▌        | 231/1500 [01:00<05:23,  3.93batch/s, context_loss=0.748, loss=0.329, masked_loss=0.255][A
-Training UNET for Diffusion:  15%|█▌        | 232/1500 [01:00<05:22,  3.93batch/s, context_loss=0.748, loss=0.329, masked_loss=0.255][A
-Training UNET for Diffusion:  15%|█▌        | 232/1500 [01:00<05:22,  3.93batch/s, context_loss=0.718, loss=0.352, masked_loss=0.28] [A
-Training UNET for Diffusion:  16%|█▌        | 233/1500 [01:00<05:22,  3.93batch/s, context_loss=0.718, loss=0.352, masked_loss=0.28][A
-Training UNET for Diffusion:  16%|█▌        | 233/1500 [01:00<05:22,  3.93batch/s, context_loss=0.725, loss=0.349, masked_loss=0.277][A
-Training UNET for Diffusion:  16%|█▌        | 234/1500 [01:00<05:22,  3.93batch/s, context_loss=0.725, loss=0.349, masked_loss=0.277][A
-Training UNET for Diffusion:  16%|█▌        | 234/1500 [01:00<05:22,  3.93batch/s, context_loss=0.704, loss=0.366, masked_loss=0.296][A
-Training UNET for Diffusion:  16%|█▌        | 235/1500 [01:00<05:22,  3.92batch/s, context_loss=0.704, loss=0.366, masked_loss=0.296][A
-Training UNET for Diffusion:  16%|█▌        | 235/1500 [01:01<05:22,  3.92batch/s, context_loss=0.797, loss=0.289, masked_loss=0.209][A
-Training UNET for Diffusion:  16%|█▌        | 236/1500 [01:01<05:22,  3.92batch/s, context_loss=0.797, loss=0.289, masked_loss=0.209][A
-Training UNET for Diffusion:  16%|█▌        | 236/1500 [01:01<05:22,  3.92batch/s, context_loss=0.53, loss=0.524, masked_loss=0.471] [A
-Training UNET for Diffusion:  16%|█▌        | 237/1500 [01:01<05:21,  3.93batch/s, context_loss=0.53, loss=0.524, masked_loss=0.471][A
-Training UNET for Diffusion:  16%|█▌        | 237/1500 [01:01<05:21,  3.93batch/s, context_loss=0.708, loss=0.367, masked_loss=0.297][A
-Training UNET for Diffusion:  16%|█▌        | 238/1500 [01:01<05:21,  3.93batch/s, context_loss=0.708, loss=0.367, masked_loss=0.297][A
-Training UNET for Diffusion:  16%|█▌        | 238/1500 [01:01<05:21,  3.93batch/s, context_loss=0.753, loss=0.324, masked_loss=0.249][A
-Training UNET for Diffusion:  16%|█▌        | 239/1500 [01:01<05:21,  3.93batch/s, context_loss=0.753, loss=0.324, masked_loss=0.249][A
-Training UNET for Diffusion:  16%|█▌        | 239/1500 [01:02<05:21,  3.93batch/s, context_loss=0.796, loss=0.287, masked_loss=0.208][A
-Training UNET for Diffusion:  16%|█▌        | 240/1500 [01:02<05:20,  3.93batch/s, context_loss=0.796, loss=0.287, masked_loss=0.208][A
-Training UNET for Diffusion:  16%|█▌        | 240/1500 [01:02<05:20,  3.93batch/s, context_loss=0.617, loss=0.448, masked_loss=0.386][A
-Training UNET for Diffusion:  16%|█▌        | 241/1500 [01:02<05:20,  3.93batch/s, context_loss=0.617, loss=0.448, masked_loss=0.386][A
-Training UNET for Diffusion:  16%|█▌        | 241/1500 [01:02<05:20,  3.93batch/s, context_loss=0.509, loss=0.545, masked_loss=0.494][A
-Training UNET for Diffusion:  16%|█▌        | 242/1500 [01:02<05:19,  3.93batch/s, context_loss=0.509, loss=0.545, masked_loss=0.494][A
-Training UNET for Diffusion:  16%|█▌        | 242/1500 [01:03<05:19,  3.93batch/s, context_loss=0.412, loss=0.631, masked_loss=0.59] [A
-Training UNET for Diffusion:  16%|█▌        | 243/1500 [01:03<05:19,  3.93batch/s, context_loss=0.412, loss=0.631, masked_loss=0.59][A
-Training UNET for Diffusion:  16%|█▌        | 243/1500 [01:03<05:19,  3.93batch/s, context_loss=0.739, loss=0.337, masked_loss=0.263][A
-Training UNET for Diffusion:  16%|█▋        | 244/1500 [01:03<05:19,  3.93batch/s, context_loss=0.739, loss=0.337, masked_loss=0.263][A
-Training UNET for Diffusion:  16%|█▋        | 244/1500 [01:03<05:19,  3.93batch/s, context_loss=0.564, loss=0.494, masked_loss=0.437][A
-Training UNET for Diffusion:  16%|█▋        | 245/1500 [01:03<05:19,  3.93batch/s, context_loss=0.564, loss=0.494, masked_loss=0.437][A
-Training UNET for Diffusion:  16%|█▋        | 245/1500 [01:03<05:19,  3.93batch/s, context_loss=0.592, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  16%|█▋        | 246/1500 [01:03<05:19,  3.93batch/s, context_loss=0.592, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  16%|█▋        | 246/1500 [01:04<05:19,  3.93batch/s, context_loss=0.502, loss=0.548, masked_loss=0.498][A
-Training UNET for Diffusion:  16%|█▋        | 247/1500 [01:04<05:19,  3.93batch/s, context_loss=0.502, loss=0.548, masked_loss=0.498][A
-Training UNET for Diffusion:  16%|█▋        | 247/1500 [01:04<05:19,  3.93batch/s, context_loss=0.469, loss=0.581, masked_loss=0.534][A
-Training UNET for Diffusion:  17%|█▋        | 248/1500 [01:04<05:18,  3.93batch/s, context_loss=0.469, loss=0.581, masked_loss=0.534][A
-Training UNET for Diffusion:  17%|█▋        | 248/1500 [01:04<05:18,  3.93batch/s, context_loss=0.737, loss=0.338, masked_loss=0.264][A
-Training UNET for Diffusion:  17%|█▋        | 249/1500 [01:04<05:18,  3.93batch/s, context_loss=0.737, loss=0.338, masked_loss=0.264][A
-Training UNET for Diffusion:  17%|█▋        | 249/1500 [01:04<05:18,  3.93batch/s, context_loss=0.538, loss=0.519, masked_loss=0.465][A
-Training UNET for Diffusion:  17%|█▋        | 250/1500 [01:04<05:18,  3.93batch/s, context_loss=0.538, loss=0.519, masked_loss=0.465][A
-Training UNET for Diffusion:  17%|█▋        | 250/1500 [01:05<05:18,  3.93batch/s, context_loss=0.445, loss=0.602, masked_loss=0.558][A
-Training UNET for Diffusion:  17%|█▋        | 251/1500 [01:05<05:17,  3.93batch/s, context_loss=0.445, loss=0.602, masked_loss=0.558][A
-Training UNET for Diffusion:  17%|█▋        | 251/1500 [01:05<05:17,  3.93batch/s, context_loss=0.457, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  17%|█▋        | 252/1500 [01:05<05:17,  3.93batch/s, context_loss=0.457, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  17%|█▋        | 252/1500 [01:05<05:17,  3.93batch/s, context_loss=0.531, loss=0.524, masked_loss=0.471][A
-Training UNET for Diffusion:  17%|█▋        | 253/1500 [01:05<05:17,  3.93batch/s, context_loss=0.531, loss=0.524, masked_loss=0.471][A
-Training UNET for Diffusion:  17%|█▋        | 253/1500 [01:05<05:17,  3.93batch/s, context_loss=0.714, loss=0.359, masked_loss=0.288][A
-Training UNET for Diffusion:  17%|█▋        | 254/1500 [01:05<05:17,  3.93batch/s, context_loss=0.714, loss=0.359, masked_loss=0.288][A
-Training UNET for Diffusion:  17%|█▋        | 254/1500 [01:06<05:17,  3.93batch/s, context_loss=0.456, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  17%|█▋        | 255/1500 [01:06<05:17,  3.93batch/s, context_loss=0.456, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  17%|█▋        | 255/1500 [01:06<05:17,  3.93batch/s, context_loss=0.597, loss=0.466, masked_loss=0.406][A
-Training UNET for Diffusion:  17%|█▋        | 256/1500 [01:06<05:17,  3.92batch/s, context_loss=0.597, loss=0.466, masked_loss=0.406][A
-Training UNET for Diffusion:  17%|█▋        | 256/1500 [01:06<05:17,  3.92batch/s, context_loss=0.555, loss=0.502, masked_loss=0.446][A
-Training UNET for Diffusion:  17%|█▋        | 257/1500 [01:06<05:16,  3.93batch/s, context_loss=0.555, loss=0.502, masked_loss=0.446][A
-Training UNET for Diffusion:  17%|█▋        | 257/1500 [01:06<05:16,  3.93batch/s, context_loss=0.464, loss=0.584, masked_loss=0.538][A
-Training UNET for Diffusion:  17%|█▋        | 258/1500 [01:06<05:16,  3.93batch/s, context_loss=0.464, loss=0.584, masked_loss=0.538][A
-Training UNET for Diffusion:  17%|█▋        | 258/1500 [01:07<05:16,  3.93batch/s, context_loss=0.628, loss=0.437, masked_loss=0.374][A
-Training UNET for Diffusion:  17%|█▋        | 259/1500 [01:07<05:15,  3.93batch/s, context_loss=0.628, loss=0.437, masked_loss=0.374][A
-Training UNET for Diffusion:  17%|█▋        | 259/1500 [01:07<05:15,  3.93batch/s, context_loss=0.646, loss=0.419, masked_loss=0.355][A
-Training UNET for Diffusion:  17%|█▋        | 260/1500 [01:07<05:15,  3.93batch/s, context_loss=0.646, loss=0.419, masked_loss=0.355][A
-Training UNET for Diffusion:  17%|█▋        | 260/1500 [01:07<05:15,  3.93batch/s, context_loss=0.508, loss=0.544, masked_loss=0.493][A
-Training UNET for Diffusion:  17%|█▋        | 261/1500 [01:07<05:15,  3.93batch/s, context_loss=0.508, loss=0.544, masked_loss=0.493][A
-Training UNET for Diffusion:  17%|█▋        | 261/1500 [01:07<05:15,  3.93batch/s, context_loss=0.656, loss=0.415, masked_loss=0.35] [A
-Training UNET for Diffusion:  17%|█▋        | 262/1500 [01:07<05:15,  3.93batch/s, context_loss=0.656, loss=0.415, masked_loss=0.35][A
-Training UNET for Diffusion:  17%|█▋        | 262/1500 [01:08<05:15,  3.93batch/s, context_loss=0.46, loss=0.586, masked_loss=0.54] [A
-Training UNET for Diffusion:  18%|█▊        | 263/1500 [01:08<05:14,  3.93batch/s, context_loss=0.46, loss=0.586, masked_loss=0.54][A
-Training UNET for Diffusion:  18%|█▊        | 263/1500 [01:08<05:14,  3.93batch/s, context_loss=0.7, loss=0.372, masked_loss=0.302][A
-Training UNET for Diffusion:  18%|█▊        | 264/1500 [01:08<05:14,  3.93batch/s, context_loss=0.7, loss=0.372, masked_loss=0.302][A
-Training UNET for Diffusion:  18%|█▊        | 264/1500 [01:08<05:14,  3.93batch/s, context_loss=0.52, loss=0.535, masked_loss=0.483][A
-Training UNET for Diffusion:  18%|█▊        | 265/1500 [01:08<05:14,  3.93batch/s, context_loss=0.52, loss=0.535, masked_loss=0.483][A
-Training UNET for Diffusion:  18%|█▊        | 265/1500 [01:08<05:14,  3.93batch/s, context_loss=0.581, loss=0.476, masked_loss=0.418][A
-Training UNET for Diffusion:  18%|█▊        | 266/1500 [01:08<05:14,  3.93batch/s, context_loss=0.581, loss=0.476, masked_loss=0.418][A
-Training UNET for Diffusion:  18%|█▊        | 266/1500 [01:09<05:14,  3.93batch/s, context_loss=0.711, loss=0.364, masked_loss=0.293][A
-Training UNET for Diffusion:  18%|█▊        | 267/1500 [01:09<05:13,  3.93batch/s, context_loss=0.711, loss=0.364, masked_loss=0.293][A
-Training UNET for Diffusion:  18%|█▊        | 267/1500 [01:09<05:13,  3.93batch/s, context_loss=0.568, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:  18%|█▊        | 268/1500 [01:09<05:14,  3.92batch/s, context_loss=0.568, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:  18%|█▊        | 268/1500 [01:09<05:14,  3.92batch/s, context_loss=0.695, loss=0.376, masked_loss=0.306][A
-Training UNET for Diffusion:  18%|█▊        | 269/1500 [01:09<05:15,  3.91batch/s, context_loss=0.695, loss=0.376, masked_loss=0.306][A
-Training UNET for Diffusion:  18%|█▊        | 269/1500 [01:09<05:15,  3.91batch/s, context_loss=0.485, loss=0.565, masked_loss=0.516][A
-Training UNET for Diffusion:  18%|█▊        | 270/1500 [01:09<05:18,  3.86batch/s, context_loss=0.485, loss=0.565, masked_loss=0.516][A
-Training UNET for Diffusion:  18%|█▊        | 270/1500 [01:10<05:18,  3.86batch/s, context_loss=0.629, loss=0.433, masked_loss=0.37] [A
-Training UNET for Diffusion:  18%|█▊        | 271/1500 [01:10<05:17,  3.87batch/s, context_loss=0.629, loss=0.433, masked_loss=0.37][A
-Training UNET for Diffusion:  18%|█▊        | 271/1500 [01:10<05:17,  3.87batch/s, context_loss=0.621, loss=0.441, masked_loss=0.379][A
-Training UNET for Diffusion:  18%|█▊        | 272/1500 [01:10<05:16,  3.89batch/s, context_loss=0.621, loss=0.441, masked_loss=0.379][A
-Training UNET for Diffusion:  18%|█▊        | 272/1500 [01:10<05:16,  3.89batch/s, context_loss=0.478, loss=0.571, masked_loss=0.523][A
-Training UNET for Diffusion:  18%|█▊        | 273/1500 [01:10<05:14,  3.90batch/s, context_loss=0.478, loss=0.571, masked_loss=0.523][A
-Training UNET for Diffusion:  18%|█▊        | 273/1500 [01:10<05:14,  3.90batch/s, context_loss=0.568, loss=0.49, masked_loss=0.433] [A
-Training UNET for Diffusion:  18%|█▊        | 274/1500 [01:10<05:13,  3.91batch/s, context_loss=0.568, loss=0.49, masked_loss=0.433][A
-Training UNET for Diffusion:  18%|█▊        | 274/1500 [01:11<05:13,  3.91batch/s, context_loss=0.794, loss=0.288, masked_loss=0.209][A
-Training UNET for Diffusion:  18%|█▊        | 275/1500 [01:11<05:13,  3.91batch/s, context_loss=0.794, loss=0.288, masked_loss=0.209][A
-Training UNET for Diffusion:  18%|█▊        | 275/1500 [01:11<05:13,  3.91batch/s, context_loss=0.599, loss=0.462, masked_loss=0.402][A
-Training UNET for Diffusion:  18%|█▊        | 276/1500 [01:11<05:12,  3.91batch/s, context_loss=0.599, loss=0.462, masked_loss=0.402][A
-Training UNET for Diffusion:  18%|█▊        | 276/1500 [01:11<05:12,  3.91batch/s, context_loss=0.779, loss=0.302, masked_loss=0.224][A
-Training UNET for Diffusion:  18%|█▊        | 277/1500 [01:11<05:12,  3.92batch/s, context_loss=0.779, loss=0.302, masked_loss=0.224][A
-Training UNET for Diffusion:  18%|█▊        | 277/1500 [01:11<05:12,  3.92batch/s, context_loss=0.408, loss=0.635, masked_loss=0.595][A
-Training UNET for Diffusion:  19%|█▊        | 278/1500 [01:11<05:11,  3.92batch/s, context_loss=0.408, loss=0.635, masked_loss=0.595][A
-Training UNET for Diffusion:  19%|█▊        | 278/1500 [01:12<05:11,  3.92batch/s, context_loss=0.75, loss=0.326, masked_loss=0.251] [A
-Training UNET for Diffusion:  19%|█▊        | 279/1500 [01:12<05:11,  3.92batch/s, context_loss=0.75, loss=0.326, masked_loss=0.251][A
-Training UNET for Diffusion:  19%|█▊        | 279/1500 [01:12<05:11,  3.92batch/s, context_loss=0.561, loss=0.497, masked_loss=0.441][A
-Training UNET for Diffusion:  19%|█▊        | 280/1500 [01:12<05:10,  3.93batch/s, context_loss=0.561, loss=0.497, masked_loss=0.441][A
-Training UNET for Diffusion:  19%|█▊        | 280/1500 [01:12<05:10,  3.93batch/s, context_loss=0.447, loss=0.6, masked_loss=0.555]  [A
-Training UNET for Diffusion:  19%|█▊        | 281/1500 [01:12<05:11,  3.92batch/s, context_loss=0.447, loss=0.6, masked_loss=0.555][A
-Training UNET for Diffusion:  19%|█▊        | 281/1500 [01:12<05:11,  3.92batch/s, context_loss=0.556, loss=0.5, masked_loss=0.444][A
-Training UNET for Diffusion:  19%|█▉        | 282/1500 [01:12<05:11,  3.91batch/s, context_loss=0.556, loss=0.5, masked_loss=0.444][A
-Training UNET for Diffusion:  19%|█▉        | 282/1500 [01:13<05:11,  3.91batch/s, context_loss=0.612, loss=0.451, masked_loss=0.389][A
-Training UNET for Diffusion:  19%|█▉        | 283/1500 [01:13<05:11,  3.91batch/s, context_loss=0.612, loss=0.451, masked_loss=0.389][A
-Training UNET for Diffusion:  19%|█▉        | 283/1500 [01:13<05:11,  3.91batch/s, context_loss=0.647, loss=0.419, masked_loss=0.354][A
-Training UNET for Diffusion:  19%|█▉        | 284/1500 [01:13<05:10,  3.92batch/s, context_loss=0.647, loss=0.419, masked_loss=0.354][A
-Training UNET for Diffusion:  19%|█▉        | 284/1500 [01:13<05:10,  3.92batch/s, context_loss=0.694, loss=0.374, masked_loss=0.305][A
-Training UNET for Diffusion:  19%|█▉        | 285/1500 [01:13<05:09,  3.92batch/s, context_loss=0.694, loss=0.374, masked_loss=0.305][A
-Training UNET for Diffusion:  19%|█▉        | 285/1500 [01:13<05:09,  3.92batch/s, context_loss=0.769, loss=0.313, masked_loss=0.236][A
-Training UNET for Diffusion:  19%|█▉        | 286/1500 [01:13<05:09,  3.92batch/s, context_loss=0.769, loss=0.313, masked_loss=0.236][A
-Training UNET for Diffusion:  19%|█▉        | 286/1500 [01:14<05:09,  3.92batch/s, context_loss=0.403, loss=0.638, masked_loss=0.598][A
-Training UNET for Diffusion:  19%|█▉        | 287/1500 [01:14<05:08,  3.93batch/s, context_loss=0.403, loss=0.638, masked_loss=0.598][A
-Training UNET for Diffusion:  19%|█▉        | 287/1500 [01:14<05:08,  3.93batch/s, context_loss=0.713, loss=0.361, masked_loss=0.29] [A
-Training UNET for Diffusion:  19%|█▉        | 288/1500 [01:14<05:08,  3.93batch/s, context_loss=0.713, loss=0.361, masked_loss=0.29][A
-Training UNET for Diffusion:  19%|█▉        | 288/1500 [01:14<05:08,  3.93batch/s, context_loss=0.418, loss=0.625, masked_loss=0.583][A
-Training UNET for Diffusion:  19%|█▉        | 289/1500 [01:14<05:08,  3.93batch/s, context_loss=0.418, loss=0.625, masked_loss=0.583][A
-Training UNET for Diffusion:  19%|█▉        | 289/1500 [01:14<05:08,  3.93batch/s, context_loss=0.642, loss=0.425, masked_loss=0.36] [A
-Training UNET for Diffusion:  19%|█▉        | 290/1500 [01:14<05:07,  3.93batch/s, context_loss=0.642, loss=0.425, masked_loss=0.36][A
-Training UNET for Diffusion:  19%|█▉        | 290/1500 [01:15<05:07,  3.93batch/s, context_loss=0.681, loss=0.392, masked_loss=0.324][A
-Training UNET for Diffusion:  19%|█▉        | 291/1500 [01:15<05:07,  3.93batch/s, context_loss=0.681, loss=0.392, masked_loss=0.324][A
-Training UNET for Diffusion:  19%|█▉        | 291/1500 [01:15<05:07,  3.93batch/s, context_loss=0.724, loss=0.348, masked_loss=0.276][A
-Training UNET for Diffusion:  19%|█▉        | 292/1500 [01:15<05:07,  3.93batch/s, context_loss=0.724, loss=0.348, masked_loss=0.276][A
-Training UNET for Diffusion:  19%|█▉        | 292/1500 [01:15<05:07,  3.93batch/s, context_loss=0.76, loss=0.32, masked_loss=0.244]  [A
-Training UNET for Diffusion:  20%|█▉        | 293/1500 [01:15<05:07,  3.93batch/s, context_loss=0.76, loss=0.32, masked_loss=0.244][A
-Training UNET for Diffusion:  20%|█▉        | 293/1500 [01:16<05:07,  3.93batch/s, context_loss=0.749, loss=0.33, masked_loss=0.255][A
-Training UNET for Diffusion:  20%|█▉        | 294/1500 [01:16<05:06,  3.93batch/s, context_loss=0.749, loss=0.33, masked_loss=0.255][A
-Training UNET for Diffusion:  20%|█▉        | 294/1500 [01:16<05:06,  3.93batch/s, context_loss=0.456, loss=0.591, masked_loss=0.546][A
-Training UNET for Diffusion:  20%|█▉        | 295/1500 [01:16<05:06,  3.93batch/s, context_loss=0.456, loss=0.591, masked_loss=0.546][A
-Training UNET for Diffusion:  20%|█▉        | 295/1500 [01:16<05:06,  3.93batch/s, context_loss=0.678, loss=0.391, masked_loss=0.323][A
-Training UNET for Diffusion:  20%|█▉        | 296/1500 [01:16<05:06,  3.93batch/s, context_loss=0.678, loss=0.391, masked_loss=0.323][A
-Training UNET for Diffusion:  20%|█▉        | 296/1500 [01:16<05:06,  3.93batch/s, context_loss=0.434, loss=0.613, masked_loss=0.57] [A
-Training UNET for Diffusion:  20%|█▉        | 297/1500 [01:16<05:07,  3.92batch/s, context_loss=0.434, loss=0.613, masked_loss=0.57][A
-Training UNET for Diffusion:  20%|█▉        | 297/1500 [01:17<05:07,  3.92batch/s, context_loss=0.739, loss=0.334, masked_loss=0.26][A
-Training UNET for Diffusion:  20%|█▉        | 298/1500 [01:17<05:06,  3.92batch/s, context_loss=0.739, loss=0.334, masked_loss=0.26][A
-Training UNET for Diffusion:  20%|█▉        | 298/1500 [01:17<05:06,  3.92batch/s, context_loss=0.514, loss=0.539, masked_loss=0.488][A
-Training UNET for Diffusion:  20%|█▉        | 299/1500 [01:17<05:06,  3.92batch/s, context_loss=0.514, loss=0.539, masked_loss=0.488][A
-Training UNET for Diffusion:  20%|█▉        | 299/1500 [01:17<05:06,  3.92batch/s, context_loss=0.567, loss=0.491, masked_loss=0.434][A
-Training UNET for Diffusion:  20%|██        | 300/1500 [01:17<05:05,  3.93batch/s, context_loss=0.567, loss=0.491, masked_loss=0.434][A
-Training UNET for Diffusion:  20%|██        | 300/1500 [01:17<05:05,  3.93batch/s, context_loss=0.697, loss=0.372, masked_loss=0.302][A
-Training UNET for Diffusion:  20%|██        | 301/1500 [01:17<05:05,  3.93batch/s, context_loss=0.697, loss=0.372, masked_loss=0.302][A
-Training UNET for Diffusion:  20%|██        | 301/1500 [01:18<05:05,  3.93batch/s, context_loss=0.581, loss=0.48, masked_loss=0.422] [A
-Training UNET for Diffusion:  20%|██        | 302/1500 [01:18<05:04,  3.93batch/s, context_loss=0.581, loss=0.48, masked_loss=0.422][A
-Training UNET for Diffusion:  20%|██        | 302/1500 [01:18<05:04,  3.93batch/s, context_loss=0.522, loss=0.532, masked_loss=0.48][A
-Training UNET for Diffusion:  20%|██        | 303/1500 [01:18<05:04,  3.93batch/s, context_loss=0.522, loss=0.532, masked_loss=0.48][A
-Training UNET for Diffusion:  20%|██        | 303/1500 [01:18<05:04,  3.93batch/s, context_loss=0.456, loss=0.59, masked_loss=0.545][A
-Training UNET for Diffusion:  20%|██        | 304/1500 [01:18<05:04,  3.93batch/s, context_loss=0.456, loss=0.59, masked_loss=0.545][A
-Training UNET for Diffusion:  20%|██        | 304/1500 [01:18<05:04,  3.93batch/s, context_loss=0.684, loss=0.384, masked_loss=0.316][A
-Training UNET for Diffusion:  20%|██        | 305/1500 [01:18<05:03,  3.93batch/s, context_loss=0.684, loss=0.384, masked_loss=0.316][A
-Training UNET for Diffusion:  20%|██        | 305/1500 [01:19<05:03,  3.93batch/s, context_loss=0.751, loss=0.327, masked_loss=0.252][A
-Training UNET for Diffusion:  20%|██        | 306/1500 [01:19<05:03,  3.93batch/s, context_loss=0.751, loss=0.327, masked_loss=0.252][A
-Training UNET for Diffusion:  20%|██        | 306/1500 [01:19<05:03,  3.93batch/s, context_loss=0.561, loss=0.495, masked_loss=0.439][A
-Training UNET for Diffusion:  20%|██        | 307/1500 [01:19<05:03,  3.93batch/s, context_loss=0.561, loss=0.495, masked_loss=0.439][A
-Training UNET for Diffusion:  20%|██        | 307/1500 [01:19<05:03,  3.93batch/s, context_loss=0.466, loss=0.581, masked_loss=0.535][A
-Training UNET for Diffusion:  21%|██        | 308/1500 [01:19<05:03,  3.93batch/s, context_loss=0.466, loss=0.581, masked_loss=0.535][A
-Training UNET for Diffusion:  21%|██        | 308/1500 [01:19<05:03,  3.93batch/s, context_loss=0.742, loss=0.333, masked_loss=0.258][A
-Training UNET for Diffusion:  21%|██        | 309/1500 [01:19<05:02,  3.93batch/s, context_loss=0.742, loss=0.333, masked_loss=0.258][A
-Training UNET for Diffusion:  21%|██        | 309/1500 [01:20<05:02,  3.93batch/s, context_loss=0.499, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:  21%|██        | 310/1500 [01:20<05:02,  3.93batch/s, context_loss=0.499, loss=0.553, masked_loss=0.503][A
-Training UNET for Diffusion:  21%|██        | 310/1500 [01:20<05:02,  3.93batch/s, context_loss=0.575, loss=0.482, masked_loss=0.425][A
-Training UNET for Diffusion:  21%|██        | 311/1500 [01:20<05:02,  3.93batch/s, context_loss=0.575, loss=0.482, masked_loss=0.425][A
-Training UNET for Diffusion:  21%|██        | 311/1500 [01:20<05:02,  3.93batch/s, context_loss=0.587, loss=0.471, masked_loss=0.412][A
-Training UNET for Diffusion:  21%|██        | 312/1500 [01:20<05:02,  3.93batch/s, context_loss=0.587, loss=0.471, masked_loss=0.412][A
-Training UNET for Diffusion:  21%|██        | 312/1500 [01:20<05:02,  3.93batch/s, context_loss=0.634, loss=0.43, masked_loss=0.367] [A
-Training UNET for Diffusion:  21%|██        | 313/1500 [01:20<05:01,  3.93batch/s, context_loss=0.634, loss=0.43, masked_loss=0.367][A
-Training UNET for Diffusion:  21%|██        | 313/1500 [01:21<05:01,  3.93batch/s, context_loss=0.548, loss=0.507, masked_loss=0.452][A
-Training UNET for Diffusion:  21%|██        | 314/1500 [01:21<05:01,  3.93batch/s, context_loss=0.548, loss=0.507, masked_loss=0.452][A
-Training UNET for Diffusion:  21%|██        | 314/1500 [01:21<05:01,  3.93batch/s, context_loss=0.59, loss=0.471, masked_loss=0.412] [A
-Training UNET for Diffusion:  21%|██        | 315/1500 [01:21<05:01,  3.93batch/s, context_loss=0.59, loss=0.471, masked_loss=0.412][A
-Training UNET for Diffusion:  21%|██        | 315/1500 [01:21<05:01,  3.93batch/s, context_loss=0.544, loss=0.511, masked_loss=0.457][A
-Training UNET for Diffusion:  21%|██        | 316/1500 [01:21<05:00,  3.93batch/s, context_loss=0.544, loss=0.511, masked_loss=0.457][A
-Training UNET for Diffusion:  21%|██        | 316/1500 [01:21<05:00,  3.93batch/s, context_loss=0.548, loss=0.509, masked_loss=0.455][A
-Training UNET for Diffusion:  21%|██        | 317/1500 [01:21<05:00,  3.94batch/s, context_loss=0.548, loss=0.509, masked_loss=0.455][A
-Training UNET for Diffusion:  21%|██        | 317/1500 [01:22<05:00,  3.94batch/s, context_loss=0.508, loss=0.544, masked_loss=0.493][A
-Training UNET for Diffusion:  21%|██        | 318/1500 [01:22<05:00,  3.93batch/s, context_loss=0.508, loss=0.544, masked_loss=0.493][A
-Training UNET for Diffusion:  21%|██        | 318/1500 [01:22<05:00,  3.93batch/s, context_loss=0.786, loss=0.295, masked_loss=0.216][A
-Training UNET for Diffusion:  21%|██▏       | 319/1500 [01:22<05:00,  3.93batch/s, context_loss=0.786, loss=0.295, masked_loss=0.216][A
-Training UNET for Diffusion:  21%|██▏       | 319/1500 [01:22<05:00,  3.93batch/s, context_loss=0.455, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  21%|██▏       | 320/1500 [01:22<04:59,  3.93batch/s, context_loss=0.455, loss=0.591, masked_loss=0.545][A
-Training UNET for Diffusion:  21%|██▏       | 320/1500 [01:22<04:59,  3.93batch/s, context_loss=0.569, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:  21%|██▏       | 321/1500 [01:22<04:59,  3.94batch/s, context_loss=0.569, loss=0.489, masked_loss=0.432][A
-Training UNET for Diffusion:  21%|██▏       | 321/1500 [01:23<04:59,  3.94batch/s, context_loss=0.643, loss=0.424, masked_loss=0.36] [A
-Training UNET for Diffusion:  21%|██▏       | 322/1500 [01:23<04:59,  3.93batch/s, context_loss=0.643, loss=0.424, masked_loss=0.36][A
-Training UNET for Diffusion:  21%|██▏       | 322/1500 [01:23<04:59,  3.93batch/s, context_loss=0.702, loss=0.37, masked_loss=0.3]  [A
-Training UNET for Diffusion:  22%|██▏       | 323/1500 [01:23<04:59,  3.93batch/s, context_loss=0.702, loss=0.37, masked_loss=0.3][A
-Training UNET for Diffusion:  22%|██▏       | 323/1500 [01:23<04:59,  3.93batch/s, context_loss=0.755, loss=0.321, masked_loss=0.246][A
-Training UNET for Diffusion:  22%|██▏       | 324/1500 [01:23<04:58,  3.93batch/s, context_loss=0.755, loss=0.321, masked_loss=0.246][A
-Training UNET for Diffusion:  22%|██▏       | 324/1500 [01:23<04:58,  3.93batch/s, context_loss=0.454, loss=0.592, masked_loss=0.547][A
-Training UNET for Diffusion:  22%|██▏       | 325/1500 [01:23<04:58,  3.94batch/s, context_loss=0.454, loss=0.592, masked_loss=0.547][A
-Training UNET for Diffusion:  22%|██▏       | 325/1500 [01:24<04:58,  3.94batch/s, context_loss=0.62, loss=0.444, masked_loss=0.382] [A
-Training UNET for Diffusion:  22%|██▏       | 326/1500 [01:24<04:58,  3.93batch/s, context_loss=0.62, loss=0.444, masked_loss=0.382][A
-Training UNET for Diffusion:  22%|██▏       | 326/1500 [01:24<04:58,  3.93batch/s, context_loss=0.517, loss=0.536, masked_loss=0.484][A
-Training UNET for Diffusion:  22%|██▏       | 327/1500 [01:24<04:58,  3.93batch/s, context_loss=0.517, loss=0.536, masked_loss=0.484][A
-Training UNET for Diffusion:  22%|██▏       | 327/1500 [01:24<04:58,  3.93batch/s, context_loss=0.779, loss=0.299, masked_loss=0.221][A
-Training UNET for Diffusion:  22%|██▏       | 328/1500 [01:24<04:58,  3.93batch/s, context_loss=0.779, loss=0.299, masked_loss=0.221][A
-Training UNET for Diffusion:  22%|██▏       | 328/1500 [01:24<04:58,  3.93batch/s, context_loss=0.445, loss=0.599, masked_loss=0.554][A
-Training UNET for Diffusion:  22%|██▏       | 329/1500 [01:24<04:58,  3.93batch/s, context_loss=0.445, loss=0.599, masked_loss=0.554][A
-Training UNET for Diffusion:  22%|██▏       | 329/1500 [01:25<04:58,  3.93batch/s, context_loss=0.685, loss=0.386, masked_loss=0.317][A
-Training UNET for Diffusion:  22%|██▏       | 330/1500 [01:25<04:57,  3.93batch/s, context_loss=0.685, loss=0.386, masked_loss=0.317][A
-Training UNET for Diffusion:  22%|██▏       | 330/1500 [01:25<04:57,  3.93batch/s, context_loss=0.582, loss=0.48, masked_loss=0.422] [A
-Training UNET for Diffusion:  22%|██▏       | 331/1500 [01:25<04:57,  3.93batch/s, context_loss=0.582, loss=0.48, masked_loss=0.422][A
-Training UNET for Diffusion:  22%|██▏       | 331/1500 [01:25<04:57,  3.93batch/s, context_loss=0.563, loss=0.493, masked_loss=0.436][A
-Training UNET for Diffusion:  22%|██▏       | 332/1500 [01:25<04:57,  3.93batch/s, context_loss=0.563, loss=0.493, masked_loss=0.436][A
-Training UNET for Diffusion:  22%|██▏       | 332/1500 [01:25<04:57,  3.93batch/s, context_loss=0.757, loss=0.319, masked_loss=0.243][A
-Training UNET for Diffusion:  22%|██▏       | 333/1500 [01:25<04:56,  3.93batch/s, context_loss=0.757, loss=0.319, masked_loss=0.243][A
-Training UNET for Diffusion:  22%|██▏       | 333/1500 [01:26<04:56,  3.93batch/s, context_loss=0.538, loss=0.515, masked_loss=0.462][A
-Training UNET for Diffusion:  22%|██▏       | 334/1500 [01:26<04:56,  3.93batch/s, context_loss=0.538, loss=0.515, masked_loss=0.462][A
-Training UNET for Diffusion:  22%|██▏       | 334/1500 [01:26<04:56,  3.93batch/s, context_loss=0.702, loss=0.369, masked_loss=0.299][A
-Training UNET for Diffusion:  22%|██▏       | 335/1500 [01:26<04:56,  3.93batch/s, context_loss=0.702, loss=0.369, masked_loss=0.299][A
-Training UNET for Diffusion:  22%|██▏       | 335/1500 [01:26<04:56,  3.93batch/s, context_loss=0.642, loss=0.422, masked_loss=0.358][A
-Training UNET for Diffusion:  22%|██▏       | 336/1500 [01:26<04:56,  3.93batch/s, context_loss=0.642, loss=0.422, masked_loss=0.358][A
-Training UNET for Diffusion:  22%|██▏       | 336/1500 [01:26<04:56,  3.93batch/s, context_loss=0.521, loss=0.531, masked_loss=0.479][A
-Training UNET for Diffusion:  22%|██▏       | 337/1500 [01:26<04:55,  3.93batch/s, context_loss=0.521, loss=0.531, masked_loss=0.479][A
-Training UNET for Diffusion:  22%|██▏       | 337/1500 [01:27<04:55,  3.93batch/s, context_loss=0.509, loss=0.543, masked_loss=0.492][A
-Training UNET for Diffusion:  23%|██▎       | 338/1500 [01:27<04:55,  3.93batch/s, context_loss=0.509, loss=0.543, masked_loss=0.492][A
-Training UNET for Diffusion:  23%|██▎       | 338/1500 [01:27<04:55,  3.93batch/s, context_loss=0.578, loss=0.48, masked_loss=0.423] [A
-Training UNET for Diffusion:  23%|██▎       | 339/1500 [01:27<04:55,  3.93batch/s, context_loss=0.578, loss=0.48, masked_loss=0.423][A
-Training UNET for Diffusion:  23%|██▎       | 339/1500 [01:27<04:55,  3.93batch/s, context_loss=0.487, loss=0.564, masked_loss=0.515][A
-Training UNET for Diffusion:  23%|██▎       | 340/1500 [01:27<04:55,  3.93batch/s, context_loss=0.487, loss=0.564, masked_loss=0.515][A
-Training UNET for Diffusion:  23%|██▎       | 340/1500 [01:27<04:55,  3.93batch/s, context_loss=0.423, loss=0.62, masked_loss=0.577] [A
-Training UNET for Diffusion:  23%|██▎       | 341/1500 [01:27<04:54,  3.93batch/s, context_loss=0.423, loss=0.62, masked_loss=0.577][A
-Training UNET for Diffusion:  23%|██▎       | 341/1500 [01:28<04:54,  3.93batch/s, context_loss=0.754, loss=0.324, masked_loss=0.249][A
-Training UNET for Diffusion:  23%|██▎       | 342/1500 [01:28<04:54,  3.93batch/s, context_loss=0.754, loss=0.324, masked_loss=0.249][A
-Training UNET for Diffusion:  23%|██▎       | 342/1500 [01:28<04:54,  3.93batch/s, context_loss=0.587, loss=0.476, masked_loss=0.417][A
-Training UNET for Diffusion:  23%|██▎       | 343/1500 [01:28<05:44,  3.36batch/s, context_loss=0.587, loss=0.476, masked_loss=0.417][A
-Training UNET for Diffusion:  23%|██▎       | 343/1500 [01:28<05:44,  3.36batch/s, context_loss=0.529, loss=0.526, masked_loss=0.473][A
-Training UNET for Diffusion:  23%|██▎       | 344/1500 [01:28<05:28,  3.52batch/s, context_loss=0.529, loss=0.526, masked_loss=0.473][A
-Training UNET for Diffusion:  23%|██▎       | 344/1500 [01:29<05:28,  3.52batch/s, context_loss=0.771, loss=0.306, masked_loss=0.229][A
-Training UNET for Diffusion:  23%|██▎       | 345/1500 [01:29<05:18,  3.63batch/s, context_loss=0.771, loss=0.306, masked_loss=0.229][A
-Training UNET for Diffusion:  23%|██▎       | 345/1500 [01:29<05:18,  3.63batch/s, context_loss=0.67, loss=0.399, masked_loss=0.332] [A
-Training UNET for Diffusion:  23%|██▎       | 346/1500 [01:29<05:10,  3.72batch/s, context_loss=0.67, loss=0.399, masked_loss=0.332][A
-Training UNET for Diffusion:  23%|██▎       | 346/1500 [01:29<05:10,  3.72batch/s, context_loss=0.696, loss=0.374, masked_loss=0.304][A
-Training UNET for Diffusion:  23%|██▎       | 347/1500 [01:29<05:05,  3.78batch/s, context_loss=0.696, loss=0.374, masked_loss=0.304][A
-Training UNET for Diffusion:  23%|██▎       | 347/1500 [01:29<05:05,  3.78batch/s, context_loss=0.469, loss=0.581, masked_loss=0.534][A
-Training UNET for Diffusion:  23%|██▎       | 348/1500 [01:29<05:01,  3.82batch/s, context_loss=0.469, loss=0.581, masked_loss=0.534][A
-Training UNET for Diffusion:  23%|██▎       | 348/1500 [01:30<05:01,  3.82batch/s, context_loss=0.764, loss=0.313, masked_loss=0.236][A
-Training UNET for Diffusion:  23%|██▎       | 349/1500 [01:30<04:58,  3.85batch/s, context_loss=0.764, loss=0.313, masked_loss=0.236][A
-Training UNET for Diffusion:  23%|██▎       | 349/1500 [01:30<04:58,  3.85batch/s, context_loss=0.683, loss=0.386, masked_loss=0.317][A
-Training UNET for Diffusion:  23%|██▎       | 350/1500 [01:30<04:56,  3.88batch/s, context_loss=0.683, loss=0.386, masked_loss=0.317][A
-Training UNET for Diffusion:  23%|██▎       | 350/1500 [01:30<04:56,  3.88batch/s, context_loss=0.757, loss=0.32, masked_loss=0.244] [A
-Training UNET for Diffusion:  23%|██▎       | 351/1500 [01:30<04:55,  3.89batch/s, context_loss=0.757, loss=0.32, masked_loss=0.244][A
-Training UNET for Diffusion:  23%|██▎       | 351/1500 [01:30<04:55,  3.89batch/s, context_loss=0.434, loss=0.61, masked_loss=0.567][A
-Training UNET for Diffusion:  23%|██▎       | 352/1500 [01:30<04:54,  3.90batch/s, context_loss=0.434, loss=0.61, masked_loss=0.567][A
-Training UNET for Diffusion:  23%|██▎       | 352/1500 [01:31<04:54,  3.90batch/s, context_loss=0.498, loss=0.552, masked_loss=0.502][A
-Training UNET for Diffusion:  24%|██▎       | 353/1500 [01:31<04:53,  3.90batch/s, context_loss=0.498, loss=0.552, masked_loss=0.502][A
-Training UNET for Diffusion:  24%|██▎       | 353/1500 [01:31<04:53,  3.90batch/s, context_loss=0.688, loss=0.381, masked_loss=0.313][A
-Training UNET for Diffusion:  24%|██▎       | 354/1500 [01:31<04:53,  3.91batch/s, context_loss=0.688, loss=0.381, masked_loss=0.313][A
-Training UNET for Diffusion:  24%|██▎       | 354/1500 [01:31<04:53,  3.91batch/s, context_loss=0.772, loss=0.307, masked_loss=0.23] [A
-Training UNET for Diffusion:  24%|██▎       | 355/1500 [01:31<04:52,  3.91batch/s, context_loss=0.772, loss=0.307, masked_loss=0.23][A
-Training UNET for Diffusion:  24%|██▎       | 355/1500 [01:31<04:52,  3.91batch/s, context_loss=0.617, loss=0.447, masked_loss=0.386][A
-Training UNET for Diffusion:  24%|██▎       | 356/1500 [01:31<04:52,  3.92batch/s, context_loss=0.617, loss=0.447, masked_loss=0.386][A
-Training UNET for Diffusion:  24%|██▎       | 356/1500 [01:32<04:52,  3.92batch/s, context_loss=0.51, loss=0.541, masked_loss=0.49]  [A
-Training UNET for Diffusion:  24%|██▍       | 357/1500 [01:32<04:51,  3.92batch/s, context_loss=0.51, loss=0.541, masked_loss=0.49][A
-Training UNET for Diffusion:  24%|██▍       | 357/1500 [01:32<04:51,  3.92batch/s, context_loss=0.472, loss=0.579, masked_loss=0.532][A
-Training UNET for Diffusion:  24%|██▍       | 358/1500 [01:32<04:51,  3.92batch/s, context_loss=0.472, loss=0.579, masked_loss=0.532][A
-Training UNET for Diffusion:  24%|██▍       | 358/1500 [01:32<04:51,  3.92batch/s, context_loss=0.74, loss=0.335, masked_loss=0.261] [A
-Training UNET for Diffusion:  24%|██▍       | 359/1500 [01:32<04:51,  3.92batch/s, context_loss=0.74, loss=0.335, masked_loss=0.261][A
-Training UNET for Diffusion:  24%|██▍       | 359/1500 [01:32<04:51,  3.92batch/s, context_loss=0.671, loss=0.396, masked_loss=0.329][A
-Training UNET for Diffusion:  24%|██▍       | 360/1500 [01:32<04:50,  3.92batch/s, context_loss=0.671, loss=0.396, masked_loss=0.329][A
-Training UNET for Diffusion:  24%|██▍       | 360/1500 [01:33<04:50,  3.92batch/s, context_loss=0.463, loss=0.584, masked_loss=0.538][A
-Training UNET for Diffusion:  24%|██▍       | 361/1500 [01:33<04:50,  3.92batch/s, context_loss=0.463, loss=0.584, masked_loss=0.538][A
-Training UNET for Diffusion:  24%|██▍       | 361/1500 [01:33<04:50,  3.92batch/s, context_loss=0.718, loss=0.355, masked_loss=0.283][A
-Training UNET for Diffusion:  24%|██▍       | 362/1500 [01:33<04:50,  3.92batch/s, context_loss=0.718, loss=0.355, masked_loss=0.283][A
-Training UNET for Diffusion:  24%|██▍       | 362/1500 [01:33<04:50,  3.92batch/s, context_loss=0.689, loss=0.381, masked_loss=0.312][A
-Training UNET for Diffusion:  24%|██▍       | 363/1500 [01:33<04:50,  3.92batch/s, context_loss=0.689, loss=0.381, masked_loss=0.312][A
-Training UNET for Diffusion:  24%|██▍       | 363/1500 [01:33<04:50,  3.92batch/s, context_loss=0.728, loss=0.345, masked_loss=0.272][A
-Training UNET for Diffusion:  24%|██▍       | 364/1500 [01:33<04:50,  3.92batch/s, context_loss=0.728, loss=0.345, masked_loss=0.272][A
-Training UNET for Diffusion:  24%|██▍       | 364/1500 [01:34<04:50,  3.92batch/s, context_loss=0.534, loss=0.522, masked_loss=0.469][A
-Training UNET for Diffusion:  24%|██▍       | 365/1500 [01:34<04:49,  3.92batch/s, context_loss=0.534, loss=0.522, masked_loss=0.469][A
-Training UNET for Diffusion:  24%|██▍       | 365/1500 [01:34<04:49,  3.92batch/s, context_loss=0.446, loss=0.598, masked_loss=0.554][A
-Training UNET for Diffusion:  24%|██▍       | 366/1500 [01:34<04:49,  3.92batch/s, context_loss=0.446, loss=0.598, masked_loss=0.554][A
-Training UNET for Diffusion:  24%|██▍       | 366/1500 [01:34<04:49,  3.92batch/s, context_loss=0.405, loss=0.638, masked_loss=0.597][A
-Training UNET for Diffusion:  24%|██▍       | 367/1500 [01:34<04:49,  3.92batch/s, context_loss=0.405, loss=0.638, masked_loss=0.597][A
-Training UNET for Diffusion:  24%|██▍       | 367/1500 [01:34<04:49,  3.92batch/s, context_loss=0.674, loss=0.393, masked_loss=0.325][A
-Training UNET for Diffusion:  25%|██▍       | 368/1500 [01:34<04:49,  3.91batch/s, context_loss=0.674, loss=0.393, masked_loss=0.325][A
-Training UNET for Diffusion:  25%|██▍       | 368/1500 [01:35<04:49,  3.91batch/s, context_loss=0.432, loss=0.61, masked_loss=0.567] [A
-Training UNET for Diffusion:  25%|██▍       | 369/1500 [01:35<04:48,  3.91batch/s, context_loss=0.432, loss=0.61, masked_loss=0.567][A
-Training UNET for Diffusion:  25%|██▍       | 369/1500 [01:35<04:48,  3.91batch/s, context_loss=0.655, loss=0.411, masked_loss=0.346][A
-Training UNET for Diffusion:  25%|██▍       | 370/1500 [01:35<04:48,  3.92batch/s, context_loss=0.655, loss=0.411, masked_loss=0.346][A
-Training UNET for Diffusion:  25%|██▍       | 370/1500 [01:35<04:48,  3.92batch/s, context_loss=0.625, loss=0.437, masked_loss=0.375][A
-Training UNET for Diffusion:  25%|██▍       | 371/1500 [01:35<04:48,  3.92batch/s, context_loss=0.625, loss=0.437, masked_loss=0.375][A
-Training UNET for Diffusion:  25%|██▍       | 371/1500 [01:36<04:48,  3.92batch/s, context_loss=0.568, loss=0.491, masked_loss=0.434][A
-Training UNET for Diffusion:  25%|██▍       | 372/1500 [01:36<04:48,  3.92batch/s, context_loss=0.568, loss=0.491, masked_loss=0.434][A
-Training UNET for Diffusion:  25%|██▍       | 372/1500 [01:36<04:48,  3.92batch/s, context_loss=0.499, loss=0.552, masked_loss=0.502][A
-Training UNET for Diffusion:  25%|██▍       | 373/1500 [01:36<04:47,  3.92batch/s, context_loss=0.499, loss=0.552, masked_loss=0.502][A
-Training UNET for Diffusion:  25%|██▍       | 373/1500 [01:36<04:47,  3.92batch/s, context_loss=0.663, loss=0.402, masked_loss=0.335][A
-Training UNET for Diffusion:  25%|██▍       | 374/1500 [01:36<04:46,  3.92batch/s, context_loss=0.663, loss=0.402, masked_loss=0.335][A
-Training UNET for Diffusion:  25%|██▍       | 374/1500 [01:36<04:46,  3.92batch/s, context_loss=0.479, loss=0.568, masked_loss=0.52] [A
-Training UNET for Diffusion:  25%|██▌       | 375/1500 [01:36<04:46,  3.93batch/s, context_loss=0.479, loss=0.568, masked_loss=0.52][A
-Training UNET for Diffusion:  25%|██▌       | 375/1500 [01:37<04:46,  3.93batch/s, context_loss=0.444, loss=0.602, masked_loss=0.558][A
-Training UNET for Diffusion:  25%|██▌       | 376/1500 [01:37<04:45,  3.93batch/s, context_loss=0.444, loss=0.602, masked_loss=0.558][A
-Training UNET for Diffusion:  25%|██▌       | 376/1500 [01:37<04:45,  3.93batch/s, context_loss=0.584, loss=0.475, masked_loss=0.416][A
-Training UNET for Diffusion:  25%|██▌       | 377/1500 [01:37<04:45,  3.93batch/s, context_loss=0.584, loss=0.475, masked_loss=0.416][A
-Training UNET for Diffusion:  25%|██▌       | 377/1500 [01:37<04:45,  3.93batch/s, context_loss=0.516, loss=0.535, masked_loss=0.483][A
-Training UNET for Diffusion:  25%|██▌       | 378/1500 [01:37<04:45,  3.93batch/s, context_loss=0.516, loss=0.535, masked_loss=0.483][A
-Training UNET for Diffusion:  25%|██▌       | 378/1500 [01:37<04:45,  3.93batch/s, context_loss=0.722, loss=0.351, masked_loss=0.279][A
-Training UNET for Diffusion:  25%|██▌       | 379/1500 [01:37<04:45,  3.93batch/s, context_loss=0.722, loss=0.351, masked_loss=0.279][A
-Training UNET for Diffusion:  25%|██▌       | 379/1500 [01:38<04:45,  3.93batch/s, context_loss=0.748, loss=0.33, masked_loss=0.255] [A
-Training UNET for Diffusion:  25%|██▌       | 380/1500 [01:38<04:44,  3.93batch/s, context_loss=0.748, loss=0.33, masked_loss=0.255][A
-Training UNET for Diffusion:  25%|██▌       | 380/1500 [01:38<04:44,  3.93batch/s, context_loss=0.417, loss=0.626, masked_loss=0.584][A
-Training UNET for Diffusion:  25%|██▌       | 381/1500 [01:38<04:44,  3.93batch/s, context_loss=0.417, loss=0.626, masked_loss=0.584][A
-Training UNET for Diffusion:  25%|██▌       | 381/1500 [01:38<04:44,  3.93batch/s, context_loss=0.752, loss=0.325, masked_loss=0.25] [A
-Training UNET for Diffusion:  25%|██▌       | 382/1500 [01:38<04:44,  3.93batch/s, context_loss=0.752, loss=0.325, masked_loss=0.25][A
-Training UNET for Diffusion:  25%|██▌       | 382/1500 [01:38<04:44,  3.93batch/s, context_loss=0.495, loss=0.556, masked_loss=0.507][A
-Training UNET for Diffusion:  26%|██▌       | 383/1500 [01:38<04:44,  3.93batch/s, context_loss=0.495, loss=0.556, masked_loss=0.507][A
-Training UNET for Diffusion:  26%|██▌       | 383/1500 [01:39<04:44,  3.93batch/s, context_loss=0.524, loss=0.529, masked_loss=0.476][A
-Training UNET for Diffusion:  26%|██▌       | 384/1500 [01:39<04:43,  3.93batch/s, context_loss=0.524, loss=0.529, masked_loss=0.476][A
-Training UNET for Diffusion:  26%|██▌       | 384/1500 [01:39<04:43,  3.93batch/s, context_loss=0.434, loss=0.612, masked_loss=0.569][A
-Training UNET for Diffusion:  26%|██▌       | 385/1500 [01:39<04:43,  3.93batch/s, context_loss=0.434, loss=0.612, masked_loss=0.569][A
-Training UNET for Diffusion:  26%|██▌       | 385/1500 [01:39<04:43,  3.93batch/s, context_loss=0.474, loss=0.575, masked_loss=0.528][A
-Training UNET for Diffusion:  26%|██▌       | 386/1500 [01:39<04:43,  3.93batch/s, context_loss=0.474, loss=0.575, masked_loss=0.528][A
-Training UNET for Diffusion:  26%|██▌       | 386/1500 [01:39<04:43,  3.93batch/s, context_loss=0.46, loss=0.586, masked_loss=0.54]  [A
-Training UNET for Diffusion:  26%|██▌       | 387/1500 [01:39<04:44,  3.91batch/s, context_loss=0.46, loss=0.586, masked_loss=0.54][A
-Training UNET for Diffusion:  26%|██▌       | 387/1500 [01:40<04:44,  3.91batch/s, context_loss=0.6, loss=0.462, masked_loss=0.402][A
-Training UNET for Diffusion:  26%|██▌       | 388/1500 [01:40<04:43,  3.92batch/s, context_loss=0.6, loss=0.462, masked_loss=0.402][A
-Training UNET for Diffusion:  26%|██▌       | 388/1500 [01:40<04:43,  3.92batch/s, context_loss=0.539, loss=0.515, masked_loss=0.461][A
-Training UNET for Diffusion:  26%|██▌       | 389/1500 [01:40<04:43,  3.92batch/s, context_loss=0.539, loss=0.515, masked_loss=0.461][A
-Training UNET for Diffusion:  26%|██▌       | 389/1500 [01:40<04:43,  3.92batch/s, context_loss=0.655, loss=0.411, masked_loss=0.345][A
-Training UNET for Diffusion:  26%|██▌       | 390/1500 [01:40<04:42,  3.93batch/s, context_loss=0.655, loss=0.411, masked_loss=0.345][A
-Training UNET for Diffusion:  26%|██▌       | 390/1500 [01:40<04:42,  3.93batch/s, context_loss=0.802, loss=0.282, masked_loss=0.202][A
-Training UNET for Diffusion:  26%|██▌       | 391/1500 [01:40<04:42,  3.93batch/s, context_loss=0.802, loss=0.282, masked_loss=0.202][A
-Training UNET for Diffusion:  26%|██▌       | 391/1500 [01:41<04:42,  3.93batch/s, context_loss=0.451, loss=0.594, masked_loss=0.549][A
-Training UNET for Diffusion:  26%|██▌       | 392/1500 [01:41<04:41,  3.93batch/s, context_loss=0.451, loss=0.594, masked_loss=0.549][A
-Training UNET for Diffusion:  26%|██▌       | 392/1500 [01:41<04:41,  3.93batch/s, context_loss=0.526, loss=0.527, masked_loss=0.474][A
-Training UNET for Diffusion:  26%|██▌       | 393/1500 [01:41<04:41,  3.93batch/s, context_loss=0.526, loss=0.527, masked_loss=0.474][A
-Training UNET for Diffusion:  26%|██▌       | 393/1500 [01:41<04:41,  3.93batch/s, context_loss=0.54, loss=0.514, masked_loss=0.46]  [A
-Training UNET for Diffusion:  26%|██▋       | 394/1500 [01:41<04:41,  3.93batch/s, context_loss=0.54, loss=0.514, masked_loss=0.46][A
-Training UNET for Diffusion:  26%|██▋       | 394/1500 [01:41<04:41,  3.93batch/s, context_loss=0.502, loss=0.551, masked_loss=0.501][A
-Training UNET for Diffusion:  26%|██▋       | 395/1500 [01:41<04:41,  3.93batch/s, context_loss=0.502, loss=0.551, masked_loss=0.501][A
-Training UNET for Diffusion:  26%|██▋       | 395/1500 [01:42<04:41,  3.93batch/s, context_loss=0.473, loss=0.576, masked_loss=0.529][A
-Training UNET for Diffusion:  26%|██▋       | 396/1500 [01:42<04:40,  3.93batch/s, context_loss=0.473, loss=0.576, masked_loss=0.529][A
-Training UNET for Diffusion:  26%|██▋       | 396/1500 [01:42<04:40,  3.93batch/s, context_loss=0.789, loss=0.289, masked_loss=0.21] [A
-Training UNET for Diffusion:  26%|██▋       | 397/1500 [01:42<04:40,  3.93batch/s, context_loss=0.789, loss=0.289, masked_loss=0.21][A
-Training UNET for Diffusion:  26%|██▋       | 397/1500 [01:42<04:40,  3.93batch/s, context_loss=0.462, loss=0.583, masked_loss=0.537][A
-Training UNET for Diffusion:  27%|██▋       | 398/1500 [01:42<04:40,  3.93batch/s, context_loss=0.462, loss=0.583, masked_loss=0.537][A
-Training UNET for Diffusion:  27%|██▋       | 398/1500 [01:42<04:40,  3.93batch/s, context_loss=0.588, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  27%|██▋       | 399/1500 [01:42<04:40,  3.93batch/s, context_loss=0.588, loss=0.472, masked_loss=0.413][A
-Training UNET for Diffusion:  27%|██▋       | 399/1500 [01:43<04:40,  3.93batch/s, context_loss=0.626, loss=0.437, masked_loss=0.375][A
-Training UNET for Diffusion:  27%|██▋       | 400/1500 [01:43<04:39,  3.93batch/s, context_loss=0.626, loss=0.437, masked_loss=0.375][A
-Training UNET for Diffusion:  27%|██▋       | 400/1500 [01:43<04:39,  3.93batch/s, context_loss=0.759, loss=0.318, masked_loss=0.242][A
-Training UNET for Diffusion:  27%|██▋       | 401/1500 [01:43<04:39,  3.93batch/s, context_loss=0.759, loss=0.318, masked_loss=0.242][A
-Training UNET for Diffusion:  27%|██▋       | 401/1500 [01:43<04:39,  3.93batch/s, context_loss=0.507, loss=0.543, masked_loss=0.493][A
-Training UNET for Diffusion:  27%|██▋       | 402/1500 [01:43<04:39,  3.93batch/s, context_loss=0.507, loss=0.543, masked_loss=0.493][A
-Training UNET for Diffusion:  27%|██▋       | 402/1500 [01:43<04:39,  3.93batch/s, context_loss=0.752, loss=0.326, masked_loss=0.251][A
-Training UNET for Diffusion:  27%|██▋       | 403/1500 [01:43<04:38,  3.93batch/s, context_loss=0.752, loss=0.326, masked_loss=0.251][A
-Training UNET for Diffusion:  27%|██▋       | 403/1500 [01:44<04:38,  3.93batch/s, context_loss=0.677, loss=0.389, masked_loss=0.322][A
-Training UNET for Diffusion:  27%|██▋       | 404/1500 [01:44<04:38,  3.93batch/s, context_loss=0.677, loss=0.389, masked_loss=0.322][A
-Training UNET for Diffusion:  27%|██▋       | 404/1500 [01:44<04:38,  3.93batch/s, context_loss=0.671, loss=0.395, masked_loss=0.328][A
-Training UNET for Diffusion:  27%|██▋       | 405/1500 [01:44<04:38,  3.93batch/s, context_loss=0.671, loss=0.395, masked_loss=0.328][A
-Training UNET for Diffusion:  27%|██▋       | 405/1500 [01:44<04:38,  3.93batch/s, context_loss=0.658, loss=0.41, masked_loss=0.344] [A
-Training UNET for Diffusion:  27%|██▋       | 406/1500 [01:44<04:38,  3.93batch/s, context_loss=0.658, loss=0.41, masked_loss=0.344][A
-Training UNET for Diffusion:  27%|██▋       | 406/1500 [01:44<04:38,  3.93batch/s, context_loss=0.635, loss=0.43, masked_loss=0.366][A
-Training UNET for Diffusion:  27%|██▋       | 407/1500 [01:44<04:37,  3.93batch/s, context_loss=0.635, loss=0.43, masked_loss=0.366][A
-Training UNET for Diffusion:  27%|██▋       | 407/1500 [01:45<04:37,  3.93batch/s, context_loss=0.58, loss=0.477, masked_loss=0.419][A
-Training UNET for Diffusion:  27%|██▋       | 408/1500 [01:45<04:37,  3.93batch/s, context_loss=0.58, loss=0.477, masked_loss=0.419][A
-Training UNET for Diffusion:  27%|██▋       | 408/1500 [01:45<04:37,  3.93batch/s, context_loss=0.644, loss=0.421, masked_loss=0.357][A
-Training UNET for Diffusion:  27%|██▋       | 409/1500 [01:45<04:37,  3.94batch/s, context_loss=0.644, loss=0.421, masked_loss=0.357][A
-Training UNET for Diffusion:  27%|██▋       | 409/1500 [01:45<04:37,  3.94batch/s, context_loss=0.688, loss=0.381, masked_loss=0.313][A
-Training UNET for Diffusion:  27%|██▋       | 410/1500 [01:45<04:37,  3.93batch/s, context_loss=0.688, loss=0.381, masked_loss=0.313][A
-Training UNET for Diffusion:  27%|██▋       | 410/1500 [01:45<04:37,  3.93batch/s, context_loss=0.467, loss=0.583, masked_loss=0.536][A
-Training UNET for Diffusion:  27%|██▋       | 411/1500 [01:45<04:36,  3.93batch/s, context_loss=0.467, loss=0.583, masked_loss=0.536][A
-Training UNET for Diffusion:  27%|██▋       | 411/1500 [01:46<04:36,  3.93batch/s, context_loss=0.572, loss=0.489, masked_loss=0.431][A
-Training UNET for Diffusion:  27%|██▋       | 412/1500 [01:46<04:36,  3.93batch/s, context_loss=0.572, loss=0.489, masked_loss=0.431][A
-Training UNET for Diffusion:  27%|██▋       | 412/1500 [01:46<04:36,  3.93batch/s, context_loss=0.437, loss=0.606, masked_loss=0.562][A
-Training UNET for Diffusion:  28%|██▊       | 413/1500 [01:46<04:36,  3.93batch/s, context_loss=0.437, loss=0.606, masked_loss=0.562][A
-Training UNET for Diffusion:  28%|██▊       | 413/1500 [01:46<04:36,  3.93batch/s, context_loss=0.452, loss=0.593, masked_loss=0.548][A
-Training UNET for Diffusion:  28%|██▊       | 414/1500 [01:46<04:36,  3.93batch/s, context_loss=0.452, loss=0.593, masked_loss=0.548][A
-Training UNET for Diffusion:  28%|██▊       | 414/1500 [01:46<04:36,  3.93batch/s, context_loss=0.594, loss=0.468, masked_loss=0.408][A
-Training UNET for Diffusion:  28%|██▊       | 415/1500 [01:46<04:35,  3.94batch/s, context_loss=0.594, loss=0.468, masked_loss=0.408][A
-Training UNET for Diffusion:  28%|██▊       | 415/1500 [01:47<04:35,  3.94batch/s, context_loss=0.483, loss=0.568, masked_loss=0.52] [A
-Training UNET for Diffusion:  28%|██▊       | 416/1500 [01:47<04:35,  3.93batch/s, context_loss=0.483, loss=0.568, masked_loss=0.52][A
-Training UNET for Diffusion:  28%|██▊       | 416/1500 [01:47<04:35,  3.93batch/s, context_loss=0.653, loss=0.415, masked_loss=0.35][A
-Training UNET for Diffusion:  28%|██▊       | 417/1500 [01:47<04:35,  3.94batch/s, context_loss=0.653, loss=0.415, masked_loss=0.35][A
-Training UNET for Diffusion:  28%|██▊       | 417/1500 [01:47<04:35,  3.94batch/s, context_loss=0.438, loss=0.608, masked_loss=0.564][A
-Training UNET for Diffusion:  28%|██▊       | 418/1500 [01:47<04:34,  3.94batch/s, context_loss=0.438, loss=0.608, masked_loss=0.564][A
-Training UNET for Diffusion:  28%|██▊       | 418/1500 [01:47<04:34,  3.94batch/s, context_loss=0.746, loss=0.33, masked_loss=0.256] [A
-Training UNET for Diffusion:  28%|██▊       | 419/1500 [01:47<04:34,  3.94batch/s, context_loss=0.746, loss=0.33, masked_loss=0.256][A
-Training UNET for Diffusion:  28%|██▊       | 419/1500 [01:48<04:34,  3.94batch/s, context_loss=0.582, loss=0.48, masked_loss=0.421][A
-Training UNET for Diffusion:  28%|██▊       | 420/1500 [01:48<04:34,  3.94batch/s, context_loss=0.582, loss=0.48, masked_loss=0.421][A
-Training UNET for Diffusion:  28%|██▊       | 420/1500 [01:48<04:34,  3.94batch/s, context_loss=0.622, loss=0.443, masked_loss=0.381][A
-Training UNET for Diffusion:  28%|██▊       | 421/1500 [01:48<04:34,  3.94batch/s, context_loss=0.622, loss=0.443, masked_loss=0.381][A
-Training UNET for Diffusion:  28%|██▊       | 421/1500 [01:48<04:34,  3.94batch/s, context_loss=0.412, loss=0.629, masked_loss=0.588][A
-Training UNET for Diffusion:  28%|██▊       | 422/1500 [01:48<04:34,  3.93batch/s, context_loss=0.412, loss=0.629, masked_loss=0.588][A
-Training UNET for Diffusion:  28%|██▊       | 422/1500 [01:48<04:34,  3.93batch/s, context_loss=0.406, loss=0.635, masked_loss=0.595][A
-Training UNET for Diffusion:  28%|██▊       | 423/1500 [01:48<04:33,  3.93batch/s, context_loss=0.406, loss=0.635, masked_loss=0.595][A
-Training UNET for Diffusion:  28%|██▊       | 423/1500 [01:49<04:33,  3.93batch/s, context_loss=0.774, loss=0.302, masked_loss=0.224][A
-Training UNET for Diffusion:  28%|██▊       | 424/1500 [01:49<04:33,  3.93batch/s, context_loss=0.774, loss=0.302, masked_loss=0.224][A
-Training UNET for Diffusion:  28%|██▊       | 424/1500 [01:49<04:33,  3.93batch/s, context_loss=0.528, loss=0.523, masked_loss=0.47] [A
-Training UNET for Diffusion:  28%|██▊       | 425/1500 [01:49<04:33,  3.93batch/s, context_loss=0.528, loss=0.523, masked_loss=0.47][A
-Training UNET for Diffusion:  28%|██▊       | 425/1500 [01:49<04:33,  3.93batch/s, context_loss=0.468, loss=0.578, masked_loss=0.531][A
-Training UNET for Diffusion:  28%|██▊       | 426/1500 [01:49<04:33,  3.93batch/s, context_loss=0.468, loss=0.578, masked_loss=0.531][A
-Training UNET for Diffusion:  28%|██▊       | 426/1500 [01:50<04:33,  3.93batch/s, context_loss=0.528, loss=0.525, masked_loss=0.472][A
-Training UNET for Diffusion:  28%|██▊       | 427/1500 [01:50<04:32,  3.93batch/s, context_loss=0.528, loss=0.525, masked_loss=0.472][A
-Training UNET for Diffusion:  28%|██▊       | 427/1500 [01:50<04:32,  3.93batch/s, context_loss=0.502, loss=0.548, masked_loss=0.498][A
-Training UNET for Diffusion:  29%|██▊       | 428/1500 [01:50<04:32,  3.93batch/s, context_loss=0.502, loss=0.548, masked_loss=0.498][Aslurmstepd: error: *** JOB 63799 ON edu01 CANCELLED AT 2025-08-31T21:15:55 ***
-
-Training UNET for Diffusion:  29%|██▊       | 428/1500 [01:50<04:32,  3.93batch/s, context_loss=0.535, loss=0.52, masked_loss=0.466] [A
-Training UNET for Diffusion:  29%|██▊       | 429/1500 [01:50<04:32,  3.93batch/s, context_loss=0.535, loss=0.52, masked_loss=0.466][A

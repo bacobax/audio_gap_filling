@@ -232,6 +232,14 @@ class DiffusionTrainer(BaseTrainer):
             return {"loss": 0.0}
         self.model.eval()
         total_loss = total_mask = total_ctx = 0.0
+        pbar = tqdm(
+            total=len(self.val_loader),
+            desc='Validating UNET for Diffusion',
+            unit='batch',
+            leave=False,
+            dynamic_ncols=True,
+            position=1
+        )
         for batch in self.val_loader:
             audio = batch.to(self.device)
             x_t, x_known, mask, t, v_target, clap_vec = self._prepare_batch(audio)
@@ -249,6 +257,8 @@ class DiffusionTrainer(BaseTrainer):
             total_loss += loss.item()
             total_mask += masked.item()
             total_ctx += ctx.item()
+            pbar.set_postfix(loss=loss.item(), masked_loss=masked.item(), context_loss=ctx.item())
+            pbar.update(1)
 
         n = max(1, len(self.val_loader))
         return {

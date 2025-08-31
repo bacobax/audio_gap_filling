@@ -20,7 +20,7 @@ paths:
 data:
   dataset_type: gap_waveform
   sample_rate: 16000
-  segment_length: 65536          # waveform samples per training crop
+  segment_length: 65536 # waveform samples per training crop
   n_fft: 1024
   hop_length: 256
   n_mels: 80
@@ -34,7 +34,7 @@ training:
   max_device_batch_size: 4
   total_epoch: 30
   early_stop_patience: 3
-
+  step_interval: 2
   # Optim
   lr: 5.0e-5
   weight_decay: 1.0e-3
