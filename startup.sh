@@ -2,6 +2,7 @@
 
 ## List of YAML configuration files to use for training.
 # Modify the CONFIGS array below to specify which config files to run.
+
 CONFIGS=(
     "diffusion"
 )

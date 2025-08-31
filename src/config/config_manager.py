@@ -212,6 +212,7 @@ class ConfigManager:
             'seed': self.get('training.seed', 42),
             'batch_size': self.get('training.batch_size', 4),
             'max_device_batch_size': self.get('training.max_device_batch_size', 512),
+            'step_interval': self.get('training.step_interval', 1),
             'base_learning_rate': self.get('training.base_learning_rate', 0.00015),
             'weight_decay': self.get('training.weight_decay', 0.05),
             'total_epoch': self.get('training.total_epoch', 8),

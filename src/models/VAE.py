@@ -9,6 +9,8 @@ import torchaudio
 import einops
 from typing import Optional
 
+from typing import Optional
+
 try:
     from snake.activations import Snake
 except Exception:  # pragma: no cover - fallback if package unavailable

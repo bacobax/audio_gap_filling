@@ -162,6 +162,7 @@ class VAETrainer(BaseTrainer):
                 n_mels=config.get("n_mels", 80),
             ).to(self.device)
             self.lambda_p = config.get("lambda_p", 0.0)
+            self.lambda_p = config.get("lambda_p", 0.0)
         else:
             self.lpips_fn = None
             self.mel_transform = None
