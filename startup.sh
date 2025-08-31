@@ -4,7 +4,7 @@
 # Modify the CONFIGS array below to specify which config files to run.
 
 CONFIGS=(
-    "vae"
+    "vae_x32"
 )
 
 for config in "${CONFIGS[@]}"; do

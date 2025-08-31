@@ -78,7 +78,6 @@ class MultiResolutionSTFTLoss(nn.Module):
     def _get_window(self, win: int) -> torch.Tensor:
         """Return a cached Hann window of length `win` on the module's current device."""
         dev = DEVICE
-        print(f"DEVICE: {dev}")
         w = self._windows.get(win)
         if w is None or w.device != dev:
             w = torch.hann_window(win, device=dev)

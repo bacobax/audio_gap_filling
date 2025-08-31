@@ -3,7 +3,7 @@ model:
   input_channels: 1
   hidden_channels: 64
   latent_dim: 64
-  num_blocks: 3
+  num_blocks: 5
   kernel_size: 3
   downsample_stride: 2
 
@@ -30,11 +30,9 @@ training:
     hop_sizes: [50, 120, 240]
     win_lengths: [240, 600, 1200]
 
-
-
 paths:
   audio_filename: assets/gapped_audio.wav
-  log_dir: /home/francesco.bassignana/audio_gap_filling/runs/vae_cluster_2
+  log_dir: runs/vae_x32
 
 
 data:
