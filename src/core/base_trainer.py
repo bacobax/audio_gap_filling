@@ -58,6 +58,11 @@ class BaseTrainer(ABC):
         # Move model to device
         self.model.to(self.device)
 
+        # Gradient accumulation (virtual batch size)
+        self.step_interval = int(self.config.get('step_interval', 1))
+        if self.step_interval < 1:
+            self.step_interval = 1
+
         # Setup logging
         self.writer = SummaryWriter(self.log_dir)
 

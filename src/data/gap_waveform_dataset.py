@@ -26,8 +26,11 @@ class GapWaveformDataset(MelSpectrogramDataset):
 
     def __len__(self) -> int:  # type: ignore[override]
         starts = len(self.valid_starts)
-        max_samples = 1500 * self.config["batch_size"]
-        return min(starts, max_samples)
+        step_interval = int(self.config.get("step_interval", 1))
+        max_samples = 1500 * self.config["batch_size"] * max(1, step_interval)
+        return min(len(starts), max_samples)
+
+
 
 
     def __getitem__(self, idx: int) -> torch.Tensor:  # type: ignore[override]

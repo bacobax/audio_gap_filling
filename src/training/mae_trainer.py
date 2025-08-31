@@ -57,17 +57,16 @@ class MAETrainer(BaseTrainer):
         self.lambda_p = config.get('lambda_p', 0.0) if config else 0.0
         self.lambda_p_warmup = config.get('lambda_p_warmup', 0)
 
-        # Setup gradient accumulation
+        # Gradient accumulation: prefer explicit step_interval; fallback to ratio of global:device batch
         self.batch_size = config.get('batch_size', 4) if config else 4
         self.max_device_batch_size = config.get('max_device_batch_size', 512) if config else 512
         self.load_batch_size = min(self.max_device_batch_size, self.batch_size)
-        self.steps_per_update = self.batch_size // self.load_batch_size
-
-        # Validate batch size compatibility
-        if self.batch_size % self.load_batch_size != 0:
-            raise ValueError(
-                f"Batch size {self.batch_size} must be divisible by load batch size {self.load_batch_size}"
-            )
+        explicit_si = int(config.get('step_interval', 1)) if config else 1
+        if explicit_si > 1:
+            self.steps_per_update = explicit_si
+        else:
+            # Fallback to whole-batch equivalence if user didn't set step_interval
+            self.steps_per_update = max(1, self.batch_size // max(1, self.load_batch_size))
 
         super().__init__(model, train_loader, val_loader, config, device, config["log_dir"])
 
@@ -133,6 +132,8 @@ class MAETrainer(BaseTrainer):
         if self.perceptual_loss:
             p_loss_meter = AverageMeter()
         step_count = 0
+        # zero grads once per accumulation window
+        self.optimizer.zero_grad()  # type: ignore
 
         pbar = tqdm(
             total=len(self.train_loader),
@@ -188,11 +189,11 @@ class MAETrainer(BaseTrainer):
 
             total_loss.update(logged_total_loss.item(), n=1)
 
-            # Backward pass
-            loss.backward()
+            # Backward pass with gradient accumulation
+            (loss / self.steps_per_update).backward()
 
-            # Gradient accumulation
-            if step_count % self.steps_per_update == 0:
+            # Optimizer step when reaching virtual batch
+            if step_count % self.steps_per_update == 0 or step_count == len(self.train_loader):
                 self.optimizer.step()  # type: ignore
                 self.optimizer.zero_grad()  # type: ignore
 

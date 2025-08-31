@@ -172,11 +172,12 @@ class DiffusionTrainer(BaseTrainer):
             dynamic_ncols=True,
             position=1
         )
+        # Zero grad once at start of accumulation window
+        self.optimizer.zero_grad(set_to_none=True)
+        step_interval = max(1, int(self.config.get('step_interval', 1)))
         for batch_idx, batch in enumerate(self.train_loader):
             audio = batch.to(self.device)  # [B, T]
             x_t, x_known, mask, t, v_target, clap_vec = self._prepare_batch(audio)
-
-            self.optimizer.zero_grad(set_to_none=True)
 
             # Autocast using new API when available
             try:
@@ -197,12 +198,15 @@ class DiffusionTrainer(BaseTrainer):
                 )
                 loss, masked, ctx = self._compute_loss(v_pred, v_target, mask)
 
-            # Backprop and optimizer step
-            scaler.scale(loss).backward()
-            scaler.step(self.optimizer)
-            scaler.update()
-            if self.scheduler is not None:
-                self.scheduler.step()
+            # Backprop with accumulation; optimizer step at intervals
+            scaler.scale(loss / step_interval).backward()
+            do_step = ((batch_idx + 1) % step_interval == 0) or ((batch_idx + 1) == len(self.train_loader))
+            if do_step:
+                scaler.step(self.optimizer)
+                scaler.update()
+                self.optimizer.zero_grad(set_to_none=True)
+                if self.scheduler is not None:
+                    self.scheduler.step()
 
             total_loss += loss.item()
             total_mask += masked.item()

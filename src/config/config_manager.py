@@ -211,6 +211,7 @@ class ConfigManager:
         cfg = {
             'seed': self.get('training.seed', 42),
             'batch_size': self.get('training.batch_size', 4),
+            'step_interval': self.get('training.step_interval', 1),
             'max_device_batch_size': self.get('training.max_device_batch_size', 512),
             'step_interval': self.get('training.step_interval', 1),
             'base_learning_rate': self.get('training.base_learning_rate', 0.00015),
@@ -286,5 +287,7 @@ class ConfigManager:
             'segment_length': self.get('data.segment_length', 65536),
             'folder': self.get('data.folder', 'assets'),
             'batch_size': self.get('training.batch_size', 4),
+            'step_interval': self.get('training.step_interval', 1),
+
         }
         return cfg
