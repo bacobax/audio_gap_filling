@@ -1,0 +1,65 @@
+model:
+  type: diffusion_unet
+  network:
+    # U-Net architecture
+    in_channels: 129            # 64 (x_t) + 64 (x_known) + 1 (mask)
+    latents_channels: 64
+    channels_per_scale: [128, 256, 384, 512, 768]
+    self_attn_scales: [3, 4]    # self-attention at coarse scales
+    num_res_blocks: 2
+    cond_dim: 256               # timestep/text/timing/CLAP embedding size
+    n_heads: 8
+    gradient_checkpointing: true
+
+paths:
+  audio_filename: assets/gapped_audio.wav
+  test_audio_filename: assets/wav_test.wav
+  # Set CLAP checkpoint if available
+  clap_checkpoint: pretrained/music_audioset_epoch_15_esc_90.14.pt
+
+data:
+  dataset_type: gap_waveform
+  sample_rate: 16000
+  segment_length: 65536          # waveform samples per training crop
+  n_fft: 1024
+  hop_length: 256
+  n_mels: 80
+  # Gap percentage can be a float or a [min, max] range
+  gap_percentage: [0.2, 0.6]
+
+training:
+  trainer_type: diffusion
+  seed: 42
+  batch_size: 4
+  max_device_batch_size: 4
+  total_epoch: 10
+
+  # Optim
+  lr: 5.0e-5
+  weight_decay: 1.0e-3
+  warmup_steps: 2000
+  total_steps: 100000
+
+  # Loss
+  lambda_ctx: 0.1
+
+  # CFG (drop only text/timing, not CLAP)
+  cfg_dropout_p: 0.15
+
+  # Latent encoder used during diffusion training (frozen)
+  vae:
+    input_channels: 1
+    hidden_channels: 64
+    latent_dim: 64
+    kernel_size: 3
+    num_blocks: 3
+    downsample_stride: 2
+    # Optional: path to pretrained VAE weights
+    # If provided, the encoder/decoder weights will be loaded (strict=False)
+    checkpoint: pretrained/vae_checkpoint.pt
+
+  # CLAP conditioner (optional). Set checkpoint to enable
+  clap:
+    checkpoint: pretrained/music_audioset_epoch_15_esc_90.14.pt
+    audio_model_type: HTSAT-base
+    enable_fusion: true

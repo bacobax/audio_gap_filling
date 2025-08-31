@@ -35,7 +35,8 @@ class VAEWaveformDataset(MelSpectrogramDataset):
 
     def __len__(self) -> int:  # type: ignore[override]
         starts = self.train_starts if self.split == "train" else self.val_starts
-        return len(starts)
+        max_samples = 1500 * self.config["batch_size"]
+        return min(len(starts), max_samples)
 
     def __getitem__(self, idx: int) -> torch.Tensor:  # type: ignore[override]
         starts = self.train_starts if self.split == "train" else self.val_starts

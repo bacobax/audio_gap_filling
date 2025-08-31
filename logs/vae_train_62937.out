@@ -1,0 +1,116 @@
+Starting training with configuration: vae
+{'data': {'dataset_type': 'vae_waveform',
+          'gap_percentage': 0.5,
+          'sample_rate': 22050},
+ 'model': {'downsample_stride': 2,
+           'hidden_channels': 64,
+           'input_channels': 1,
+           'kernel_size': 3,
+           'latent_dim': 64,
+           'num_blocks': 3,
+           'type': 'vae'},
+ 'paths': {'audio_filename': 'assets/gapped_audio.wav',
+           'log_dir': '/home/francesco.bassignana/audio_gap_filling/runs/vae_cluster'},
+ 'training': {'base_learning_rate': 0.00015,
+              'batch_size': 1,
+              'beta_kl': 0.0001,
+              'decoder_batch_size': 1,
+              'decoder_learning_rate': 0.00015,
+              'disc_learning_rate': 0.0003,
+              'early_stop_patience': 3,
+              'freeze_encoder_epoch': 5,
+              'lambda_adv': 1.0,
+              'lambda_fm': 1.0,
+              'max_device_batch_size': 1,
+              'mrstft': {'fft_sizes': [512, 1024, 2048],
+                         'hop_sizes': [50, 120, 240],
+                         'win_lengths': [240, 600, 1200]},
+              'resume': True,
+              'seed': 0,
+              'step_interval': 4,
+              'total_epoch': 15,
+              'trainer_type': 'vae',
+              'warmup_epoch': 1,
+              'weight_decay': 0.0}}
+Using device: cuda
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'train',
+ 'test_audio_filename': 'wav_test.wav'}
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'val',
+ 'test_audio_filename': 'wav_test.wav'}
+Data setup complete: training and validation datasets created
+sample shape: torch.Size([442368])
+MODEL CONFIG
+{'audio_len': 442368,
+ 'decoder': {'hidden_channels': 64,
+             'kernel_size': 3,
+             'latent_dim': 64,
+             'num_blocks': 3,
+             'output_channels': 1,
+             'upsample_stride': 2},
+ 'device': 'cuda',
+ 'downsample_stride': 2,
+ 'hidden_channels': 64,
+ 'input_channels': 1,
+ 'kernel_size': 3,
+ 'latent_dim': 64,
+ 'num_blocks': 3,
+ 'type': 'vae'}
+hidden channels: 64
+channels: 64
+channels: 64
+channels: 64
+Model created successfully
+Trainer setup complete
+Starting training for 15 epochs...
+Training Progress:   0%|          | 0/10 [00:00<?, ?epoch/s]
+Training VAE:   0%|          | 0/1500 [00:00<?, ?batch/s][ATraceback (most recent call last):
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 41, in <module>
+    main() 
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 38, in main
+    pipeline.train()
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 338, in train
+    history = self.trainer.train(num_epochs)
+  File "/home/francesco.bassignana/audio_gap_filling/src/core/base_trainer.py", line 144, in train
+    train_metrics = self._train_epoch()
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/vae_trainer.py", line 269, in _train_epoch
+    recon_loss = self.recon_loss_fn(recon, wave)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/vae_trainer.py", line 99, in forward
+    X = self._stft(x_, fft, hop, win)
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/vae_trainer.py", line 88, in _stft
+    return torch.stft(
+  File "/home/francesco.bassignana/.conda/envs/deepl/lib/python3.10/site-packages/torch/functional.py", line 730, in stft
+    return _VF.stft(  # type: ignore[attr-defined]
+RuntimeError: stft input and window must be on the same device but got self on cuda:0 and window on cpu
+
+                                                         [ATraining Progress:   0%|          | 0/10 [00:00<?, ?epoch/s]
+Training failed for config: vae

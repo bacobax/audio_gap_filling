@@ -230,12 +230,43 @@ class ConfigManager:
             'lambda_p_warmup': self.get('training.lambda_p_warmup', 0.0),
             'beta_kl': self.get('training.beta_kl', 1.0),
             'lambda_adv': self.get('training.lambda_adv', 0.0),
+            'lambda_fm': self.get('training.lambda_fm', 0.0),
+            'disc_learning_rate': self.get('training.disc_learning_rate', 0.0003),
+            'freeze_encoder_epoch': self.get('training.freeze_encoder_epoch', None),
+            'decoder_batch_size': self.get('training.decoder_batch_size', None),
+            'decoder_learning_rate': self.get('training.decoder_learning_rate', self.get('training.base_learning_rate', 0.00015)),
+            'mrstft': self.get('training.mrstft', {}),
             'sample_rate': self.get('data.sample_rate', 16000),
             'mixed_precision': self.get('training.mixed_precision', None),
             'config_filename': self.config_filename,
         }
         model_type = self.get('model.type', 'mae_vit')
         if model_type == 'diffusion_unet':
+            # Diffusion trainer specific keys
+            cfg.update({
+                'lr': self.get('training.lr', 5e-5),
+                'weight_decay': self.get('training.weight_decay', 1e-3),
+                'warmup_steps': self.get('training.warmup_steps', 2000),
+                'total_steps': self.get('training.total_steps', 100_000),
+                'lambda_ctx': self.get('training.lambda_ctx', 0.1),
+                'cfg_dropout_p': self.get('training.cfg_dropout_p', 0.15),
+                'gap_percentage': self.get('data.gap_percentage', 0.5),
+                'vae': self.get('training.vae', {
+                    'input_channels': 1,
+                    'hidden_channels': 64,
+                    'latent_dim': 64,
+                    'kernel_size': 3,
+                    'num_blocks': 3,
+                    'downsample_stride': 2,
+                }),
+                'clap': None if self.get('training.clap', None) is None else {
+                    'checkpoint': self.get('training.clap.checkpoint'),
+                    'audio_model_type': self.get('training.clap.audio_model_type', 'HTSAT-base'),
+                    'enable_fusion': self.get('training.clap.enable_fusion', True),
+                },
+                'cond_dim': self.get('model.network.cond_dim', 256),
+            })
+            # Keep legacy key for backward compatibility
             cfg["diff_params"] = self.get("diff_params")
         return cfg
     
@@ -253,5 +284,6 @@ class ConfigManager:
             'sample_rate': self.get('data.sample_rate', 16000),
             'segment_length': self.get('data.segment_length', 65536),
             'folder': self.get('data.folder', 'assets'),
+            'batch_size': self.get('training.batch_size', 4),
         }
         return cfg

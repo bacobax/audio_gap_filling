@@ -7,14 +7,16 @@ from torch.utils.data import DataLoader
 from pprint import pprint
 from .config.config_manager import ConfigManager
 from .models.mae_vit import MAEViT
-from .models.unet_cqt_oct_with_projattention_adaLN_2 import Unet_CQT_oct_with_attention
 from .models.VAE import VAE, Decoder
 from .data.mel_spectrogram_dataset import MelSpectrogramDataset
 from .data.audio_dataset import AudioFolderDataset
 from .data.vae_waveform_dataset import VAEWaveformDataset
 import torch.distributed as dist
 import os
-
+from .training.diff_trainer import DiffusionTrainer
+from .data.gap_waveform_dataset import GapWaveformDataset
+from .training.mae_trainer import MAETrainer
+from .training.vae_trainer import VAETrainer
 
 class ModelFactory:
     """Factory for creating model instances."""
@@ -35,7 +37,20 @@ class ModelFactory:
         if model_type == 'mae_vit':
             return MAEViT(config)
         elif model_type == 'diffusion_unet':
-            return Unet_CQT_oct_with_attention(config, device=config.get('device', 'cpu'))
+            # Temporal 1-D masked inpainting U-Net operating in latent space
+            from .models.inpaint_unet_1d import InpaintUNet1D
+            # Configure model according to project defaults
+            net_cfg = config.get('network', {})
+            return InpaintUNet1D(
+                in_channels=net_cfg.get('in_channels', 64 + 64 + 1),
+                latents_channels=net_cfg.get('latents_channels', 64),
+                channels_per_scale=tuple(net_cfg.get('channels_per_scale', [128, 256, 384, 512, 768])),
+                self_attn_scales=tuple(net_cfg.get('self_attn_scales', [3, 4])),
+                num_res_blocks=net_cfg.get('num_res_blocks', 2),
+                cond_dim=net_cfg.get('cond_dim', 256),
+                n_heads=net_cfg.get('n_heads', 8),
+                use_gradient_checkpointing=net_cfg.get('gradient_checkpointing', False),
+            )
         elif model_type == 'vae':
             decoder_cfg = config.get('decoder', {})
             decoder = Decoder(**decoder_cfg)
@@ -73,7 +88,6 @@ class DatasetFactory:
         elif dataset_type == 'audio_folder':
             return AudioFolderDataset(config)
         elif dataset_type == 'gap_waveform':
-            from .data.gap_waveform_dataset import GapWaveformDataset
             return GapWaveformDataset(config)
         elif dataset_type == 'vae_waveform':
             return VAEWaveformDataset(config, split=config.get('split', 'train'))
@@ -139,7 +153,6 @@ class TrainerFactory:
         """
         trainer_type = trainer_type.lower()
         if trainer_type == 'mae':
-            from .training.mae_trainer import MAETrainer
             return MAETrainer(
                 model=model,
                 train_loader=train_loader,
@@ -148,7 +161,6 @@ class TrainerFactory:
                 device=device,
             )
         elif trainer_type == 'diffusion':
-            from .training.diff_trainer import DiffusionTrainer
             return DiffusionTrainer(
                 model=model,
                 train_loader=train_loader,
@@ -157,7 +169,7 @@ class TrainerFactory:
                 device=device,
             )
         elif trainer_type == 'vae':
-            from .training.vae_trainer import VAETrainer
+            
             return VAETrainer(
                 model=model,
                 train_loader=train_loader,

@@ -2,7 +2,7 @@
 
 from .mae_vit import MAEViT, MAEEncoder, MAEDecoder
 from .patch_shuffle import PatchShuffle
-from .unet_cqt_oct_with_projattention_adaLN_2 import Unet_CQT_oct_with_attention
+from .inpaint_unet_1d import InpaintUNet1D
 from .VAE import VAE, Decoder
 
-__all__ = ['MAEViT', 'MAEEncoder', 'MAEDecoder', 'PatchShuffle', 'Unet_CQT_oct_with_attention', 'VAE', 'Decoder']
+__all__ = ['MAEViT', 'MAEEncoder', 'MAEDecoder', 'PatchShuffle', 'InpaintUNet1D', 'VAE', 'Decoder']

@@ -1,15 +1,14 @@
 import math
 
 import torch.nn as nn
-import numpy as np
-import torch.nn.functional as F
-import math as m
 import torch
 #import torchaudio
 from easydict import EasyDict
 from cqt_nsgt_pytorch import CQT_nsgt
 import torchaudio
 import einops
+from typing import Optional
+
 try:
     from snake.activations import Snake
 except Exception:  # pragma: no cover - fallback if package unavailable
@@ -180,7 +179,8 @@ class VAE(nn.Module):
         kernel_size: int = 3,
         num_blocks: int = 3,
         downsample_stride: int = 2,
-        decoder: nn.Module | None = None,  # plug your decoder later
+        decoder: Optional[nn.Module] = None,  # plug your decoder later
+        checkpoint: Optional[str] = None,  # path to checkpoint to load weights from
     ):
         super().__init__()
         self.encoder = Encoder(

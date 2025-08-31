@@ -1,0 +1,41 @@
+model:
+  type: vae
+  input_channels: 1
+  hidden_channels: 64
+  latent_dim: 64
+  num_blocks: 5
+  kernel_size: 3
+  downsample_stride: 2
+
+training:
+  trainer_type: vae
+  seed: 0
+  batch_size: 1
+  decoder_batch_size: 1
+  max_device_batch_size: 1
+  step_interval: 4
+  base_learning_rate: 0.00015
+  disc_learning_rate: 0.0003
+  decoder_learning_rate: 0.00015
+  weight_decay: 0.0
+  total_epoch: 15
+  warmup_epoch: 1
+  beta_kl: 0.0001
+  lambda_adv: 1.0
+  lambda_fm: 1.0
+  early_stop_patience: 3
+  freeze_encoder_epoch: 5
+  mrstft:
+    fft_sizes: [512, 1024, 2048]
+    hop_sizes: [50, 120, 240]
+    win_lengths: [240, 600, 1200]
+
+paths:
+  audio_filename: assets/gapped_audio.wav
+  log_dir: runs/vae_x32
+
+
+data:
+  dataset_type: vae_waveform
+  gap_percentage: 0.5
+  sample_rate: 22050

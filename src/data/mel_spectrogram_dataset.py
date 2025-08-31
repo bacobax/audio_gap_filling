@@ -55,7 +55,17 @@ class MelSpectrogramDataset(BaseDataset):
         """Setup the dataset by loading audio and computing spectrograms."""
         # Extract configuration
         self.flac_path = self.config['flac_path']
-        self.gap_percentage = self.config['gap_percentage']
+        gp = self.config['gap_percentage']
+        # Support list/tuple ranges by sampling a value once for dataset initialization
+        if isinstance(gp, (list, tuple)):
+            try:
+                lo, hi = float(gp[0]), float(gp[1])
+                self.gap_percentage = float(np.random.uniform(lo, hi))
+            except Exception:
+                # Fallback to midpoint if any issue
+                self.gap_percentage = float((gp[0] + gp[1]) / 2.0)
+        else:
+            self.gap_percentage = float(gp)
         self.n_fft = self.config.get('n_fft', 1024)
         self.hop_length = self.config.get('hop_length', 256)
         self.n_mels = self.config.get('n_mels', 80)
@@ -98,7 +108,7 @@ class MelSpectrogramDataset(BaseDataset):
         if not os.path.isfile(path):
             raise FileNotFoundError(path)
         
-        wave, sr = librosa.load(path, sr=16000, mono=True, dtype=np.float32)
+        wave, sr = librosa.load(path, sr=self.sample_rate, mono=True, dtype=np.float32)
         return wave, sr
     
     def _compute_mel_spectrogram(self, audio: np.ndarray) -> np.ndarray:

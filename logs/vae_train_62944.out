@@ -1,0 +1,4097 @@
+Starting training with configuration: vae
+{'data': {'dataset_type': 'vae_waveform',
+          'gap_percentage': 0.5,
+          'sample_rate': 22050},
+ 'model': {'downsample_stride': 2,
+           'hidden_channels': 64,
+           'input_channels': 1,
+           'kernel_size': 3,
+           'latent_dim': 64,
+           'num_blocks': 3,
+           'type': 'vae'},
+ 'paths': {'audio_filename': 'assets/gapped_audio.wav',
+           'log_dir': '/home/francesco.bassignana/audio_gap_filling/runs/vae_cluster'},
+ 'training': {'base_learning_rate': 0.00015,
+              'batch_size': 1,
+              'beta_kl': 0.0001,
+              'decoder_batch_size': 1,
+              'decoder_learning_rate': 0.00015,
+              'disc_learning_rate': 0.0003,
+              'early_stop_patience': 3,
+              'freeze_encoder_epoch': 5,
+              'lambda_adv': 1.0,
+              'lambda_fm': 1.0,
+              'max_device_batch_size': 1,
+              'mrstft': {'fft_sizes': [512, 1024, 2048],
+                         'hop_sizes': [50, 120, 240],
+                         'win_lengths': [240, 600, 1200]},
+              'resume': True,
+              'seed': 0,
+              'step_interval': 4,
+              'total_epoch': 15,
+              'trainer_type': 'vae',
+              'warmup_epoch': 1,
+              'weight_decay': 0.0}}
+Using device: cuda
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'train',
+ 'test_audio_filename': 'wav_test.wav'}
+SAMPLE RATE 22050
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'vae_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': 0.5,
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 22050,
+ 'segment_length': 65536,
+ 'split': 'val',
+ 'test_audio_filename': 'wav_test.wav'}
+Data setup complete: training and validation datasets created
+sample shape: torch.Size([442368])
+MODEL CONFIG
+{'audio_len': 442368,
+ 'decoder': {'hidden_channels': 64,
+             'kernel_size': 3,
+             'latent_dim': 64,
+             'num_blocks': 3,
+             'output_channels': 1,
+             'upsample_stride': 2},
+ 'device': 'cuda',
+ 'downsample_stride': 2,
+ 'hidden_channels': 64,
+ 'input_channels': 1,
+ 'kernel_size': 3,
+ 'latent_dim': 64,
+ 'num_blocks': 3,
+ 'type': 'vae'}
+hidden channels: 64
+channels: 64
+channels: 64
+channels: 64
+Model created successfully
+Trainer setup complete
+Starting training for 15 epochs...
+Training Progress:   0%|          | 0/7 [00:00<?, ?epoch/s]
+Training VAE:   0%|          | 0/1500 [00:00<?, ?batch/s][A
+Training VAE:   0%|          | 1/1500 [00:01<26:12,  1.05s/batch][A
+Training VAE:   0%|          | 1/1500 [00:01<26:12,  1.05s/batch, loss=0.715][A
+Training VAE:   0%|          | 2/1500 [00:01<20:42,  1.21batch/s, loss=0.715][A
+Training VAE:   0%|          | 2/1500 [00:01<20:42,  1.21batch/s, loss=0.699][A
+Training VAE:   0%|          | 3/1500 [00:02<16:17,  1.53batch/s, loss=0.699][A
+Training VAE:   0%|          | 3/1500 [00:02<16:17,  1.53batch/s, loss=0.702][A
+Training VAE:   0%|          | 4/1500 [00:02<14:43,  1.69batch/s, loss=0.702][A
+Training VAE:   0%|          | 4/1500 [00:02<14:43,  1.69batch/s, loss=0.699][A
+Training VAE:   0%|          | 5/1500 [00:03<13:22,  1.86batch/s, loss=0.699][A
+Training VAE:   0%|          | 5/1500 [00:03<13:22,  1.86batch/s, loss=1.05] [A
+Training VAE:   0%|          | 6/1500 [00:03<12:33,  1.98batch/s, loss=1.05][A
+Training VAE:   0%|          | 6/1500 [00:03<12:33,  1.98batch/s, loss=1.17][A
+Training VAE:   0%|          | 7/1500 [00:03<12:02,  2.07batch/s, loss=1.17][A
+Training VAE:   0%|          | 7/1500 [00:03<12:02,  2.07batch/s, loss=1.14][A
+Training VAE:   1%|          | 8/1500 [00:04<11:42,  2.12batch/s, loss=1.14][A
+Training VAE:   1%|          | 8/1500 [00:04<11:42,  2.12batch/s, loss=1.05][A
+Training VAE:   1%|          | 9/1500 [00:04<11:28,  2.17batch/s, loss=1.05][A
+Training VAE:   1%|          | 9/1500 [00:04<11:28,  2.17batch/s, loss=1.07][A
+Training VAE:   1%|          | 10/1500 [00:05<11:18,  2.20batch/s, loss=1.07][A
+Training VAE:   1%|          | 10/1500 [00:05<11:18,  2.20batch/s, loss=0.965][A
+Training VAE:   1%|          | 11/1500 [00:05<11:12,  2.22batch/s, loss=0.965][A
+Training VAE:   1%|          | 11/1500 [00:05<11:12,  2.22batch/s, loss=1.26] [A
+Training VAE:   1%|          | 12/1500 [00:06<11:08,  2.23batch/s, loss=1.26][A
+Training VAE:   1%|          | 12/1500 [00:06<11:08,  2.23batch/s, loss=0.991][A
+Training VAE:   1%|          | 13/1500 [00:06<11:04,  2.24batch/s, loss=0.991][A
+Training VAE:   1%|          | 13/1500 [00:06<11:04,  2.24batch/s, loss=0.888][A
+Training VAE:   1%|          | 14/1500 [00:07<11:02,  2.24batch/s, loss=0.888][A
+Training VAE:   1%|          | 14/1500 [00:07<11:02,  2.24batch/s, loss=1.07] [A
+Training VAE:   1%|          | 15/1500 [00:07<11:00,  2.25batch/s, loss=1.07][A
+Training VAE:   1%|          | 15/1500 [00:07<11:00,  2.25batch/s, loss=1.11][A
+Training VAE:   1%|          | 16/1500 [00:07<10:59,  2.25batch/s, loss=1.11][A
+Training VAE:   1%|          | 16/1500 [00:07<10:59,  2.25batch/s, loss=0.872][A
+Training VAE:   1%|          | 17/1500 [00:08<10:57,  2.25batch/s, loss=0.872][A
+Training VAE:   1%|          | 17/1500 [00:08<10:57,  2.25batch/s, loss=0.81] [A
+Training VAE:   1%|          | 18/1500 [00:08<10:56,  2.26batch/s, loss=0.81][A
+Training VAE:   1%|          | 18/1500 [00:08<10:56,  2.26batch/s, loss=0.726][A
+Training VAE:   1%|▏         | 19/1500 [00:09<10:55,  2.26batch/s, loss=0.726][A
+Training VAE:   1%|▏         | 19/1500 [00:09<10:55,  2.26batch/s, loss=0.938][A
+Training VAE:   1%|▏         | 20/1500 [00:09<10:55,  2.26batch/s, loss=0.938][A
+Training VAE:   1%|▏         | 20/1500 [00:09<10:55,  2.26batch/s, loss=0.766][A
+Training VAE:   1%|▏         | 21/1500 [00:10<10:54,  2.26batch/s, loss=0.766][A
+Training VAE:   1%|▏         | 21/1500 [00:10<10:54,  2.26batch/s, loss=0.765][A
+Training VAE:   1%|▏         | 22/1500 [00:10<10:53,  2.26batch/s, loss=0.765][A
+Training VAE:   1%|▏         | 22/1500 [00:10<10:53,  2.26batch/s, loss=1.07] [A
+Training VAE:   2%|▏         | 23/1500 [00:11<10:53,  2.26batch/s, loss=1.07][A
+Training VAE:   2%|▏         | 23/1500 [00:11<10:53,  2.26batch/s, loss=0.946][A
+Training VAE:   2%|▏         | 24/1500 [00:11<10:53,  2.26batch/s, loss=0.946][A
+Training VAE:   2%|▏         | 24/1500 [00:11<10:53,  2.26batch/s, loss=0.753][A
+Training VAE:   2%|▏         | 25/1500 [00:11<10:52,  2.26batch/s, loss=0.753][A
+Training VAE:   2%|▏         | 25/1500 [00:11<10:52,  2.26batch/s, loss=0.978][A
+Training VAE:   2%|▏         | 26/1500 [00:12<10:52,  2.26batch/s, loss=0.978][A
+Training VAE:   2%|▏         | 26/1500 [00:12<10:52,  2.26batch/s, loss=0.892][A
+Training VAE:   2%|▏         | 27/1500 [00:12<10:51,  2.26batch/s, loss=0.892][A
+Training VAE:   2%|▏         | 27/1500 [00:12<10:51,  2.26batch/s, loss=0.943][A
+Training VAE:   2%|▏         | 28/1500 [00:13<10:52,  2.25batch/s, loss=0.943][A
+Training VAE:   2%|▏         | 28/1500 [00:13<10:52,  2.25batch/s, loss=1.04] [A
+Training VAE:   2%|▏         | 29/1500 [00:13<10:51,  2.26batch/s, loss=1.04][A
+Training VAE:   2%|▏         | 29/1500 [00:13<10:51,  2.26batch/s, loss=0.76][A
+Training VAE:   2%|▏         | 30/1500 [00:14<10:51,  2.26batch/s, loss=0.76][A
+Training VAE:   2%|▏         | 30/1500 [00:14<10:51,  2.26batch/s, loss=0.796][A
+Training VAE:   2%|▏         | 31/1500 [00:14<10:50,  2.26batch/s, loss=0.796][A
+Training VAE:   2%|▏         | 31/1500 [00:14<10:50,  2.26batch/s, loss=0.791][A
+Training VAE:   2%|▏         | 32/1500 [00:15<10:50,  2.26batch/s, loss=0.791][A
+Training VAE:   2%|▏         | 32/1500 [00:15<10:50,  2.26batch/s, loss=0.904][A
+Training VAE:   2%|▏         | 33/1500 [00:15<10:49,  2.26batch/s, loss=0.904][A
+Training VAE:   2%|▏         | 33/1500 [00:15<10:49,  2.26batch/s, loss=0.74] [A
+Training VAE:   2%|▏         | 34/1500 [00:15<10:49,  2.26batch/s, loss=0.74][A
+Training VAE:   2%|▏         | 34/1500 [00:15<10:49,  2.26batch/s, loss=0.953][A
+Training VAE:   2%|▏         | 35/1500 [00:16<10:48,  2.26batch/s, loss=0.953][A
+Training VAE:   2%|▏         | 35/1500 [00:16<10:48,  2.26batch/s, loss=0.801][A
+Training VAE:   2%|▏         | 36/1500 [00:16<10:48,  2.26batch/s, loss=0.801][A
+Training VAE:   2%|▏         | 36/1500 [00:16<10:48,  2.26batch/s, loss=0.796][A
+Training VAE:   2%|▏         | 37/1500 [00:17<10:47,  2.26batch/s, loss=0.796][A
+Training VAE:   2%|▏         | 37/1500 [00:17<10:47,  2.26batch/s, loss=0.821][A
+Training VAE:   3%|▎         | 38/1500 [00:18<13:02,  1.87batch/s, loss=0.821][A
+Training VAE:   3%|▎         | 38/1500 [00:18<13:02,  1.87batch/s, loss=0.824][A
+Training VAE:   3%|▎         | 39/1500 [00:18<12:21,  1.97batch/s, loss=0.824][A
+Training VAE:   3%|▎         | 39/1500 [00:18<12:21,  1.97batch/s, loss=0.819][A
+Training VAE:   3%|▎         | 40/1500 [00:18<11:53,  2.05batch/s, loss=0.819][A
+Training VAE:   3%|▎         | 40/1500 [00:18<11:53,  2.05batch/s, loss=0.913][A
+Training VAE:   3%|▎         | 41/1500 [00:19<11:32,  2.11batch/s, loss=0.913][A
+Training VAE:   3%|▎         | 41/1500 [00:19<11:32,  2.11batch/s, loss=0.874][A
+Training VAE:   3%|▎         | 42/1500 [00:19<11:17,  2.15batch/s, loss=0.874][A
+Training VAE:   3%|▎         | 42/1500 [00:19<11:17,  2.15batch/s, loss=0.888][A
+Training VAE:   3%|▎         | 43/1500 [00:20<11:07,  2.18batch/s, loss=0.888][A
+Training VAE:   3%|▎         | 43/1500 [00:20<11:07,  2.18batch/s, loss=0.928][A
+Training VAE:   3%|▎         | 44/1500 [00:20<11:01,  2.20batch/s, loss=0.928][A
+Training VAE:   3%|▎         | 44/1500 [00:20<11:01,  2.20batch/s, loss=0.989][A
+Training VAE:   3%|▎         | 45/1500 [00:21<10:55,  2.22batch/s, loss=0.989][A
+Training VAE:   3%|▎         | 45/1500 [00:21<10:55,  2.22batch/s, loss=0.909][A
+Training VAE:   3%|▎         | 46/1500 [00:21<10:51,  2.23batch/s, loss=0.909][A
+Training VAE:   3%|▎         | 46/1500 [00:21<10:51,  2.23batch/s, loss=0.998][A
+Training VAE:   3%|▎         | 47/1500 [00:22<10:48,  2.24batch/s, loss=0.998][A
+Training VAE:   3%|▎         | 47/1500 [00:22<10:48,  2.24batch/s, loss=0.896][A
+Training VAE:   3%|▎         | 48/1500 [00:22<10:47,  2.24batch/s, loss=0.896][A
+Training VAE:   3%|▎         | 48/1500 [00:22<10:47,  2.24batch/s, loss=0.829][A
+Training VAE:   3%|▎         | 49/1500 [00:22<10:45,  2.25batch/s, loss=0.829][A
+Training VAE:   3%|▎         | 49/1500 [00:22<10:45,  2.25batch/s, loss=0.909][A
+Training VAE:   3%|▎         | 50/1500 [00:23<10:43,  2.25batch/s, loss=0.909][A
+Training VAE:   3%|▎         | 50/1500 [00:23<10:43,  2.25batch/s, loss=0.761][A
+Training VAE:   3%|▎         | 51/1500 [00:23<10:42,  2.25batch/s, loss=0.761][A
+Training VAE:   3%|▎         | 51/1500 [00:23<10:42,  2.25batch/s, loss=0.855][A
+Training VAE:   3%|▎         | 52/1500 [00:24<10:42,  2.25batch/s, loss=0.855][A
+Training VAE:   3%|▎         | 52/1500 [00:24<10:42,  2.25batch/s, loss=0.761][A
+Training VAE:   4%|▎         | 53/1500 [00:24<10:41,  2.26batch/s, loss=0.761][A
+Training VAE:   4%|▎         | 53/1500 [00:24<10:41,  2.26batch/s, loss=0.796][A
+Training VAE:   4%|▎         | 54/1500 [00:25<10:40,  2.26batch/s, loss=0.796][A
+Training VAE:   4%|▎         | 54/1500 [00:25<10:40,  2.26batch/s, loss=0.775][A
+Training VAE:   4%|▎         | 55/1500 [00:25<10:39,  2.26batch/s, loss=0.775][A
+Training VAE:   4%|▎         | 55/1500 [00:25<10:39,  2.26batch/s, loss=0.844][A
+Training VAE:   4%|▎         | 56/1500 [00:25<10:40,  2.26batch/s, loss=0.844][A
+Training VAE:   4%|▎         | 56/1500 [00:25<10:40,  2.26batch/s, loss=0.799][A
+Training VAE:   4%|▍         | 57/1500 [00:26<10:39,  2.26batch/s, loss=0.799][A
+Training VAE:   4%|▍         | 57/1500 [00:26<10:39,  2.26batch/s, loss=0.916][A
+Training VAE:   4%|▍         | 58/1500 [00:26<10:38,  2.26batch/s, loss=0.916][A
+Training VAE:   4%|▍         | 58/1500 [00:26<10:38,  2.26batch/s, loss=0.843][A
+Training VAE:   4%|▍         | 59/1500 [00:27<10:38,  2.26batch/s, loss=0.843][A
+Training VAE:   4%|▍         | 59/1500 [00:27<10:38,  2.26batch/s, loss=0.904][A
+Training VAE:   4%|▍         | 60/1500 [00:27<10:38,  2.26batch/s, loss=0.904][A
+Training VAE:   4%|▍         | 60/1500 [00:27<10:38,  2.26batch/s, loss=0.79] [A
+Training VAE:   4%|▍         | 61/1500 [00:28<10:37,  2.26batch/s, loss=0.79][A
+Training VAE:   4%|▍         | 61/1500 [00:28<10:37,  2.26batch/s, loss=0.807][A
+Training VAE:   4%|▍         | 62/1500 [00:28<10:36,  2.26batch/s, loss=0.807][A
+Training VAE:   4%|▍         | 62/1500 [00:28<10:36,  2.26batch/s, loss=0.845][A
+Training VAE:   4%|▍         | 63/1500 [00:29<10:36,  2.26batch/s, loss=0.845][A
+Training VAE:   4%|▍         | 63/1500 [00:29<10:36,  2.26batch/s, loss=0.833][A
+Training VAE:   4%|▍         | 64/1500 [00:29<10:36,  2.26batch/s, loss=0.833][A
+Training VAE:   4%|▍         | 64/1500 [00:29<10:36,  2.26batch/s, loss=0.786][A
+Training VAE:   4%|▍         | 65/1500 [00:29<10:35,  2.26batch/s, loss=0.786][A
+Training VAE:   4%|▍         | 65/1500 [00:29<10:35,  2.26batch/s, loss=0.858][A
+Training VAE:   4%|▍         | 66/1500 [00:30<10:35,  2.26batch/s, loss=0.858][A
+Training VAE:   4%|▍         | 66/1500 [00:30<10:35,  2.26batch/s, loss=0.839][A
+Training VAE:   4%|▍         | 67/1500 [00:30<10:34,  2.26batch/s, loss=0.839][A
+Training VAE:   4%|▍         | 67/1500 [00:30<10:34,  2.26batch/s, loss=0.763][A
+Training VAE:   5%|▍         | 68/1500 [00:31<10:34,  2.26batch/s, loss=0.763][A
+Training VAE:   5%|▍         | 68/1500 [00:31<10:34,  2.26batch/s, loss=0.779][A
+Training VAE:   5%|▍         | 69/1500 [00:31<10:33,  2.26batch/s, loss=0.779][A
+Training VAE:   5%|▍         | 69/1500 [00:31<10:33,  2.26batch/s, loss=0.776][A
+Training VAE:   5%|▍         | 70/1500 [00:32<10:33,  2.26batch/s, loss=0.776][A
+Training VAE:   5%|▍         | 70/1500 [00:32<10:33,  2.26batch/s, loss=0.875][A
+Training VAE:   5%|▍         | 71/1500 [00:32<10:32,  2.26batch/s, loss=0.875][A
+Training VAE:   5%|▍         | 71/1500 [00:32<10:32,  2.26batch/s, loss=0.734][A
+Training VAE:   5%|▍         | 72/1500 [00:33<10:32,  2.26batch/s, loss=0.734][A
+Training VAE:   5%|▍         | 72/1500 [00:33<10:32,  2.26batch/s, loss=0.743][A
+Training VAE:   5%|▍         | 73/1500 [00:33<10:31,  2.26batch/s, loss=0.743][A
+Training VAE:   5%|▍         | 73/1500 [00:33<10:31,  2.26batch/s, loss=0.765][A
+Training VAE:   5%|▍         | 74/1500 [00:33<10:31,  2.26batch/s, loss=0.765][A
+Training VAE:   5%|▍         | 74/1500 [00:33<10:31,  2.26batch/s, loss=0.738][A
+Training VAE:   5%|▌         | 75/1500 [00:34<10:30,  2.26batch/s, loss=0.738][A
+Training VAE:   5%|▌         | 75/1500 [00:34<10:30,  2.26batch/s, loss=0.766][A
+Training VAE:   5%|▌         | 76/1500 [00:34<10:31,  2.26batch/s, loss=0.766][A
+Training VAE:   5%|▌         | 76/1500 [00:34<10:31,  2.26batch/s, loss=0.755][A
+Training VAE:   5%|▌         | 77/1500 [00:35<10:30,  2.26batch/s, loss=0.755][A
+Training VAE:   5%|▌         | 77/1500 [00:35<10:30,  2.26batch/s, loss=0.748][A
+Training VAE:   5%|▌         | 78/1500 [00:35<10:29,  2.26batch/s, loss=0.748][A
+Training VAE:   5%|▌         | 78/1500 [00:35<10:29,  2.26batch/s, loss=0.74] [A
+Training VAE:   5%|▌         | 79/1500 [00:36<10:28,  2.26batch/s, loss=0.74][A
+Training VAE:   5%|▌         | 79/1500 [00:36<10:28,  2.26batch/s, loss=0.763][A
+Training VAE:   5%|▌         | 80/1500 [00:36<10:29,  2.26batch/s, loss=0.763][A
+Training VAE:   5%|▌         | 80/1500 [00:36<10:29,  2.26batch/s, loss=0.761][A
+Training VAE:   5%|▌         | 81/1500 [00:37<10:28,  2.26batch/s, loss=0.761][A
+Training VAE:   5%|▌         | 81/1500 [00:37<10:28,  2.26batch/s, loss=0.765][A
+Training VAE:   5%|▌         | 82/1500 [00:37<10:27,  2.26batch/s, loss=0.765][A
+Training VAE:   5%|▌         | 82/1500 [00:37<10:27,  2.26batch/s, loss=0.736][A
+Training VAE:   6%|▌         | 83/1500 [00:37<10:27,  2.26batch/s, loss=0.736][A
+Training VAE:   6%|▌         | 83/1500 [00:37<10:27,  2.26batch/s, loss=0.734][A
+Training VAE:   6%|▌         | 84/1500 [00:38<10:27,  2.26batch/s, loss=0.734][A
+Training VAE:   6%|▌         | 84/1500 [00:38<10:27,  2.26batch/s, loss=0.764][A
+Training VAE:   6%|▌         | 85/1500 [00:38<10:26,  2.26batch/s, loss=0.764][A
+Training VAE:   6%|▌         | 85/1500 [00:38<10:26,  2.26batch/s, loss=0.769][A
+Training VAE:   6%|▌         | 86/1500 [00:39<10:25,  2.26batch/s, loss=0.769][A
+Training VAE:   6%|▌         | 86/1500 [00:39<10:25,  2.26batch/s, loss=0.754][A
+Training VAE:   6%|▌         | 87/1500 [00:39<10:24,  2.26batch/s, loss=0.754][A
+Training VAE:   6%|▌         | 87/1500 [00:39<10:24,  2.26batch/s, loss=0.809][A
+Training VAE:   6%|▌         | 88/1500 [00:40<10:24,  2.26batch/s, loss=0.809][A
+Training VAE:   6%|▌         | 88/1500 [00:40<10:24,  2.26batch/s, loss=0.738][A
+Training VAE:   6%|▌         | 89/1500 [00:40<10:23,  2.26batch/s, loss=0.738][A
+Training VAE:   6%|▌         | 89/1500 [00:40<10:23,  2.26batch/s, loss=0.739][A
+Training VAE:   6%|▌         | 90/1500 [00:41<10:23,  2.26batch/s, loss=0.739][A
+Training VAE:   6%|▌         | 90/1500 [00:41<10:23,  2.26batch/s, loss=0.757][A
+Training VAE:   6%|▌         | 91/1500 [00:41<10:22,  2.26batch/s, loss=0.757][A
+Training VAE:   6%|▌         | 91/1500 [00:41<10:22,  2.26batch/s, loss=0.816][A
+Training VAE:   6%|▌         | 92/1500 [00:41<10:22,  2.26batch/s, loss=0.816][A
+Training VAE:   6%|▌         | 92/1500 [00:41<10:22,  2.26batch/s, loss=0.737][A
+Training VAE:   6%|▌         | 93/1500 [00:42<10:21,  2.26batch/s, loss=0.737][A
+Training VAE:   6%|▌         | 93/1500 [00:42<10:21,  2.26batch/s, loss=0.749][A
+Training VAE:   6%|▋         | 94/1500 [00:42<10:21,  2.26batch/s, loss=0.749][A
+Training VAE:   6%|▋         | 94/1500 [00:42<10:21,  2.26batch/s, loss=0.734][A
+Training VAE:   6%|▋         | 95/1500 [00:43<10:21,  2.26batch/s, loss=0.734][A
+Training VAE:   6%|▋         | 95/1500 [00:43<10:21,  2.26batch/s, loss=0.828][A
+Training VAE:   6%|▋         | 96/1500 [00:43<10:21,  2.26batch/s, loss=0.828][A
+Training VAE:   6%|▋         | 96/1500 [00:43<10:21,  2.26batch/s, loss=0.799][A
+Training VAE:   6%|▋         | 97/1500 [00:44<10:20,  2.26batch/s, loss=0.799][A
+Training VAE:   6%|▋         | 97/1500 [00:44<10:20,  2.26batch/s, loss=0.742][A
+Training VAE:   7%|▋         | 98/1500 [00:44<10:19,  2.26batch/s, loss=0.742][A
+Training VAE:   7%|▋         | 98/1500 [00:44<10:19,  2.26batch/s, loss=0.736][A
+Training VAE:   7%|▋         | 99/1500 [00:45<10:19,  2.26batch/s, loss=0.736][A
+Training VAE:   7%|▋         | 99/1500 [00:45<10:19,  2.26batch/s, loss=0.759][A
+Training VAE:   7%|▋         | 100/1500 [00:45<10:19,  2.26batch/s, loss=0.759][A
+Training VAE:   7%|▋         | 100/1500 [00:45<10:19,  2.26batch/s, loss=0.746][A
+Training VAE:   7%|▋         | 101/1500 [00:45<10:18,  2.26batch/s, loss=0.746][A
+Training VAE:   7%|▋         | 101/1500 [00:45<10:18,  2.26batch/s, loss=0.743][A
+Training VAE:   7%|▋         | 102/1500 [00:46<10:18,  2.26batch/s, loss=0.743][A
+Training VAE:   7%|▋         | 102/1500 [00:46<10:18,  2.26batch/s, loss=0.791][A
+Training VAE:   7%|▋         | 103/1500 [00:46<10:17,  2.26batch/s, loss=0.791][A
+Training VAE:   7%|▋         | 103/1500 [00:46<10:17,  2.26batch/s, loss=0.766][A
+Training VAE:   7%|▋         | 104/1500 [00:47<10:17,  2.26batch/s, loss=0.766][A
+Training VAE:   7%|▋         | 104/1500 [00:47<10:17,  2.26batch/s, loss=0.785][A
+Training VAE:   7%|▋         | 105/1500 [00:47<10:16,  2.26batch/s, loss=0.785][A
+Training VAE:   7%|▋         | 105/1500 [00:47<10:16,  2.26batch/s, loss=0.737][A
+Training VAE:   7%|▋         | 106/1500 [00:48<10:16,  2.26batch/s, loss=0.737][A
+Training VAE:   7%|▋         | 106/1500 [00:48<10:16,  2.26batch/s, loss=0.744][A
+Training VAE:   7%|▋         | 107/1500 [00:48<10:15,  2.26batch/s, loss=0.744][A
+Training VAE:   7%|▋         | 107/1500 [00:48<10:15,  2.26batch/s, loss=0.741][A
+Training VAE:   7%|▋         | 108/1500 [00:48<10:15,  2.26batch/s, loss=0.741][A
+Training VAE:   7%|▋         | 108/1500 [00:48<10:15,  2.26batch/s, loss=0.798][A
+Training VAE:   7%|▋         | 109/1500 [00:49<10:15,  2.26batch/s, loss=0.798][A
+Training VAE:   7%|▋         | 109/1500 [00:49<10:15,  2.26batch/s, loss=0.738][A
+Training VAE:   7%|▋         | 110/1500 [00:49<10:14,  2.26batch/s, loss=0.738][A
+Training VAE:   7%|▋         | 110/1500 [00:49<10:14,  2.26batch/s, loss=0.735][A
+Training VAE:   7%|▋         | 111/1500 [00:50<10:14,  2.26batch/s, loss=0.735][A
+Training VAE:   7%|▋         | 111/1500 [00:50<10:14,  2.26batch/s, loss=0.731][A
+Training VAE:   7%|▋         | 112/1500 [00:50<10:14,  2.26batch/s, loss=0.731][A
+Training VAE:   7%|▋         | 112/1500 [00:50<10:14,  2.26batch/s, loss=0.82] [A
+Training VAE:   8%|▊         | 113/1500 [00:51<10:13,  2.26batch/s, loss=0.82][A
+Training VAE:   8%|▊         | 113/1500 [00:51<10:13,  2.26batch/s, loss=0.743][A
+Training VAE:   8%|▊         | 114/1500 [00:51<10:12,  2.26batch/s, loss=0.743][A
+Training VAE:   8%|▊         | 114/1500 [00:51<10:12,  2.26batch/s, loss=0.737][A
+Training VAE:   8%|▊         | 115/1500 [00:52<10:12,  2.26batch/s, loss=0.737][A
+Training VAE:   8%|▊         | 115/1500 [00:52<10:12,  2.26batch/s, loss=0.81] [A
+Training VAE:   8%|▊         | 116/1500 [00:52<10:12,  2.26batch/s, loss=0.81][A
+Training VAE:   8%|▊         | 116/1500 [00:52<10:12,  2.26batch/s, loss=0.773][A
+Training VAE:   8%|▊         | 117/1500 [00:52<10:11,  2.26batch/s, loss=0.773][A
+Training VAE:   8%|▊         | 117/1500 [00:52<10:11,  2.26batch/s, loss=0.734][A
+Training VAE:   8%|▊         | 118/1500 [00:53<10:11,  2.26batch/s, loss=0.734][A
+Training VAE:   8%|▊         | 118/1500 [00:53<10:11,  2.26batch/s, loss=0.745][A
+Training VAE:   8%|▊         | 119/1500 [00:53<10:10,  2.26batch/s, loss=0.745][A
+Training VAE:   8%|▊         | 119/1500 [00:53<10:10,  2.26batch/s, loss=0.739][A
+Training VAE:   8%|▊         | 120/1500 [00:54<10:10,  2.26batch/s, loss=0.739][A
+Training VAE:   8%|▊         | 120/1500 [00:54<10:10,  2.26batch/s, loss=0.727][A
+Training VAE:   8%|▊         | 121/1500 [00:54<10:09,  2.26batch/s, loss=0.727][A
+Training VAE:   8%|▊         | 121/1500 [00:54<10:09,  2.26batch/s, loss=0.73] [A
+Training VAE:   8%|▊         | 122/1500 [00:55<10:09,  2.26batch/s, loss=0.73][A
+Training VAE:   8%|▊         | 122/1500 [00:55<10:09,  2.26batch/s, loss=0.736][A
+Training VAE:   8%|▊         | 123/1500 [00:55<10:08,  2.26batch/s, loss=0.736][A
+Training VAE:   8%|▊         | 123/1500 [00:55<10:08,  2.26batch/s, loss=0.762][A
+Training VAE:   8%|▊         | 124/1500 [00:56<10:08,  2.26batch/s, loss=0.762][A
+Training VAE:   8%|▊         | 124/1500 [00:56<10:08,  2.26batch/s, loss=0.768][A
+Training VAE:   8%|▊         | 125/1500 [00:56<10:07,  2.26batch/s, loss=0.768][A
+Training VAE:   8%|▊         | 125/1500 [00:56<10:07,  2.26batch/s, loss=0.726][A
+Training VAE:   8%|▊         | 126/1500 [00:56<10:07,  2.26batch/s, loss=0.726][A
+Training VAE:   8%|▊         | 126/1500 [00:56<10:07,  2.26batch/s, loss=0.724][A
+Training VAE:   8%|▊         | 127/1500 [00:57<10:06,  2.26batch/s, loss=0.724][A
+Training VAE:   8%|▊         | 127/1500 [00:57<10:06,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▊         | 128/1500 [00:57<10:07,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▊         | 128/1500 [00:57<10:07,  2.26batch/s, loss=0.807][A
+Training VAE:   9%|▊         | 129/1500 [00:58<10:06,  2.26batch/s, loss=0.807][A
+Training VAE:   9%|▊         | 129/1500 [00:58<10:06,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▊         | 130/1500 [00:58<10:05,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▊         | 130/1500 [00:58<10:05,  2.26batch/s, loss=0.8]  [A
+Training VAE:   9%|▊         | 131/1500 [00:59<10:05,  2.26batch/s, loss=0.8][A
+Training VAE:   9%|▊         | 131/1500 [00:59<10:05,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▉         | 132/1500 [00:59<10:05,  2.26batch/s, loss=0.738][A
+Training VAE:   9%|▉         | 132/1500 [00:59<10:05,  2.26batch/s, loss=0.769][A
+Training VAE:   9%|▉         | 133/1500 [01:00<10:04,  2.26batch/s, loss=0.769][A
+Training VAE:   9%|▉         | 133/1500 [01:00<10:04,  2.26batch/s, loss=0.725][A
+Training VAE:   9%|▉         | 134/1500 [01:00<10:04,  2.26batch/s, loss=0.725][A
+Training VAE:   9%|▉         | 134/1500 [01:00<10:04,  2.26batch/s, loss=0.796][A
+Training VAE:   9%|▉         | 135/1500 [01:00<10:03,  2.26batch/s, loss=0.796][A
+Training VAE:   9%|▉         | 135/1500 [01:00<10:03,  2.26batch/s, loss=0.729][A
+Training VAE:   9%|▉         | 136/1500 [01:01<10:03,  2.26batch/s, loss=0.729][A
+Training VAE:   9%|▉         | 136/1500 [01:01<10:03,  2.26batch/s, loss=0.735][A
+Training VAE:   9%|▉         | 137/1500 [01:01<10:02,  2.26batch/s, loss=0.735][A
+Training VAE:   9%|▉         | 137/1500 [01:01<10:02,  2.26batch/s, loss=0.734][A
+Training VAE:   9%|▉         | 138/1500 [01:02<10:02,  2.26batch/s, loss=0.734][A
+Training VAE:   9%|▉         | 138/1500 [01:02<10:02,  2.26batch/s, loss=0.739][A
+Training VAE:   9%|▉         | 139/1500 [01:02<10:01,  2.26batch/s, loss=0.739][A
+Training VAE:   9%|▉         | 139/1500 [01:02<10:01,  2.26batch/s, loss=0.795][A
+Training VAE:   9%|▉         | 140/1500 [01:03<10:01,  2.26batch/s, loss=0.795][A
+Training VAE:   9%|▉         | 140/1500 [01:03<10:01,  2.26batch/s, loss=0.734][A
+Training VAE:   9%|▉         | 141/1500 [01:03<10:00,  2.26batch/s, loss=0.734][A
+Training VAE:   9%|▉         | 141/1500 [01:03<10:00,  2.26batch/s, loss=0.732][A
+Training VAE:   9%|▉         | 142/1500 [01:04<10:00,  2.26batch/s, loss=0.732][A
+Training VAE:   9%|▉         | 142/1500 [01:04<10:00,  2.26batch/s, loss=0.731][A
+Training VAE:  10%|▉         | 143/1500 [01:04<09:59,  2.26batch/s, loss=0.731][A
+Training VAE:  10%|▉         | 143/1500 [01:04<09:59,  2.26batch/s, loss=0.736][A
+Training VAE:  10%|▉         | 144/1500 [01:04<09:59,  2.26batch/s, loss=0.736][A
+Training VAE:  10%|▉         | 144/1500 [01:04<09:59,  2.26batch/s, loss=0.789][A
+Training VAE:  10%|▉         | 145/1500 [01:05<09:58,  2.26batch/s, loss=0.789][A
+Training VAE:  10%|▉         | 145/1500 [01:05<09:58,  2.26batch/s, loss=0.757][A
+Training VAE:  10%|▉         | 146/1500 [01:05<09:58,  2.26batch/s, loss=0.757][A
+Training VAE:  10%|▉         | 146/1500 [01:05<09:58,  2.26batch/s, loss=0.85] [A
+Training VAE:  10%|▉         | 147/1500 [01:06<09:58,  2.26batch/s, loss=0.85][A
+Training VAE:  10%|▉         | 147/1500 [01:06<09:58,  2.26batch/s, loss=0.741][A
+Training VAE:  10%|▉         | 148/1500 [01:07<09:58,  2.26batch/s, loss=0.741][A
+Training VAE:  10%|▉         | 148/1500 [01:07<09:58,  2.26batch/s, loss=0.759][A
+Training VAE:  10%|▉         | 149/1500 [01:07<14:26,  1.56batch/s, loss=0.759][A
+Training VAE:  10%|▉         | 149/1500 [01:07<14:26,  1.56batch/s, loss=0.731][A
+Training VAE:  10%|█         | 150/1500 [01:08<13:05,  1.72batch/s, loss=0.731][A
+Training VAE:  10%|█         | 150/1500 [01:08<13:05,  1.72batch/s, loss=0.733][A
+Training VAE:  10%|█         | 151/1500 [01:08<12:08,  1.85batch/s, loss=0.733][A
+Training VAE:  10%|█         | 151/1500 [01:08<12:08,  1.85batch/s, loss=0.733][A
+Training VAE:  10%|█         | 152/1500 [01:09<11:28,  1.96batch/s, loss=0.733][A
+Training VAE:  10%|█         | 152/1500 [01:09<11:28,  1.96batch/s, loss=0.738][A
+Training VAE:  10%|█         | 153/1500 [01:09<11:00,  2.04batch/s, loss=0.738][A
+Training VAE:  10%|█         | 153/1500 [01:09<11:00,  2.04batch/s, loss=0.722][A
+Training VAE:  10%|█         | 154/1500 [01:10<10:40,  2.10batch/s, loss=0.722][A
+Training VAE:  10%|█         | 154/1500 [01:10<10:40,  2.10batch/s, loss=0.733][A
+Training VAE:  10%|█         | 155/1500 [01:10<10:26,  2.15batch/s, loss=0.733][A
+Training VAE:  10%|█         | 155/1500 [01:10<10:26,  2.15batch/s, loss=0.725][A
+Training VAE:  10%|█         | 156/1500 [01:10<10:16,  2.18batch/s, loss=0.725][A
+Training VAE:  10%|█         | 156/1500 [01:10<10:16,  2.18batch/s, loss=0.722][A
+Training VAE:  10%|█         | 157/1500 [01:11<10:09,  2.20batch/s, loss=0.722][A
+Training VAE:  10%|█         | 157/1500 [01:11<10:09,  2.20batch/s, loss=0.772][A
+Training VAE:  11%|█         | 158/1500 [01:11<10:04,  2.22batch/s, loss=0.772][A
+Training VAE:  11%|█         | 158/1500 [01:11<10:04,  2.22batch/s, loss=0.756][A
+Training VAE:  11%|█         | 159/1500 [01:12<10:00,  2.23batch/s, loss=0.756][A
+Training VAE:  11%|█         | 159/1500 [01:12<10:00,  2.23batch/s, loss=0.859][A
+Training VAE:  11%|█         | 160/1500 [01:12<09:58,  2.24batch/s, loss=0.859][A
+Training VAE:  11%|█         | 160/1500 [01:12<09:58,  2.24batch/s, loss=0.722][A
+Training VAE:  11%|█         | 161/1500 [01:13<09:55,  2.25batch/s, loss=0.722][A
+Training VAE:  11%|█         | 161/1500 [01:13<09:55,  2.25batch/s, loss=0.719][A
+Training VAE:  11%|█         | 162/1500 [01:13<09:54,  2.25batch/s, loss=0.719][A
+Training VAE:  11%|█         | 162/1500 [01:13<09:54,  2.25batch/s, loss=0.752][A
+Training VAE:  11%|█         | 163/1500 [01:13<09:52,  2.25batch/s, loss=0.752][A
+Training VAE:  11%|█         | 163/1500 [01:13<09:52,  2.25batch/s, loss=0.719][A
+Training VAE:  11%|█         | 164/1500 [01:14<09:52,  2.25batch/s, loss=0.719][A
+Training VAE:  11%|█         | 164/1500 [01:14<09:52,  2.25batch/s, loss=0.725][A
+Training VAE:  11%|█         | 165/1500 [01:14<09:51,  2.26batch/s, loss=0.725][A
+Training VAE:  11%|█         | 165/1500 [01:14<09:51,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█         | 166/1500 [01:15<09:50,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█         | 166/1500 [01:15<09:50,  2.26batch/s, loss=0.775][A
+Training VAE:  11%|█         | 167/1500 [01:15<09:49,  2.26batch/s, loss=0.775][A
+Training VAE:  11%|█         | 167/1500 [01:15<09:49,  2.26batch/s, loss=0.733][A
+Training VAE:  11%|█         | 168/1500 [01:16<09:49,  2.26batch/s, loss=0.733][A
+Training VAE:  11%|█         | 168/1500 [01:16<09:49,  2.26batch/s, loss=0.718][A
+Training VAE:  11%|█▏        | 169/1500 [01:16<09:48,  2.26batch/s, loss=0.718][A
+Training VAE:  11%|█▏        | 169/1500 [01:16<09:48,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█▏        | 170/1500 [01:17<09:48,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█▏        | 170/1500 [01:17<09:48,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█▏        | 171/1500 [01:17<09:47,  2.26batch/s, loss=0.717][A
+Training VAE:  11%|█▏        | 171/1500 [01:17<09:47,  2.26batch/s, loss=0.719][A
+Training VAE:  11%|█▏        | 172/1500 [01:17<09:47,  2.26batch/s, loss=0.719][A
+Training VAE:  11%|█▏        | 172/1500 [01:17<09:47,  2.26batch/s, loss=0.774][A
+Training VAE:  12%|█▏        | 173/1500 [01:18<09:46,  2.26batch/s, loss=0.774][A
+Training VAE:  12%|█▏        | 173/1500 [01:18<09:46,  2.26batch/s, loss=0.797][A
+Training VAE:  12%|█▏        | 174/1500 [01:18<09:46,  2.26batch/s, loss=0.797][A
+Training VAE:  12%|█▏        | 174/1500 [01:18<09:46,  2.26batch/s, loss=0.707][A
+Training VAE:  12%|█▏        | 175/1500 [01:19<09:45,  2.26batch/s, loss=0.707][A
+Training VAE:  12%|█▏        | 175/1500 [01:19<09:45,  2.26batch/s, loss=0.707][A
+Training VAE:  12%|█▏        | 176/1500 [01:19<09:46,  2.26batch/s, loss=0.707][A
+Training VAE:  12%|█▏        | 176/1500 [01:19<09:46,  2.26batch/s, loss=0.713][A
+Training VAE:  12%|█▏        | 177/1500 [01:20<09:45,  2.26batch/s, loss=0.713][A
+Training VAE:  12%|█▏        | 177/1500 [01:20<09:45,  2.26batch/s, loss=0.725][A
+Training VAE:  12%|█▏        | 178/1500 [01:20<09:44,  2.26batch/s, loss=0.725][A
+Training VAE:  12%|█▏        | 178/1500 [01:20<09:44,  2.26batch/s, loss=0.715][A
+Training VAE:  12%|█▏        | 179/1500 [01:21<09:44,  2.26batch/s, loss=0.715][A
+Training VAE:  12%|█▏        | 179/1500 [01:21<09:44,  2.26batch/s, loss=0.722][A
+Training VAE:  12%|█▏        | 180/1500 [01:21<09:44,  2.26batch/s, loss=0.722][A
+Training VAE:  12%|█▏        | 180/1500 [01:21<09:44,  2.26batch/s, loss=0.758][A
+Training VAE:  12%|█▏        | 181/1500 [01:21<09:43,  2.26batch/s, loss=0.758][A
+Training VAE:  12%|█▏        | 181/1500 [01:21<09:43,  2.26batch/s, loss=0.785][A
+Training VAE:  12%|█▏        | 182/1500 [01:22<09:42,  2.26batch/s, loss=0.785][A
+Training VAE:  12%|█▏        | 182/1500 [01:22<09:42,  2.26batch/s, loss=0.734][A
+Training VAE:  12%|█▏        | 183/1500 [01:22<09:42,  2.26batch/s, loss=0.734][A
+Training VAE:  12%|█▏        | 183/1500 [01:22<09:42,  2.26batch/s, loss=0.817][A
+Training VAE:  12%|█▏        | 184/1500 [01:23<09:42,  2.26batch/s, loss=0.817][A
+Training VAE:  12%|█▏        | 184/1500 [01:23<09:42,  2.26batch/s, loss=0.717][A
+Training VAE:  12%|█▏        | 185/1500 [01:23<09:41,  2.26batch/s, loss=0.717][A
+Training VAE:  12%|█▏        | 185/1500 [01:23<09:41,  2.26batch/s, loss=0.731][A
+Training VAE:  12%|█▏        | 186/1500 [01:24<09:41,  2.26batch/s, loss=0.731][A
+Training VAE:  12%|█▏        | 186/1500 [01:24<09:41,  2.26batch/s, loss=0.727][A
+Training VAE:  12%|█▏        | 187/1500 [01:24<09:40,  2.26batch/s, loss=0.727][A
+Training VAE:  12%|█▏        | 187/1500 [01:24<09:40,  2.26batch/s, loss=0.768][A
+Training VAE:  13%|█▎        | 188/1500 [01:25<09:40,  2.26batch/s, loss=0.768][A
+Training VAE:  13%|█▎        | 188/1500 [01:25<09:40,  2.26batch/s, loss=0.72] [A
+Training VAE:  13%|█▎        | 189/1500 [01:25<09:39,  2.26batch/s, loss=0.72][A
+Training VAE:  13%|█▎        | 189/1500 [01:25<09:39,  2.26batch/s, loss=0.737][A
+Training VAE:  13%|█▎        | 190/1500 [01:25<09:39,  2.26batch/s, loss=0.737][A
+Training VAE:  13%|█▎        | 190/1500 [01:25<09:39,  2.26batch/s, loss=0.786][A
+Training VAE:  13%|█▎        | 191/1500 [01:26<09:38,  2.26batch/s, loss=0.786][A
+Training VAE:  13%|█▎        | 191/1500 [01:26<09:38,  2.26batch/s, loss=0.763][A
+Training VAE:  13%|█▎        | 192/1500 [01:26<09:38,  2.26batch/s, loss=0.763][A
+Training VAE:  13%|█▎        | 192/1500 [01:26<09:38,  2.26batch/s, loss=0.718][A
+Training VAE:  13%|█▎        | 193/1500 [01:27<09:37,  2.26batch/s, loss=0.718][A
+Training VAE:  13%|█▎        | 193/1500 [01:27<09:37,  2.26batch/s, loss=0.732][A
+Training VAE:  13%|█▎        | 194/1500 [01:27<09:37,  2.26batch/s, loss=0.732][A
+Training VAE:  13%|█▎        | 194/1500 [01:27<09:37,  2.26batch/s, loss=0.726][A
+Training VAE:  13%|█▎        | 195/1500 [01:28<09:36,  2.26batch/s, loss=0.726][A
+Training VAE:  13%|█▎        | 195/1500 [01:28<09:36,  2.26batch/s, loss=0.735][A
+Training VAE:  13%|█▎        | 196/1500 [01:28<09:36,  2.26batch/s, loss=0.735][A
+Training VAE:  13%|█▎        | 196/1500 [01:28<09:36,  2.26batch/s, loss=0.729][A
+Training VAE:  13%|█▎        | 197/1500 [01:29<09:36,  2.26batch/s, loss=0.729][A
+Training VAE:  13%|█▎        | 197/1500 [01:29<09:36,  2.26batch/s, loss=0.741][A
+Training VAE:  13%|█▎        | 198/1500 [01:30<09:35,  2.26batch/s, loss=0.741][A
+Training VAE:  13%|█▎        | 198/1500 [01:30<09:35,  2.26batch/s, loss=0.736][A
+Training VAE:  13%|█▎        | 199/1500 [01:31<17:12,  1.26batch/s, loss=0.736][A
+Training VAE:  13%|█▎        | 199/1500 [01:31<17:12,  1.26batch/s, loss=0.797][A
+Training VAE:  13%|█▎        | 200/1500 [01:31<14:55,  1.45batch/s, loss=0.797][A
+Training VAE:  13%|█▎        | 200/1500 [01:31<14:55,  1.45batch/s, loss=0.737][A
+Training VAE:  13%|█▎        | 201/1500 [01:31<13:18,  1.63batch/s, loss=0.737][A
+Training VAE:  13%|█▎        | 201/1500 [01:31<13:18,  1.63batch/s, loss=0.736][A
+Training VAE:  13%|█▎        | 202/1500 [01:32<12:10,  1.78batch/s, loss=0.736][A
+Training VAE:  13%|█▎        | 202/1500 [01:32<12:10,  1.78batch/s, loss=0.805][A
+Training VAE:  14%|█▎        | 203/1500 [01:32<11:22,  1.90batch/s, loss=0.805][A
+Training VAE:  14%|█▎        | 203/1500 [01:32<11:22,  1.90batch/s, loss=0.733][A
+Training VAE:  14%|█▎        | 204/1500 [01:33<10:50,  1.99batch/s, loss=0.733][A
+Training VAE:  14%|█▎        | 204/1500 [01:33<10:50,  1.99batch/s, loss=0.729][A
+Training VAE:  14%|█▎        | 205/1500 [01:33<10:26,  2.07batch/s, loss=0.729][A
+Training VAE:  14%|█▎        | 205/1500 [01:33<10:26,  2.07batch/s, loss=0.718][A
+Training VAE:  14%|█▎        | 206/1500 [01:34<10:09,  2.12batch/s, loss=0.718][A
+Training VAE:  14%|█▎        | 206/1500 [01:34<10:09,  2.12batch/s, loss=0.716][A
+Training VAE:  14%|█▍        | 207/1500 [01:34<09:57,  2.16batch/s, loss=0.716][A
+Training VAE:  14%|█▍        | 207/1500 [01:34<09:57,  2.16batch/s, loss=0.729][A
+Training VAE:  14%|█▍        | 208/1500 [01:35<09:50,  2.19batch/s, loss=0.729][A
+Training VAE:  14%|█▍        | 208/1500 [01:35<09:50,  2.19batch/s, loss=0.716][A
+Training VAE:  14%|█▍        | 209/1500 [01:35<09:43,  2.21batch/s, loss=0.716][A
+Training VAE:  14%|█▍        | 209/1500 [01:35<09:43,  2.21batch/s, loss=0.844][A
+Training VAE:  14%|█▍        | 210/1500 [01:40<09:39,  2.23batch/s, loss=0.844][A
+Training VAE:  14%|█▍        | 210/1500 [01:40<09:39,  2.23batch/s, loss=0.731][A
+Training VAE:  14%|█▍        | 211/1500 [01:41<40:02,  1.86s/batch, loss=0.731][A
+Training VAE:  14%|█▍        | 211/1500 [01:41<40:02,  1.86s/batch, loss=0.851][A
+Training VAE:  14%|█▍        | 212/1500 [01:41<30:52,  1.44s/batch, loss=0.851][A
+Training VAE:  14%|█▍        | 212/1500 [01:41<30:52,  1.44s/batch, loss=0.734][A
+Training VAE:  14%|█▍        | 213/1500 [01:41<24:25,  1.14s/batch, loss=0.734][A
+Training VAE:  14%|█▍        | 213/1500 [01:41<24:25,  1.14s/batch, loss=0.792][A
+Training VAE:  14%|█▍        | 214/1500 [01:42<19:55,  1.08batch/s, loss=0.792][A
+Training VAE:  14%|█▍        | 214/1500 [01:42<19:55,  1.08batch/s, loss=0.731][A
+Training VAE:  14%|█▍        | 215/1500 [01:42<16:46,  1.28batch/s, loss=0.731][A
+Training VAE:  14%|█▍        | 215/1500 [01:42<16:46,  1.28batch/s, loss=0.747][A
+Training VAE:  14%|█▍        | 216/1500 [01:43<14:35,  1.47batch/s, loss=0.747][A
+Training VAE:  14%|█▍        | 216/1500 [01:43<14:35,  1.47batch/s, loss=0.779][A
+Training VAE:  14%|█▍        | 217/1500 [01:43<13:02,  1.64batch/s, loss=0.779][A
+Training VAE:  14%|█▍        | 217/1500 [01:43<13:02,  1.64batch/s, loss=0.745][A
+Training VAE:  15%|█▍        | 218/1500 [01:44<11:56,  1.79batch/s, loss=0.745][A
+Training VAE:  15%|█▍        | 218/1500 [01:44<11:56,  1.79batch/s, loss=0.726][A
+Training VAE:  15%|█▍        | 219/1500 [01:44<11:11,  1.91batch/s, loss=0.726][A
+Training VAE:  15%|█▍        | 219/1500 [01:44<11:11,  1.91batch/s, loss=0.725][A
+Training VAE:  15%|█▍        | 220/1500 [01:45<10:40,  2.00batch/s, loss=0.725][A
+Training VAE:  15%|█▍        | 220/1500 [01:45<10:40,  2.00batch/s, loss=0.773][A
+Training VAE:  15%|█▍        | 221/1500 [01:45<10:16,  2.07batch/s, loss=0.773][A
+Training VAE:  15%|█▍        | 221/1500 [01:45<10:16,  2.07batch/s, loss=0.825][A
+Training VAE:  15%|█▍        | 222/1500 [01:45<10:01,  2.13batch/s, loss=0.825][A
+Training VAE:  15%|█▍        | 222/1500 [01:45<10:01,  2.13batch/s, loss=0.73] [A
+Training VAE:  15%|█▍        | 223/1500 [01:46<09:49,  2.16batch/s, loss=0.73][A
+Training VAE:  15%|█▍        | 223/1500 [01:46<09:49,  2.16batch/s, loss=0.741][A
+Training VAE:  15%|█▍        | 224/1500 [01:46<09:42,  2.19batch/s, loss=0.741][A
+Training VAE:  15%|█▍        | 224/1500 [01:46<09:42,  2.19batch/s, loss=0.831][A
+Training VAE:  15%|█▌        | 225/1500 [01:47<09:36,  2.21batch/s, loss=0.831][A
+Training VAE:  15%|█▌        | 225/1500 [01:47<09:36,  2.21batch/s, loss=0.72] [A
+Training VAE:  15%|█▌        | 226/1500 [01:47<09:32,  2.23batch/s, loss=0.72][A
+Training VAE:  15%|█▌        | 226/1500 [01:47<09:32,  2.23batch/s, loss=0.729][A
+Training VAE:  15%|█▌        | 227/1500 [01:48<09:28,  2.24batch/s, loss=0.729][A
+Training VAE:  15%|█▌        | 227/1500 [01:48<09:28,  2.24batch/s, loss=0.769][A
+Training VAE:  15%|█▌        | 228/1500 [01:48<09:27,  2.24batch/s, loss=0.769][A
+Training VAE:  15%|█▌        | 228/1500 [01:48<09:27,  2.24batch/s, loss=0.796][A
+Training VAE:  15%|█▌        | 229/1500 [01:49<09:24,  2.25batch/s, loss=0.796][A
+Training VAE:  15%|█▌        | 229/1500 [01:49<09:24,  2.25batch/s, loss=0.722][A
+Training VAE:  15%|█▌        | 230/1500 [01:49<09:23,  2.25batch/s, loss=0.722][A
+Training VAE:  15%|█▌        | 230/1500 [01:49<09:23,  2.25batch/s, loss=0.832][A
+Training VAE:  15%|█▌        | 231/1500 [01:49<09:22,  2.26batch/s, loss=0.832][A
+Training VAE:  15%|█▌        | 231/1500 [01:49<09:22,  2.26batch/s, loss=0.737][A
+Training VAE:  15%|█▌        | 232/1500 [01:50<09:22,  2.26batch/s, loss=0.737][A
+Training VAE:  15%|█▌        | 232/1500 [01:50<09:22,  2.26batch/s, loss=0.735][A
+Training VAE:  16%|█▌        | 233/1500 [01:50<09:21,  2.26batch/s, loss=0.735][A
+Training VAE:  16%|█▌        | 233/1500 [01:50<09:21,  2.26batch/s, loss=0.815][A
+Training VAE:  16%|█▌        | 234/1500 [01:51<09:20,  2.26batch/s, loss=0.815][A
+Training VAE:  16%|█▌        | 234/1500 [01:51<09:20,  2.26batch/s, loss=0.804][A
+Training VAE:  16%|█▌        | 235/1500 [01:51<09:19,  2.26batch/s, loss=0.804][A
+Training VAE:  16%|█▌        | 235/1500 [01:51<09:19,  2.26batch/s, loss=0.72] [A
+Training VAE:  16%|█▌        | 236/1500 [01:52<09:19,  2.26batch/s, loss=0.72][A
+Training VAE:  16%|█▌        | 236/1500 [01:52<09:19,  2.26batch/s, loss=0.785][A
+Training VAE:  16%|█▌        | 237/1500 [01:52<09:18,  2.26batch/s, loss=0.785][A
+Training VAE:  16%|█▌        | 237/1500 [01:52<09:18,  2.26batch/s, loss=0.725][A
+Training VAE:  16%|█▌        | 238/1500 [01:53<09:18,  2.26batch/s, loss=0.725][A
+Training VAE:  16%|█▌        | 238/1500 [01:53<09:18,  2.26batch/s, loss=0.741][A
+Training VAE:  16%|█▌        | 239/1500 [01:53<09:17,  2.26batch/s, loss=0.741][A
+Training VAE:  16%|█▌        | 239/1500 [01:53<09:17,  2.26batch/s, loss=0.725][A
+Training VAE:  16%|█▌        | 240/1500 [01:53<09:17,  2.26batch/s, loss=0.725][A
+Training VAE:  16%|█▌        | 240/1500 [01:53<09:17,  2.26batch/s, loss=0.721][A
+Training VAE:  16%|█▌        | 241/1500 [01:54<09:16,  2.26batch/s, loss=0.721][A
+Training VAE:  16%|█▌        | 241/1500 [01:54<09:16,  2.26batch/s, loss=0.746][A
+Training VAE:  16%|█▌        | 242/1500 [01:54<09:16,  2.26batch/s, loss=0.746][A
+Training VAE:  16%|█▌        | 242/1500 [01:54<09:16,  2.26batch/s, loss=0.747][A
+Training VAE:  16%|█▌        | 243/1500 [01:55<09:15,  2.26batch/s, loss=0.747][A
+Training VAE:  16%|█▌        | 243/1500 [01:55<09:15,  2.26batch/s, loss=0.802][A
+Training VAE:  16%|█▋        | 244/1500 [01:55<09:15,  2.26batch/s, loss=0.802][A
+Training VAE:  16%|█▋        | 244/1500 [01:55<09:15,  2.26batch/s, loss=0.74] [A
+Training VAE:  16%|█▋        | 245/1500 [01:56<09:15,  2.26batch/s, loss=0.74][A
+Training VAE:  16%|█▋        | 245/1500 [01:56<09:15,  2.26batch/s, loss=0.806][A
+Training VAE:  16%|█▋        | 246/1500 [01:56<09:14,  2.26batch/s, loss=0.806][A
+Training VAE:  16%|█▋        | 246/1500 [01:56<09:14,  2.26batch/s, loss=0.732][A
+Training VAE:  16%|█▋        | 247/1500 [01:57<09:13,  2.26batch/s, loss=0.732][A
+Training VAE:  16%|█▋        | 247/1500 [01:57<09:13,  2.26batch/s, loss=0.833][A
+Training VAE:  17%|█▋        | 248/1500 [01:57<09:14,  2.26batch/s, loss=0.833][A
+Training VAE:  17%|█▋        | 248/1500 [01:57<09:14,  2.26batch/s, loss=0.845][A
+Training VAE:  17%|█▋        | 249/1500 [01:57<09:13,  2.26batch/s, loss=0.845][A
+Training VAE:  17%|█▋        | 249/1500 [01:57<09:13,  2.26batch/s, loss=0.722][A
+Training VAE:  17%|█▋        | 250/1500 [01:58<09:12,  2.26batch/s, loss=0.722][A
+Training VAE:  17%|█▋        | 250/1500 [01:58<09:12,  2.26batch/s, loss=0.832][A
+Training VAE:  17%|█▋        | 251/1500 [01:58<09:12,  2.26batch/s, loss=0.832][A
+Training VAE:  17%|█▋        | 251/1500 [01:58<09:12,  2.26batch/s, loss=0.716][A
+Training VAE:  17%|█▋        | 252/1500 [01:59<09:12,  2.26batch/s, loss=0.716][A
+Training VAE:  17%|█▋        | 252/1500 [01:59<09:12,  2.26batch/s, loss=0.758][A
+Training VAE:  17%|█▋        | 253/1500 [01:59<09:11,  2.26batch/s, loss=0.758][A
+Training VAE:  17%|█▋        | 253/1500 [01:59<09:11,  2.26batch/s, loss=0.744][A
+Training VAE:  17%|█▋        | 254/1500 [02:00<09:11,  2.26batch/s, loss=0.744][A
+Training VAE:  17%|█▋        | 254/1500 [02:00<09:11,  2.26batch/s, loss=0.749][A
+Training VAE:  17%|█▋        | 255/1500 [02:00<09:10,  2.26batch/s, loss=0.749][A
+Training VAE:  17%|█▋        | 255/1500 [02:00<09:10,  2.26batch/s, loss=0.724][A
+Training VAE:  17%|█▋        | 256/1500 [02:01<09:10,  2.26batch/s, loss=0.724][A
+Training VAE:  17%|█▋        | 256/1500 [02:01<09:10,  2.26batch/s, loss=0.824][A
+Training VAE:  17%|█▋        | 257/1500 [02:01<09:09,  2.26batch/s, loss=0.824][A
+Training VAE:  17%|█▋        | 257/1500 [02:01<09:09,  2.26batch/s, loss=0.764][A
+Training VAE:  17%|█▋        | 258/1500 [02:01<09:09,  2.26batch/s, loss=0.764][A
+Training VAE:  17%|█▋        | 258/1500 [02:01<09:09,  2.26batch/s, loss=0.73] [A
+Training VAE:  17%|█▋        | 259/1500 [02:02<09:08,  2.26batch/s, loss=0.73][A
+Training VAE:  17%|█▋        | 259/1500 [02:02<09:08,  2.26batch/s, loss=0.789][A
+Training VAE:  17%|█▋        | 260/1500 [02:02<09:08,  2.26batch/s, loss=0.789][A
+Training VAE:  17%|█▋        | 260/1500 [02:02<09:08,  2.26batch/s, loss=0.739][A
+Training VAE:  17%|█▋        | 261/1500 [02:03<09:08,  2.26batch/s, loss=0.739][A
+Training VAE:  17%|█▋        | 261/1500 [02:03<09:08,  2.26batch/s, loss=0.797][A
+Training VAE:  17%|█▋        | 262/1500 [02:03<09:07,  2.26batch/s, loss=0.797][A
+Training VAE:  17%|█▋        | 262/1500 [02:03<09:07,  2.26batch/s, loss=0.78] [A
+Training VAE:  18%|█▊        | 263/1500 [02:04<09:07,  2.26batch/s, loss=0.78][A
+Training VAE:  18%|█▊        | 263/1500 [02:04<09:07,  2.26batch/s, loss=0.839][A
+Training VAE:  18%|█▊        | 264/1500 [02:04<09:07,  2.26batch/s, loss=0.839][A
+Training VAE:  18%|█▊        | 264/1500 [02:04<09:07,  2.26batch/s, loss=0.775][A
+Training VAE:  18%|█▊        | 265/1500 [02:04<09:06,  2.26batch/s, loss=0.775][A
+Training VAE:  18%|█▊        | 265/1500 [02:04<09:06,  2.26batch/s, loss=0.742][A
+Training VAE:  18%|█▊        | 266/1500 [02:05<09:05,  2.26batch/s, loss=0.742][A
+Training VAE:  18%|█▊        | 266/1500 [02:05<09:05,  2.26batch/s, loss=0.736][A
+Training VAE:  18%|█▊        | 267/1500 [02:05<09:05,  2.26batch/s, loss=0.736][A
+Training VAE:  18%|█▊        | 267/1500 [02:05<09:05,  2.26batch/s, loss=0.795][A
+Training VAE:  18%|█▊        | 268/1500 [02:06<09:05,  2.26batch/s, loss=0.795][A
+Training VAE:  18%|█▊        | 268/1500 [02:06<09:05,  2.26batch/s, loss=0.735][A
+Training VAE:  18%|█▊        | 269/1500 [02:06<09:04,  2.26batch/s, loss=0.735][A
+Training VAE:  18%|█▊        | 269/1500 [02:06<09:04,  2.26batch/s, loss=0.735][A
+Training VAE:  18%|█▊        | 270/1500 [02:07<09:04,  2.26batch/s, loss=0.735][A
+Training VAE:  18%|█▊        | 270/1500 [02:07<09:04,  2.26batch/s, loss=0.749][A
+Training VAE:  18%|█▊        | 271/1500 [02:07<09:03,  2.26batch/s, loss=0.749][A
+Training VAE:  18%|█▊        | 271/1500 [02:07<09:03,  2.26batch/s, loss=0.739][A
+Training VAE:  18%|█▊        | 272/1500 [02:08<09:03,  2.26batch/s, loss=0.739][A
+Training VAE:  18%|█▊        | 272/1500 [02:08<09:03,  2.26batch/s, loss=0.726][A
+Training VAE:  18%|█▊        | 273/1500 [02:08<09:02,  2.26batch/s, loss=0.726][A
+Training VAE:  18%|█▊        | 273/1500 [02:08<09:02,  2.26batch/s, loss=0.725][A
+Training VAE:  18%|█▊        | 274/1500 [02:09<11:15,  1.81batch/s, loss=0.725][A
+Training VAE:  18%|█▊        | 274/1500 [02:09<11:15,  1.81batch/s, loss=0.799][A
+Training VAE:  18%|█▊        | 275/1500 [02:09<10:34,  1.93batch/s, loss=0.799][A
+Training VAE:  18%|█▊        | 275/1500 [02:09<10:34,  1.93batch/s, loss=0.751][A
+Training VAE:  18%|█▊        | 276/1500 [02:10<10:07,  2.02batch/s, loss=0.751][A
+Training VAE:  18%|█▊        | 276/1500 [02:10<10:07,  2.02batch/s, loss=0.787][A
+Training VAE:  18%|█▊        | 277/1500 [02:10<09:46,  2.08batch/s, loss=0.787][A
+Training VAE:  18%|█▊        | 277/1500 [02:10<09:46,  2.08batch/s, loss=0.727][A
+Training VAE:  19%|█▊        | 278/1500 [02:11<09:32,  2.14batch/s, loss=0.727][A
+Training VAE:  19%|█▊        | 278/1500 [02:11<09:32,  2.14batch/s, loss=0.75] [A
+Training VAE:  19%|█▊        | 279/1500 [02:11<09:22,  2.17batch/s, loss=0.75][A
+Training VAE:  19%|█▊        | 279/1500 [02:11<09:22,  2.17batch/s, loss=0.742][A
+Training VAE:  19%|█▊        | 280/1500 [02:11<09:15,  2.20batch/s, loss=0.742][A
+Training VAE:  19%|█▊        | 280/1500 [02:11<09:15,  2.20batch/s, loss=0.744][A
+Training VAE:  19%|█▊        | 281/1500 [02:12<09:09,  2.22batch/s, loss=0.744][A
+Training VAE:  19%|█▊        | 281/1500 [02:12<09:09,  2.22batch/s, loss=0.712][A
+Training VAE:  19%|█▉        | 282/1500 [02:12<09:06,  2.23batch/s, loss=0.712][A
+Training VAE:  19%|█▉        | 282/1500 [02:12<09:06,  2.23batch/s, loss=0.803][A
+Training VAE:  19%|█▉        | 283/1500 [02:13<09:03,  2.24batch/s, loss=0.803][A
+Training VAE:  19%|█▉        | 283/1500 [02:13<09:03,  2.24batch/s, loss=0.8]  [A
+Training VAE:  19%|█▉        | 284/1500 [02:13<09:02,  2.24batch/s, loss=0.8][A
+Training VAE:  19%|█▉        | 284/1500 [02:13<09:02,  2.24batch/s, loss=0.714][A
+Training VAE:  19%|█▉        | 285/1500 [02:14<09:00,  2.25batch/s, loss=0.714][A
+Training VAE:  19%|█▉        | 285/1500 [02:14<09:00,  2.25batch/s, loss=0.806][A
+Training VAE:  19%|█▉        | 286/1500 [02:14<08:58,  2.25batch/s, loss=0.806][A
+Training VAE:  19%|█▉        | 286/1500 [02:14<08:58,  2.25batch/s, loss=0.713][A
+Training VAE:  19%|█▉        | 287/1500 [02:15<10:17,  1.96batch/s, loss=0.713][A
+Training VAE:  19%|█▉        | 287/1500 [02:15<10:17,  1.96batch/s, loss=0.719][A
+Training VAE:  19%|█▉        | 288/1500 [02:15<09:53,  2.04batch/s, loss=0.719][A
+Training VAE:  19%|█▉        | 288/1500 [02:15<09:53,  2.04batch/s, loss=0.749][A
+Training VAE:  19%|█▉        | 289/1500 [02:16<09:35,  2.10batch/s, loss=0.749][A
+Training VAE:  19%|█▉        | 289/1500 [02:16<09:35,  2.10batch/s, loss=0.749][A
+Training VAE:  19%|█▉        | 290/1500 [02:16<09:22,  2.15batch/s, loss=0.749][A
+Training VAE:  19%|█▉        | 290/1500 [02:16<09:22,  2.15batch/s, loss=0.751][A
+Training VAE:  19%|█▉        | 291/1500 [02:17<09:14,  2.18batch/s, loss=0.751][A
+Training VAE:  19%|█▉        | 291/1500 [02:17<09:14,  2.18batch/s, loss=0.756][A
+Training VAE:  19%|█▉        | 292/1500 [02:17<09:08,  2.20batch/s, loss=0.756][A
+Training VAE:  19%|█▉        | 292/1500 [02:17<09:08,  2.20batch/s, loss=0.851][A
+Training VAE:  20%|█▉        | 293/1500 [02:17<09:03,  2.22batch/s, loss=0.851][A
+Training VAE:  20%|█▉        | 293/1500 [02:17<09:03,  2.22batch/s, loss=0.727][A
+Training VAE:  20%|█▉        | 294/1500 [02:18<08:59,  2.23batch/s, loss=0.727][A
+Training VAE:  20%|█▉        | 294/1500 [02:18<08:59,  2.23batch/s, loss=0.714][A
+Training VAE:  20%|█▉        | 295/1500 [02:18<08:57,  2.24batch/s, loss=0.714][A
+Training VAE:  20%|█▉        | 295/1500 [02:18<08:57,  2.24batch/s, loss=0.748][A
+Training VAE:  20%|█▉        | 296/1500 [02:19<08:56,  2.25batch/s, loss=0.748][A
+Training VAE:  20%|█▉        | 296/1500 [02:19<08:56,  2.25batch/s, loss=0.718][A
+Training VAE:  20%|█▉        | 297/1500 [02:19<08:54,  2.25batch/s, loss=0.718][A
+Training VAE:  20%|█▉        | 297/1500 [02:19<08:54,  2.25batch/s, loss=0.719][A
+Training VAE:  20%|█▉        | 298/1500 [02:20<08:52,  2.26batch/s, loss=0.719][A
+Training VAE:  20%|█▉        | 298/1500 [02:20<08:52,  2.26batch/s, loss=0.709][A
+Training VAE:  20%|█▉        | 299/1500 [02:20<08:52,  2.26batch/s, loss=0.709][A
+Training VAE:  20%|█▉        | 299/1500 [02:20<08:52,  2.26batch/s, loss=0.824][A
+Training VAE:  20%|██        | 300/1500 [02:21<08:51,  2.26batch/s, loss=0.824][A
+Training VAE:  20%|██        | 300/1500 [02:21<08:51,  2.26batch/s, loss=0.725][A
+Training VAE:  20%|██        | 301/1500 [02:21<08:50,  2.26batch/s, loss=0.725][A
+Training VAE:  20%|██        | 301/1500 [02:21<08:50,  2.26batch/s, loss=0.773][A
+Training VAE:  20%|██        | 302/1500 [02:21<08:50,  2.26batch/s, loss=0.773][A
+Training VAE:  20%|██        | 302/1500 [02:21<08:50,  2.26batch/s, loss=0.724][A
+Training VAE:  20%|██        | 303/1500 [02:22<08:49,  2.26batch/s, loss=0.724][A
+Training VAE:  20%|██        | 303/1500 [02:22<08:49,  2.26batch/s, loss=0.736][A
+Training VAE:  20%|██        | 304/1500 [02:22<08:49,  2.26batch/s, loss=0.736][A
+Training VAE:  20%|██        | 304/1500 [02:22<08:49,  2.26batch/s, loss=0.813][A
+Training VAE:  20%|██        | 305/1500 [02:23<08:48,  2.26batch/s, loss=0.813][A
+Training VAE:  20%|██        | 305/1500 [02:23<08:48,  2.26batch/s, loss=0.743][A
+Training VAE:  20%|██        | 306/1500 [02:23<08:47,  2.26batch/s, loss=0.743][A
+Training VAE:  20%|██        | 306/1500 [02:23<08:47,  2.26batch/s, loss=0.71] [A
+Training VAE:  20%|██        | 307/1500 [02:24<08:47,  2.26batch/s, loss=0.71][A
+Training VAE:  20%|██        | 307/1500 [02:24<08:47,  2.26batch/s, loss=0.751][A
+Training VAE:  21%|██        | 308/1500 [02:24<08:47,  2.26batch/s, loss=0.751][A
+Training VAE:  21%|██        | 308/1500 [02:24<08:47,  2.26batch/s, loss=0.714][A
+Training VAE:  21%|██        | 309/1500 [02:25<08:46,  2.26batch/s, loss=0.714][A
+Training VAE:  21%|██        | 309/1500 [02:25<08:46,  2.26batch/s, loss=0.733][A
+Training VAE:  21%|██        | 310/1500 [02:25<08:46,  2.26batch/s, loss=0.733][A
+Training VAE:  21%|██        | 310/1500 [02:25<08:46,  2.26batch/s, loss=0.816][A
+Training VAE:  21%|██        | 311/1500 [02:25<08:45,  2.26batch/s, loss=0.816][A
+Training VAE:  21%|██        | 311/1500 [02:25<08:45,  2.26batch/s, loss=0.738][A
+Training VAE:  21%|██        | 312/1500 [02:26<08:45,  2.26batch/s, loss=0.738][A
+Training VAE:  21%|██        | 312/1500 [02:26<08:45,  2.26batch/s, loss=0.731][A
+Training VAE:  21%|██        | 313/1500 [02:26<08:45,  2.26batch/s, loss=0.731][A
+Training VAE:  21%|██        | 313/1500 [02:26<08:45,  2.26batch/s, loss=0.722][A
+Training VAE:  21%|██        | 314/1500 [02:27<08:44,  2.26batch/s, loss=0.722][A
+Training VAE:  21%|██        | 314/1500 [02:27<08:44,  2.26batch/s, loss=0.719][A
+Training VAE:  21%|██        | 315/1500 [02:27<08:44,  2.26batch/s, loss=0.719][A
+Training VAE:  21%|██        | 315/1500 [02:27<08:44,  2.26batch/s, loss=0.832][A
+Training VAE:  21%|██        | 316/1500 [02:28<08:44,  2.26batch/s, loss=0.832][A
+Training VAE:  21%|██        | 316/1500 [02:28<08:44,  2.26batch/s, loss=0.719][A
+Training VAE:  21%|██        | 317/1500 [02:28<08:43,  2.26batch/s, loss=0.719][A
+Training VAE:  21%|██        | 317/1500 [02:28<08:43,  2.26batch/s, loss=0.729][A
+Training VAE:  21%|██        | 318/1500 [02:29<08:42,  2.26batch/s, loss=0.729][A
+Training VAE:  21%|██        | 318/1500 [02:29<08:42,  2.26batch/s, loss=0.807][A
+Training VAE:  21%|██▏       | 319/1500 [02:29<08:42,  2.26batch/s, loss=0.807][A
+Training VAE:  21%|██▏       | 319/1500 [02:29<08:42,  2.26batch/s, loss=0.839][A
+Training VAE:  21%|██▏       | 320/1500 [02:29<08:42,  2.26batch/s, loss=0.839][A
+Training VAE:  21%|██▏       | 320/1500 [02:29<08:42,  2.26batch/s, loss=0.745][A
+Training VAE:  21%|██▏       | 321/1500 [02:30<08:41,  2.26batch/s, loss=0.745][A
+Training VAE:  21%|██▏       | 321/1500 [02:30<08:41,  2.26batch/s, loss=0.825][A
+Training VAE:  21%|██▏       | 322/1500 [02:30<08:40,  2.26batch/s, loss=0.825][A
+Training VAE:  21%|██▏       | 322/1500 [02:30<08:40,  2.26batch/s, loss=0.722][A
+Training VAE:  22%|██▏       | 323/1500 [02:31<08:40,  2.26batch/s, loss=0.722][A
+Training VAE:  22%|██▏       | 323/1500 [02:31<08:40,  2.26batch/s, loss=0.727][A
+Training VAE:  22%|██▏       | 324/1500 [02:31<08:40,  2.26batch/s, loss=0.727][A
+Training VAE:  22%|██▏       | 324/1500 [02:31<08:40,  2.26batch/s, loss=0.84] [A
+Training VAE:  22%|██▏       | 325/1500 [02:32<08:39,  2.26batch/s, loss=0.84][A
+Training VAE:  22%|██▏       | 325/1500 [02:32<08:39,  2.26batch/s, loss=0.721][A
+Training VAE:  22%|██▏       | 326/1500 [02:32<08:39,  2.26batch/s, loss=0.721][A
+Training VAE:  22%|██▏       | 326/1500 [02:32<08:39,  2.26batch/s, loss=0.726][A
+Training VAE:  22%|██▏       | 327/1500 [02:33<08:38,  2.26batch/s, loss=0.726][A
+Training VAE:  22%|██▏       | 327/1500 [02:33<08:38,  2.26batch/s, loss=0.727][A
+Training VAE:  22%|██▏       | 328/1500 [02:33<08:38,  2.26batch/s, loss=0.727][A
+Training VAE:  22%|██▏       | 328/1500 [02:33<08:38,  2.26batch/s, loss=0.772][A
+Training VAE:  22%|██▏       | 329/1500 [02:33<08:37,  2.26batch/s, loss=0.772][A
+Training VAE:  22%|██▏       | 329/1500 [02:33<08:37,  2.26batch/s, loss=0.715][A
+Training VAE:  22%|██▏       | 330/1500 [02:34<08:37,  2.26batch/s, loss=0.715][A
+Training VAE:  22%|██▏       | 330/1500 [02:34<08:37,  2.26batch/s, loss=0.807][A
+Training VAE:  22%|██▏       | 331/1500 [02:34<08:36,  2.26batch/s, loss=0.807][A
+Training VAE:  22%|██▏       | 331/1500 [02:34<08:36,  2.26batch/s, loss=0.839][A
+Training VAE:  22%|██▏       | 332/1500 [02:35<08:37,  2.26batch/s, loss=0.839][A
+Training VAE:  22%|██▏       | 332/1500 [02:35<08:37,  2.26batch/s, loss=0.734][A
+Training VAE:  22%|██▏       | 333/1500 [02:35<08:36,  2.26batch/s, loss=0.734][A
+Training VAE:  22%|██▏       | 333/1500 [02:35<08:36,  2.26batch/s, loss=0.719][A
+Training VAE:  22%|██▏       | 334/1500 [02:36<08:35,  2.26batch/s, loss=0.719][A
+Training VAE:  22%|██▏       | 334/1500 [02:36<08:35,  2.26batch/s, loss=0.762][A
+Training VAE:  22%|██▏       | 335/1500 [02:36<08:35,  2.26batch/s, loss=0.762][A
+Training VAE:  22%|██▏       | 335/1500 [02:36<08:35,  2.26batch/s, loss=0.832][A
+Training VAE:  22%|██▏       | 336/1500 [02:37<09:43,  1.99batch/s, loss=0.832][A
+Training VAE:  22%|██▏       | 336/1500 [02:37<09:43,  1.99batch/s, loss=0.733][A
+Training VAE:  22%|██▏       | 337/1500 [02:37<09:22,  2.07batch/s, loss=0.733][A
+Training VAE:  22%|██▏       | 337/1500 [02:37<09:22,  2.07batch/s, loss=0.737][A
+Training VAE:  23%|██▎       | 338/1500 [02:38<09:07,  2.12batch/s, loss=0.737][A
+Training VAE:  23%|██▎       | 338/1500 [02:38<09:07,  2.12batch/s, loss=0.724][A
+Training VAE:  23%|██▎       | 339/1500 [02:38<08:56,  2.16batch/s, loss=0.724][A
+Training VAE:  23%|██▎       | 339/1500 [02:38<08:56,  2.16batch/s, loss=0.814][A
+Training VAE:  23%|██▎       | 340/1500 [02:38<08:49,  2.19batch/s, loss=0.814][A
+Training VAE:  23%|██▎       | 340/1500 [02:38<08:49,  2.19batch/s, loss=0.732][A
+Training VAE:  23%|██▎       | 341/1500 [02:39<08:44,  2.21batch/s, loss=0.732][A
+Training VAE:  23%|██▎       | 341/1500 [02:39<08:44,  2.21batch/s, loss=0.84] [A
+Training VAE:  23%|██▎       | 342/1500 [02:39<08:40,  2.23batch/s, loss=0.84][A
+Training VAE:  23%|██▎       | 342/1500 [02:39<08:40,  2.23batch/s, loss=0.713][A
+Training VAE:  23%|██▎       | 343/1500 [02:40<08:37,  2.24batch/s, loss=0.713][A
+Training VAE:  23%|██▎       | 343/1500 [02:40<08:37,  2.24batch/s, loss=0.815][A
+Training VAE:  23%|██▎       | 344/1500 [02:40<08:35,  2.24batch/s, loss=0.815][A
+Training VAE:  23%|██▎       | 344/1500 [02:40<08:35,  2.24batch/s, loss=0.797][A
+Training VAE:  23%|██▎       | 345/1500 [02:41<08:33,  2.25batch/s, loss=0.797][A
+Training VAE:  23%|██▎       | 345/1500 [02:41<08:33,  2.25batch/s, loss=0.816][A
+Training VAE:  23%|██▎       | 346/1500 [02:41<08:32,  2.25batch/s, loss=0.816][A
+Training VAE:  23%|██▎       | 346/1500 [02:41<08:32,  2.25batch/s, loss=0.731][A
+Training VAE:  23%|██▎       | 347/1500 [02:42<08:31,  2.26batch/s, loss=0.731][A
+Training VAE:  23%|██▎       | 347/1500 [02:42<08:31,  2.26batch/s, loss=0.711][A
+Training VAE:  23%|██▎       | 348/1500 [02:42<08:30,  2.25batch/s, loss=0.711][A
+Training VAE:  23%|██▎       | 348/1500 [02:42<08:30,  2.25batch/s, loss=0.759][A
+Training VAE:  23%|██▎       | 349/1500 [02:42<08:29,  2.26batch/s, loss=0.759][A
+Training VAE:  23%|██▎       | 349/1500 [02:42<08:29,  2.26batch/s, loss=0.736][A
+Training VAE:  23%|██▎       | 350/1500 [02:43<08:29,  2.26batch/s, loss=0.736][A
+Training VAE:  23%|██▎       | 350/1500 [02:43<08:29,  2.26batch/s, loss=0.832][A
+Training VAE:  23%|██▎       | 351/1500 [02:43<08:28,  2.26batch/s, loss=0.832][A
+Training VAE:  23%|██▎       | 351/1500 [02:43<08:28,  2.26batch/s, loss=0.71] [A
+Training VAE:  23%|██▎       | 352/1500 [02:44<08:28,  2.26batch/s, loss=0.71][A
+Training VAE:  23%|██▎       | 352/1500 [02:44<08:28,  2.26batch/s, loss=0.708][A
+Training VAE:  24%|██▎       | 353/1500 [02:44<08:27,  2.26batch/s, loss=0.708][A
+Training VAE:  24%|██▎       | 353/1500 [02:44<08:27,  2.26batch/s, loss=0.732][A
+Training VAE:  24%|██▎       | 354/1500 [02:45<08:26,  2.26batch/s, loss=0.732][A
+Training VAE:  24%|██▎       | 354/1500 [02:45<08:26,  2.26batch/s, loss=0.74] [A
+Training VAE:  24%|██▎       | 355/1500 [02:45<08:26,  2.26batch/s, loss=0.74][A
+Training VAE:  24%|██▎       | 355/1500 [02:45<08:26,  2.26batch/s, loss=0.707][A
+Training VAE:  24%|██▎       | 356/1500 [02:46<08:26,  2.26batch/s, loss=0.707][A
+Training VAE:  24%|██▎       | 356/1500 [02:46<08:26,  2.26batch/s, loss=0.808][A
+Training VAE:  24%|██▍       | 357/1500 [02:46<08:25,  2.26batch/s, loss=0.808][A
+Training VAE:  24%|██▍       | 357/1500 [02:46<08:25,  2.26batch/s, loss=0.796][A
+Training VAE:  24%|██▍       | 358/1500 [02:46<08:25,  2.26batch/s, loss=0.796][A
+Training VAE:  24%|██▍       | 358/1500 [02:46<08:25,  2.26batch/s, loss=0.713][A
+Training VAE:  24%|██▍       | 359/1500 [02:47<08:24,  2.26batch/s, loss=0.713][A
+Training VAE:  24%|██▍       | 359/1500 [02:47<08:24,  2.26batch/s, loss=0.713][A
+Training VAE:  24%|██▍       | 360/1500 [02:47<08:24,  2.26batch/s, loss=0.713][A
+Training VAE:  24%|██▍       | 360/1500 [02:47<08:24,  2.26batch/s, loss=0.833][A
+Training VAE:  24%|██▍       | 361/1500 [02:48<08:23,  2.26batch/s, loss=0.833][A
+Training VAE:  24%|██▍       | 361/1500 [02:48<08:23,  2.26batch/s, loss=0.723][A
+Training VAE:  24%|██▍       | 362/1500 [02:48<08:23,  2.26batch/s, loss=0.723][A
+Training VAE:  24%|██▍       | 362/1500 [02:48<08:23,  2.26batch/s, loss=0.714][A
+Training VAE:  24%|██▍       | 363/1500 [02:49<08:22,  2.26batch/s, loss=0.714][A
+Training VAE:  24%|██▍       | 363/1500 [02:49<08:22,  2.26batch/s, loss=0.727][A
+Training VAE:  24%|██▍       | 364/1500 [02:49<08:22,  2.26batch/s, loss=0.727][A
+Training VAE:  24%|██▍       | 364/1500 [02:49<08:22,  2.26batch/s, loss=0.777][A
+Training VAE:  24%|██▍       | 365/1500 [02:50<08:21,  2.26batch/s, loss=0.777][A
+Training VAE:  24%|██▍       | 365/1500 [02:50<08:21,  2.26batch/s, loss=0.71] [A
+Training VAE:  24%|██▍       | 366/1500 [02:50<08:21,  2.26batch/s, loss=0.71][A
+Training VAE:  24%|██▍       | 366/1500 [02:50<08:21,  2.26batch/s, loss=0.721][A
+Training VAE:  24%|██▍       | 367/1500 [02:50<08:21,  2.26batch/s, loss=0.721][A
+Training VAE:  24%|██▍       | 367/1500 [02:50<08:21,  2.26batch/s, loss=0.808][A
+Training VAE:  25%|██▍       | 368/1500 [02:51<08:21,  2.26batch/s, loss=0.808][A
+Training VAE:  25%|██▍       | 368/1500 [02:51<08:21,  2.26batch/s, loss=0.724][A
+Training VAE:  25%|██▍       | 369/1500 [02:51<08:20,  2.26batch/s, loss=0.724][A
+Training VAE:  25%|██▍       | 369/1500 [02:51<08:20,  2.26batch/s, loss=0.719][A
+Training VAE:  25%|██▍       | 370/1500 [02:52<08:19,  2.26batch/s, loss=0.719][A
+Training VAE:  25%|██▍       | 370/1500 [02:52<08:19,  2.26batch/s, loss=0.739][A
+Training VAE:  25%|██▍       | 371/1500 [02:52<08:19,  2.26batch/s, loss=0.739][A
+Training VAE:  25%|██▍       | 371/1500 [02:52<08:19,  2.26batch/s, loss=0.709][A
+Training VAE:  25%|██▍       | 372/1500 [02:53<08:19,  2.26batch/s, loss=0.709][A
+Training VAE:  25%|██▍       | 372/1500 [02:53<08:19,  2.26batch/s, loss=0.803][A
+Training VAE:  25%|██▍       | 373/1500 [02:53<08:18,  2.26batch/s, loss=0.803][A
+Training VAE:  25%|██▍       | 373/1500 [02:53<08:18,  2.26batch/s, loss=0.811][A
+Training VAE:  25%|██▍       | 374/1500 [02:53<08:17,  2.26batch/s, loss=0.811][A
+Training VAE:  25%|██▍       | 374/1500 [02:53<08:17,  2.26batch/s, loss=0.72] [A
+Training VAE:  25%|██▌       | 375/1500 [02:54<08:17,  2.26batch/s, loss=0.72][A
+Training VAE:  25%|██▌       | 375/1500 [02:54<08:17,  2.26batch/s, loss=0.705][A
+Training VAE:  25%|██▌       | 376/1500 [02:54<08:17,  2.26batch/s, loss=0.705][A
+Training VAE:  25%|██▌       | 376/1500 [02:54<08:17,  2.26batch/s, loss=0.707][A
+Training VAE:  25%|██▌       | 377/1500 [02:55<08:16,  2.26batch/s, loss=0.707][A
+Training VAE:  25%|██▌       | 377/1500 [02:55<08:16,  2.26batch/s, loss=0.725][A
+Training VAE:  25%|██▌       | 378/1500 [02:55<08:16,  2.26batch/s, loss=0.725][A
+Training VAE:  25%|██▌       | 378/1500 [02:55<08:16,  2.26batch/s, loss=0.738][A
+Training VAE:  25%|██▌       | 379/1500 [02:56<08:15,  2.26batch/s, loss=0.738][A
+Training VAE:  25%|██▌       | 379/1500 [02:56<08:15,  2.26batch/s, loss=0.708][A
+Training VAE:  25%|██▌       | 380/1500 [02:56<08:15,  2.26batch/s, loss=0.708][A
+Training VAE:  25%|██▌       | 380/1500 [02:56<08:15,  2.26batch/s, loss=0.756][A
+Training VAE:  25%|██▌       | 381/1500 [02:57<08:14,  2.26batch/s, loss=0.756][A
+Training VAE:  25%|██▌       | 381/1500 [02:57<08:14,  2.26batch/s, loss=0.732][A
+Training VAE:  25%|██▌       | 382/1500 [02:57<08:14,  2.26batch/s, loss=0.732][A
+Training VAE:  25%|██▌       | 382/1500 [02:57<08:14,  2.26batch/s, loss=0.723][A
+Training VAE:  26%|██▌       | 383/1500 [02:57<08:14,  2.26batch/s, loss=0.723][A
+Training VAE:  26%|██▌       | 383/1500 [02:57<08:14,  2.26batch/s, loss=0.707][A
+Training VAE:  26%|██▌       | 384/1500 [02:58<08:14,  2.26batch/s, loss=0.707][A
+Training VAE:  26%|██▌       | 384/1500 [02:58<08:14,  2.26batch/s, loss=0.704][A
+Training VAE:  26%|██▌       | 385/1500 [02:58<08:13,  2.26batch/s, loss=0.704][A
+Training VAE:  26%|██▌       | 385/1500 [02:58<08:13,  2.26batch/s, loss=0.714][A
+Training VAE:  26%|██▌       | 386/1500 [02:59<08:12,  2.26batch/s, loss=0.714][A
+Training VAE:  26%|██▌       | 386/1500 [02:59<08:12,  2.26batch/s, loss=0.727][A
+Training VAE:  26%|██▌       | 387/1500 [02:59<08:12,  2.26batch/s, loss=0.727][A
+Training VAE:  26%|██▌       | 387/1500 [02:59<08:12,  2.26batch/s, loss=0.832][A
+Training VAE:  26%|██▌       | 388/1500 [03:00<08:12,  2.26batch/s, loss=0.832][A
+Training VAE:  26%|██▌       | 388/1500 [03:00<08:12,  2.26batch/s, loss=0.783][A
+Training VAE:  26%|██▌       | 389/1500 [03:00<08:11,  2.26batch/s, loss=0.783][A
+Training VAE:  26%|██▌       | 389/1500 [03:00<08:11,  2.26batch/s, loss=0.715][A
+Training VAE:  26%|██▌       | 390/1500 [03:01<08:11,  2.26batch/s, loss=0.715][A
+Training VAE:  26%|██▌       | 390/1500 [03:01<08:11,  2.26batch/s, loss=0.831][A
+Training VAE:  26%|██▌       | 391/1500 [03:01<08:10,  2.26batch/s, loss=0.831][A
+Training VAE:  26%|██▌       | 391/1500 [03:01<08:10,  2.26batch/s, loss=0.732][A
+Training VAE:  26%|██▌       | 392/1500 [03:01<08:10,  2.26batch/s, loss=0.732][A
+Training VAE:  26%|██▌       | 392/1500 [03:01<08:10,  2.26batch/s, loss=0.732][A
+Training VAE:  26%|██▌       | 393/1500 [03:02<08:09,  2.26batch/s, loss=0.732][A
+Training VAE:  26%|██▌       | 393/1500 [03:02<08:09,  2.26batch/s, loss=0.72] [A
+Training VAE:  26%|██▋       | 394/1500 [03:02<08:09,  2.26batch/s, loss=0.72][A
+Training VAE:  26%|██▋       | 394/1500 [03:02<08:09,  2.26batch/s, loss=0.749][A
+Training VAE:  26%|██▋       | 395/1500 [03:03<08:08,  2.26batch/s, loss=0.749][A
+Training VAE:  26%|██▋       | 395/1500 [03:03<08:08,  2.26batch/s, loss=0.71] [A
+Training VAE:  26%|██▋       | 396/1500 [03:03<08:08,  2.26batch/s, loss=0.71][A
+Training VAE:  26%|██▋       | 396/1500 [03:03<08:08,  2.26batch/s, loss=0.708][A
+Training VAE:  26%|██▋       | 397/1500 [03:04<08:07,  2.26batch/s, loss=0.708][A
+Training VAE:  26%|██▋       | 397/1500 [03:04<08:07,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 398/1500 [03:04<08:07,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 398/1500 [03:04<08:07,  2.26batch/s, loss=0.811][A
+Training VAE:  27%|██▋       | 399/1500 [03:05<08:06,  2.26batch/s, loss=0.811][A
+Training VAE:  27%|██▋       | 399/1500 [03:05<08:06,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 400/1500 [03:05<08:07,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 400/1500 [03:05<08:07,  2.26batch/s, loss=0.733][A
+Training VAE:  27%|██▋       | 401/1500 [03:05<08:06,  2.26batch/s, loss=0.733][A
+Training VAE:  27%|██▋       | 401/1500 [03:05<08:06,  2.26batch/s, loss=0.808][A
+Training VAE:  27%|██▋       | 402/1500 [03:06<08:05,  2.26batch/s, loss=0.808][A
+Training VAE:  27%|██▋       | 402/1500 [03:06<08:05,  2.26batch/s, loss=0.736][A
+Training VAE:  27%|██▋       | 403/1500 [03:06<08:05,  2.26batch/s, loss=0.736][A
+Training VAE:  27%|██▋       | 403/1500 [03:06<08:05,  2.26batch/s, loss=0.731][A
+Training VAE:  27%|██▋       | 404/1500 [03:07<08:05,  2.26batch/s, loss=0.731][A
+Training VAE:  27%|██▋       | 404/1500 [03:07<08:05,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 405/1500 [03:07<08:04,  2.26batch/s, loss=0.716][A
+Training VAE:  27%|██▋       | 405/1500 [03:07<08:04,  2.26batch/s, loss=0.765][A
+Training VAE:  27%|██▋       | 406/1500 [03:08<08:03,  2.26batch/s, loss=0.765][A
+Training VAE:  27%|██▋       | 406/1500 [03:08<08:03,  2.26batch/s, loss=0.703][A
+Training VAE:  27%|██▋       | 407/1500 [03:08<08:03,  2.26batch/s, loss=0.703][A
+Training VAE:  27%|██▋       | 407/1500 [03:08<08:03,  2.26batch/s, loss=0.703][A
+Training VAE:  27%|██▋       | 408/1500 [03:09<08:03,  2.26batch/s, loss=0.703][A
+Training VAE:  27%|██▋       | 408/1500 [03:09<08:03,  2.26batch/s, loss=0.715][A
+Training VAE:  27%|██▋       | 409/1500 [03:09<08:02,  2.26batch/s, loss=0.715][A
+Training VAE:  27%|██▋       | 409/1500 [03:09<08:02,  2.26batch/s, loss=0.72] [A
+Training VAE:  27%|██▋       | 410/1500 [03:10<08:01,  2.26batch/s, loss=0.72][A
+Training VAE:  27%|██▋       | 410/1500 [03:10<08:01,  2.26batch/s, loss=0.793][A
+Training VAE:  27%|██▋       | 411/1500 [03:10<11:02,  1.64batch/s, loss=0.793][A
+Training VAE:  27%|██▋       | 411/1500 [03:10<11:02,  1.64batch/s, loss=0.814][A
+Training VAE:  27%|██▋       | 412/1500 [03:11<10:07,  1.79batch/s, loss=0.814][A
+Training VAE:  27%|██▋       | 412/1500 [03:11<10:07,  1.79batch/s, loss=0.739][A
+Training VAE:  28%|██▊       | 413/1500 [03:11<09:29,  1.91batch/s, loss=0.739][A
+Training VAE:  28%|██▊       | 413/1500 [03:11<09:29,  1.91batch/s, loss=0.828][A
+Training VAE:  28%|██▊       | 414/1500 [03:12<09:02,  2.00batch/s, loss=0.828][A
+Training VAE:  28%|██▊       | 414/1500 [03:12<09:02,  2.00batch/s, loss=0.726][A
+Training VAE:  28%|██▊       | 415/1500 [03:12<08:43,  2.07batch/s, loss=0.726][A
+Training VAE:  28%|██▊       | 415/1500 [03:12<08:43,  2.07batch/s, loss=0.744][A
+Training VAE:  28%|██▊       | 416/1500 [03:13<08:30,  2.12batch/s, loss=0.744][A
+Training VAE:  28%|██▊       | 416/1500 [03:13<08:30,  2.12batch/s, loss=0.744][A
+Training VAE:  28%|██▊       | 417/1500 [03:13<08:20,  2.16batch/s, loss=0.744][A
+Training VAE:  28%|██▊       | 417/1500 [03:13<08:20,  2.16batch/s, loss=0.726][A
+Training VAE:  28%|██▊       | 418/1500 [03:14<08:13,  2.19batch/s, loss=0.726][A
+Training VAE:  28%|██▊       | 418/1500 [03:14<08:13,  2.19batch/s, loss=0.763][A
+Training VAE:  28%|██▊       | 419/1500 [03:14<08:08,  2.21batch/s, loss=0.763][A
+Training VAE:  28%|██▊       | 419/1500 [03:14<08:08,  2.21batch/s, loss=0.711][A
+Training VAE:  28%|██▊       | 420/1500 [03:14<08:05,  2.23batch/s, loss=0.711][A
+Training VAE:  28%|██▊       | 420/1500 [03:14<08:05,  2.23batch/s, loss=0.709][A
+Training VAE:  28%|██▊       | 421/1500 [03:15<08:02,  2.24batch/s, loss=0.709][A
+Training VAE:  28%|██▊       | 421/1500 [03:15<08:02,  2.24batch/s, loss=0.722][A
+Training VAE:  28%|██▊       | 422/1500 [03:15<08:00,  2.25batch/s, loss=0.722][A
+Training VAE:  28%|██▊       | 422/1500 [03:15<08:00,  2.25batch/s, loss=0.712][A
+Training VAE:  28%|██▊       | 423/1500 [03:16<07:58,  2.25batch/s, loss=0.712][A
+Training VAE:  28%|██▊       | 423/1500 [03:16<07:58,  2.25batch/s, loss=0.826][A
+Training VAE:  28%|██▊       | 424/1500 [03:16<07:57,  2.25batch/s, loss=0.826][A
+Training VAE:  28%|██▊       | 424/1500 [03:16<07:57,  2.25batch/s, loss=0.731][A
+Training VAE:  28%|██▊       | 425/1500 [03:17<07:56,  2.26batch/s, loss=0.731][A
+Training VAE:  28%|██▊       | 425/1500 [03:17<07:56,  2.26batch/s, loss=0.729][A
+Training VAE:  28%|██▊       | 426/1500 [03:17<07:55,  2.26batch/s, loss=0.729][A
+Training VAE:  28%|██▊       | 426/1500 [03:17<07:55,  2.26batch/s, loss=0.821][A
+Training VAE:  28%|██▊       | 427/1500 [03:17<07:55,  2.26batch/s, loss=0.821][A
+Training VAE:  28%|██▊       | 427/1500 [03:17<07:55,  2.26batch/s, loss=0.746][A
+Training VAE:  29%|██▊       | 428/1500 [03:18<07:54,  2.26batch/s, loss=0.746][A
+Training VAE:  29%|██▊       | 428/1500 [03:18<07:54,  2.26batch/s, loss=0.724][A
+Training VAE:  29%|██▊       | 429/1500 [03:18<07:53,  2.26batch/s, loss=0.724][A
+Training VAE:  29%|██▊       | 429/1500 [03:18<07:53,  2.26batch/s, loss=0.741][A
+Training VAE:  29%|██▊       | 430/1500 [03:19<07:53,  2.26batch/s, loss=0.741][A
+Training VAE:  29%|██▊       | 430/1500 [03:19<07:53,  2.26batch/s, loss=0.715][A
+Training VAE:  29%|██▊       | 431/1500 [03:19<07:52,  2.26batch/s, loss=0.715][A
+Training VAE:  29%|██▊       | 431/1500 [03:19<07:52,  2.26batch/s, loss=0.726][A
+Training VAE:  29%|██▉       | 432/1500 [03:20<07:52,  2.26batch/s, loss=0.726][A
+Training VAE:  29%|██▉       | 432/1500 [03:20<07:52,  2.26batch/s, loss=0.714][A
+Training VAE:  29%|██▉       | 433/1500 [03:20<07:51,  2.26batch/s, loss=0.714][A
+Training VAE:  29%|██▉       | 433/1500 [03:20<07:51,  2.26batch/s, loss=0.718][A
+Training VAE:  29%|██▉       | 434/1500 [03:21<07:51,  2.26batch/s, loss=0.718][A
+Training VAE:  29%|██▉       | 434/1500 [03:21<07:51,  2.26batch/s, loss=0.723][A
+Training VAE:  29%|██▉       | 435/1500 [03:21<07:50,  2.26batch/s, loss=0.723][A
+Training VAE:  29%|██▉       | 435/1500 [03:21<07:50,  2.26batch/s, loss=0.723][A
+Training VAE:  29%|██▉       | 436/1500 [03:21<07:50,  2.26batch/s, loss=0.723][A
+Training VAE:  29%|██▉       | 436/1500 [03:21<07:50,  2.26batch/s, loss=0.799][A
+Training VAE:  29%|██▉       | 437/1500 [03:22<07:50,  2.26batch/s, loss=0.799][A
+Training VAE:  29%|██▉       | 437/1500 [03:22<07:50,  2.26batch/s, loss=0.712][A
+Training VAE:  29%|██▉       | 438/1500 [03:22<07:49,  2.26batch/s, loss=0.712][A
+Training VAE:  29%|██▉       | 438/1500 [03:22<07:49,  2.26batch/s, loss=0.718][A
+Training VAE:  29%|██▉       | 439/1500 [03:23<07:49,  2.26batch/s, loss=0.718][A
+Training VAE:  29%|██▉       | 439/1500 [03:23<07:49,  2.26batch/s, loss=0.72] [A
+Training VAE:  29%|██▉       | 440/1500 [03:23<07:49,  2.26batch/s, loss=0.72][A
+Training VAE:  29%|██▉       | 440/1500 [03:23<07:49,  2.26batch/s, loss=0.816][A
+Training VAE:  29%|██▉       | 441/1500 [03:24<07:48,  2.26batch/s, loss=0.816][A
+Training VAE:  29%|██▉       | 441/1500 [03:24<07:48,  2.26batch/s, loss=0.799][A
+Training VAE:  29%|██▉       | 442/1500 [03:24<07:47,  2.26batch/s, loss=0.799][A
+Training VAE:  29%|██▉       | 442/1500 [03:24<07:47,  2.26batch/s, loss=0.704][A
+Training VAE:  30%|██▉       | 443/1500 [03:25<07:47,  2.26batch/s, loss=0.704][A
+Training VAE:  30%|██▉       | 443/1500 [03:25<07:47,  2.26batch/s, loss=0.706][A
+Training VAE:  30%|██▉       | 444/1500 [03:25<07:47,  2.26batch/s, loss=0.706][A
+Training VAE:  30%|██▉       | 444/1500 [03:25<07:47,  2.26batch/s, loss=0.765][A
+Training VAE:  30%|██▉       | 445/1500 [03:25<07:46,  2.26batch/s, loss=0.765][A
+Training VAE:  30%|██▉       | 445/1500 [03:25<07:46,  2.26batch/s, loss=0.74] [A
+Training VAE:  30%|██▉       | 446/1500 [03:26<07:46,  2.26batch/s, loss=0.74][A
+Training VAE:  30%|██▉       | 446/1500 [03:26<07:46,  2.26batch/s, loss=0.725][A
+Training VAE:  30%|██▉       | 447/1500 [03:26<07:45,  2.26batch/s, loss=0.725][A
+Training VAE:  30%|██▉       | 447/1500 [03:26<07:45,  2.26batch/s, loss=0.791][A
+Training VAE:  30%|██▉       | 448/1500 [03:27<07:45,  2.26batch/s, loss=0.791][A
+Training VAE:  30%|██▉       | 448/1500 [03:27<07:45,  2.26batch/s, loss=0.725][A
+Training VAE:  30%|██▉       | 449/1500 [03:27<07:44,  2.26batch/s, loss=0.725][A
+Training VAE:  30%|██▉       | 449/1500 [03:27<07:44,  2.26batch/s, loss=0.801][A
+Training VAE:  30%|███       | 450/1500 [03:28<07:44,  2.26batch/s, loss=0.801][A
+Training VAE:  30%|███       | 450/1500 [03:28<07:44,  2.26batch/s, loss=0.835][A
+Training VAE:  30%|███       | 451/1500 [03:28<07:43,  2.26batch/s, loss=0.835][A
+Training VAE:  30%|███       | 451/1500 [03:28<07:43,  2.26batch/s, loss=0.735][A
+Training VAE:  30%|███       | 452/1500 [03:29<07:43,  2.26batch/s, loss=0.735][A
+Training VAE:  30%|███       | 452/1500 [03:29<07:43,  2.26batch/s, loss=0.743][A
+Training VAE:  30%|███       | 453/1500 [03:29<07:43,  2.26batch/s, loss=0.743][A
+Training VAE:  30%|███       | 453/1500 [03:29<07:43,  2.26batch/s, loss=0.841][A
+Training VAE:  30%|███       | 454/1500 [03:29<07:42,  2.26batch/s, loss=0.841][A
+Training VAE:  30%|███       | 454/1500 [03:29<07:42,  2.26batch/s, loss=0.758][A
+Training VAE:  30%|███       | 455/1500 [03:30<07:42,  2.26batch/s, loss=0.758][A
+Training VAE:  30%|███       | 455/1500 [03:30<07:42,  2.26batch/s, loss=0.732][A
+Training VAE:  30%|███       | 456/1500 [03:30<07:42,  2.26batch/s, loss=0.732][A
+Training VAE:  30%|███       | 456/1500 [03:30<07:42,  2.26batch/s, loss=0.736][A
+Training VAE:  30%|███       | 457/1500 [03:31<07:41,  2.26batch/s, loss=0.736][A
+Training VAE:  30%|███       | 457/1500 [03:31<07:41,  2.26batch/s, loss=0.711][A
+Training VAE:  31%|███       | 458/1500 [03:31<07:40,  2.26batch/s, loss=0.711][A
+Training VAE:  31%|███       | 458/1500 [03:31<07:40,  2.26batch/s, loss=0.822][A
+Training VAE:  31%|███       | 459/1500 [03:32<07:40,  2.26batch/s, loss=0.822][A
+Training VAE:  31%|███       | 459/1500 [03:32<07:40,  2.26batch/s, loss=0.724][A
+Training VAE:  31%|███       | 460/1500 [03:32<07:40,  2.26batch/s, loss=0.724][A
+Training VAE:  31%|███       | 460/1500 [03:32<07:40,  2.26batch/s, loss=0.711][A
+Training VAE:  31%|███       | 461/1500 [03:33<07:39,  2.26batch/s, loss=0.711][A
+Training VAE:  31%|███       | 461/1500 [03:33<07:39,  2.26batch/s, loss=0.729][A
+Training VAE:  31%|███       | 462/1500 [03:33<07:39,  2.26batch/s, loss=0.729][A
+Training VAE:  31%|███       | 462/1500 [03:33<07:39,  2.26batch/s, loss=0.728][A
+Training VAE:  31%|███       | 463/1500 [03:33<07:38,  2.26batch/s, loss=0.728][A
+Training VAE:  31%|███       | 463/1500 [03:33<07:38,  2.26batch/s, loss=0.783][A
+Training VAE:  31%|███       | 464/1500 [03:34<07:38,  2.26batch/s, loss=0.783][A
+Training VAE:  31%|███       | 464/1500 [03:34<07:38,  2.26batch/s, loss=0.806][A
+Training VAE:  31%|███       | 465/1500 [03:34<07:38,  2.26batch/s, loss=0.806][A
+Training VAE:  31%|███       | 465/1500 [03:34<07:38,  2.26batch/s, loss=0.764][A
+Training VAE:  31%|███       | 466/1500 [03:35<07:37,  2.26batch/s, loss=0.764][A
+Training VAE:  31%|███       | 466/1500 [03:35<07:37,  2.26batch/s, loss=0.769][A
+Training VAE:  31%|███       | 467/1500 [03:35<07:37,  2.26batch/s, loss=0.769][A
+Training VAE:  31%|███       | 467/1500 [03:35<07:37,  2.26batch/s, loss=0.726][A
+Training VAE:  31%|███       | 468/1500 [03:36<07:36,  2.26batch/s, loss=0.726][A
+Training VAE:  31%|███       | 468/1500 [03:36<07:36,  2.26batch/s, loss=0.815][A
+Training VAE:  31%|███▏      | 469/1500 [03:36<07:35,  2.26batch/s, loss=0.815][A
+Training VAE:  31%|███▏      | 469/1500 [03:36<07:35,  2.26batch/s, loss=0.718][A
+Training VAE:  31%|███▏      | 470/1500 [03:37<07:35,  2.26batch/s, loss=0.718][A
+Training VAE:  31%|███▏      | 470/1500 [03:37<07:35,  2.26batch/s, loss=0.72] [A
+Training VAE:  31%|███▏      | 471/1500 [03:37<07:35,  2.26batch/s, loss=0.72][A
+Training VAE:  31%|███▏      | 471/1500 [03:37<07:35,  2.26batch/s, loss=0.832][A
+Training VAE:  31%|███▏      | 472/1500 [03:37<07:35,  2.26batch/s, loss=0.832][A
+Training VAE:  31%|███▏      | 472/1500 [03:37<07:35,  2.26batch/s, loss=0.73] [A
+Training VAE:  32%|███▏      | 473/1500 [03:38<07:34,  2.26batch/s, loss=0.73][A
+Training VAE:  32%|███▏      | 473/1500 [03:38<07:34,  2.26batch/s, loss=0.714][A
+Training VAE:  32%|███▏      | 474/1500 [03:38<07:33,  2.26batch/s, loss=0.714][A
+Training VAE:  32%|███▏      | 474/1500 [03:38<07:33,  2.26batch/s, loss=0.771][A
+Training VAE:  32%|███▏      | 475/1500 [03:39<07:33,  2.26batch/s, loss=0.771][A
+Training VAE:  32%|███▏      | 475/1500 [03:39<07:33,  2.26batch/s, loss=0.733][A
+Training VAE:  32%|███▏      | 476/1500 [03:39<07:33,  2.26batch/s, loss=0.733][A
+Training VAE:  32%|███▏      | 476/1500 [03:39<07:33,  2.26batch/s, loss=0.714][A
+Training VAE:  32%|███▏      | 477/1500 [03:40<07:32,  2.26batch/s, loss=0.714][A
+Training VAE:  32%|███▏      | 477/1500 [03:40<07:32,  2.26batch/s, loss=0.721][A
+Training VAE:  32%|███▏      | 478/1500 [03:40<07:31,  2.26batch/s, loss=0.721][A
+Training VAE:  32%|███▏      | 478/1500 [03:40<07:31,  2.26batch/s, loss=0.734][A
+Training VAE:  32%|███▏      | 479/1500 [03:40<07:31,  2.26batch/s, loss=0.734][A
+Training VAE:  32%|███▏      | 479/1500 [03:40<07:31,  2.26batch/s, loss=0.718][A
+Training VAE:  32%|███▏      | 480/1500 [03:41<07:31,  2.26batch/s, loss=0.718][A
+Training VAE:  32%|███▏      | 480/1500 [03:41<07:31,  2.26batch/s, loss=0.73] [A
+Training VAE:  32%|███▏      | 481/1500 [03:41<07:30,  2.26batch/s, loss=0.73][A
+Training VAE:  32%|███▏      | 481/1500 [03:41<07:30,  2.26batch/s, loss=0.724][A
+Training VAE:  32%|███▏      | 482/1500 [03:42<07:30,  2.26batch/s, loss=0.724][A
+Training VAE:  32%|███▏      | 482/1500 [03:42<07:30,  2.26batch/s, loss=0.712][A
+Training VAE:  32%|███▏      | 483/1500 [03:42<07:29,  2.26batch/s, loss=0.712][A
+Training VAE:  32%|███▏      | 483/1500 [03:42<07:29,  2.26batch/s, loss=0.734][A
+Training VAE:  32%|███▏      | 484/1500 [03:43<07:29,  2.26batch/s, loss=0.734][A
+Training VAE:  32%|███▏      | 484/1500 [03:43<07:29,  2.26batch/s, loss=0.729][A
+Training VAE:  32%|███▏      | 485/1500 [03:43<07:28,  2.26batch/s, loss=0.729][A
+Training VAE:  32%|███▏      | 485/1500 [03:43<07:28,  2.26batch/s, loss=0.71] [A
+Training VAE:  32%|███▏      | 486/1500 [03:44<07:28,  2.26batch/s, loss=0.71][A
+Training VAE:  32%|███▏      | 486/1500 [03:44<07:28,  2.26batch/s, loss=0.724][A
+Training VAE:  32%|███▏      | 487/1500 [03:44<07:27,  2.26batch/s, loss=0.724][A
+Training VAE:  32%|███▏      | 487/1500 [03:44<07:27,  2.26batch/s, loss=0.715][A
+Training VAE:  33%|███▎      | 488/1500 [03:44<07:28,  2.26batch/s, loss=0.715][A
+Training VAE:  33%|███▎      | 488/1500 [03:44<07:28,  2.26batch/s, loss=0.728][A
+Training VAE:  33%|███▎      | 489/1500 [03:45<07:27,  2.26batch/s, loss=0.728][A
+Training VAE:  33%|███▎      | 489/1500 [03:45<07:27,  2.26batch/s, loss=0.727][A
+Training VAE:  33%|███▎      | 490/1500 [03:45<07:26,  2.26batch/s, loss=0.727][A
+Training VAE:  33%|███▎      | 490/1500 [03:45<07:26,  2.26batch/s, loss=0.727][A
+Training VAE:  33%|███▎      | 491/1500 [03:46<07:26,  2.26batch/s, loss=0.727][A
+Training VAE:  33%|███▎      | 491/1500 [03:46<07:26,  2.26batch/s, loss=0.732][A
+Training VAE:  33%|███▎      | 492/1500 [03:46<07:26,  2.26batch/s, loss=0.732][A
+Training VAE:  33%|███▎      | 492/1500 [03:46<07:26,  2.26batch/s, loss=0.8]  [A
+Training VAE:  33%|███▎      | 493/1500 [03:47<07:25,  2.26batch/s, loss=0.8][A
+Training VAE:  33%|███▎      | 493/1500 [03:47<07:25,  2.26batch/s, loss=0.709][A
+Training VAE:  33%|███▎      | 494/1500 [03:47<07:24,  2.26batch/s, loss=0.709][A
+Training VAE:  33%|███▎      | 494/1500 [03:47<07:24,  2.26batch/s, loss=0.728][A
+Training VAE:  33%|███▎      | 495/1500 [03:48<07:24,  2.26batch/s, loss=0.728][A
+Training VAE:  33%|███▎      | 495/1500 [03:48<07:24,  2.26batch/s, loss=0.716][A
+Training VAE:  33%|███▎      | 496/1500 [03:50<07:24,  2.26batch/s, loss=0.716][A
+Training VAE:  33%|███▎      | 496/1500 [03:50<07:24,  2.26batch/s, loss=0.764][A
+Training VAE:  33%|███▎      | 497/1500 [03:50<16:20,  1.02batch/s, loss=0.764][A
+Training VAE:  33%|███▎      | 497/1500 [03:50<16:20,  1.02batch/s, loss=0.72] [A
+Training VAE:  33%|███▎      | 498/1500 [03:51<13:38,  1.22batch/s, loss=0.72][A
+Training VAE:  33%|███▎      | 498/1500 [03:51<13:38,  1.22batch/s, loss=0.779][A
+Training VAE:  33%|███▎      | 499/1500 [03:51<11:45,  1.42batch/s, loss=0.779][A
+Training VAE:  33%|███▎      | 499/1500 [03:51<11:45,  1.42batch/s, loss=0.707][A
+Training VAE:  33%|███▎      | 500/1500 [03:52<10:26,  1.60batch/s, loss=0.707][A
+Training VAE:  33%|███▎      | 500/1500 [03:52<10:26,  1.60batch/s, loss=0.705][A
+Training VAE:  33%|███▎      | 501/1500 [03:52<09:30,  1.75batch/s, loss=0.705][A
+Training VAE:  33%|███▎      | 501/1500 [03:52<09:30,  1.75batch/s, loss=0.719][A
+Training VAE:  33%|███▎      | 502/1500 [03:52<08:51,  1.88batch/s, loss=0.719][A
+Training VAE:  33%|███▎      | 502/1500 [03:52<08:51,  1.88batch/s, loss=0.719][A
+Training VAE:  34%|███▎      | 503/1500 [03:53<08:23,  1.98batch/s, loss=0.719][A
+Training VAE:  34%|███▎      | 503/1500 [03:53<08:23,  1.98batch/s, loss=0.811][A
+Training VAE:  34%|███▎      | 504/1500 [03:53<08:04,  2.05batch/s, loss=0.811][A
+Training VAE:  34%|███▎      | 504/1500 [03:53<08:04,  2.05batch/s, loss=0.807][A
+Training VAE:  34%|███▎      | 505/1500 [03:54<07:50,  2.11batch/s, loss=0.807][A
+Training VAE:  34%|███▎      | 505/1500 [03:54<07:50,  2.11batch/s, loss=0.704][A
+Training VAE:  34%|███▎      | 506/1500 [03:54<07:41,  2.16batch/s, loss=0.704][A
+Training VAE:  34%|███▎      | 506/1500 [03:54<07:41,  2.16batch/s, loss=0.708][A
+Training VAE:  34%|███▍      | 507/1500 [03:55<07:34,  2.19batch/s, loss=0.708][A
+Training VAE:  34%|███▍      | 507/1500 [03:55<07:34,  2.19batch/s, loss=0.737][A
+Training VAE:  34%|███▍      | 508/1500 [03:55<07:29,  2.21batch/s, loss=0.737][A
+Training VAE:  34%|███▍      | 508/1500 [03:55<07:29,  2.21batch/s, loss=0.732][A
+Training VAE:  34%|███▍      | 509/1500 [03:56<07:25,  2.22batch/s, loss=0.732][A
+Training VAE:  34%|███▍      | 509/1500 [03:56<07:25,  2.22batch/s, loss=0.703][A
+Training VAE:  34%|███▍      | 510/1500 [03:56<07:22,  2.24batch/s, loss=0.703][A
+Training VAE:  34%|███▍      | 510/1500 [03:56<07:22,  2.24batch/s, loss=0.749][A
+Training VAE:  34%|███▍      | 511/1500 [03:56<07:20,  2.24batch/s, loss=0.749][A
+Training VAE:  34%|███▍      | 511/1500 [03:56<07:20,  2.24batch/s, loss=0.702][A
+Training VAE:  34%|███▍      | 512/1500 [03:57<07:19,  2.25batch/s, loss=0.702][A
+Training VAE:  34%|███▍      | 512/1500 [03:57<07:19,  2.25batch/s, loss=0.72] [A
+Training VAE:  34%|███▍      | 513/1500 [03:57<07:18,  2.25batch/s, loss=0.72][A
+Training VAE:  34%|███▍      | 513/1500 [03:57<07:18,  2.25batch/s, loss=0.813][A
+Training VAE:  34%|███▍      | 514/1500 [03:58<07:17,  2.25batch/s, loss=0.813][A
+Training VAE:  34%|███▍      | 514/1500 [03:58<07:17,  2.25batch/s, loss=0.716][A
+Training VAE:  34%|███▍      | 515/1500 [03:58<07:16,  2.26batch/s, loss=0.716][A
+Training VAE:  34%|███▍      | 515/1500 [03:58<07:16,  2.26batch/s, loss=0.728][A
+Training VAE:  34%|███▍      | 516/1500 [03:59<07:16,  2.26batch/s, loss=0.728][A
+Training VAE:  34%|███▍      | 516/1500 [03:59<07:16,  2.26batch/s, loss=0.702][A
+Training VAE:  34%|███▍      | 517/1500 [03:59<07:15,  2.26batch/s, loss=0.702][A
+Training VAE:  34%|███▍      | 517/1500 [03:59<07:15,  2.26batch/s, loss=0.81] [A
+Training VAE:  35%|███▍      | 518/1500 [04:00<07:14,  2.26batch/s, loss=0.81][A
+Training VAE:  35%|███▍      | 518/1500 [04:00<07:14,  2.26batch/s, loss=0.704][A
+Training VAE:  35%|███▍      | 519/1500 [04:00<07:13,  2.26batch/s, loss=0.704][A
+Training VAE:  35%|███▍      | 519/1500 [04:00<07:13,  2.26batch/s, loss=0.712][A
+Training VAE:  35%|███▍      | 520/1500 [04:00<07:13,  2.26batch/s, loss=0.712][A
+Training VAE:  35%|███▍      | 520/1500 [04:00<07:13,  2.26batch/s, loss=0.715][A
+Training VAE:  35%|███▍      | 521/1500 [04:01<07:13,  2.26batch/s, loss=0.715][A
+Training VAE:  35%|███▍      | 521/1500 [04:01<07:13,  2.26batch/s, loss=0.739][A
+Training VAE:  35%|███▍      | 522/1500 [04:01<07:12,  2.26batch/s, loss=0.739][A
+Training VAE:  35%|███▍      | 522/1500 [04:01<07:12,  2.26batch/s, loss=0.707][A
+Training VAE:  35%|███▍      | 523/1500 [04:02<07:11,  2.26batch/s, loss=0.707][A
+Training VAE:  35%|███▍      | 523/1500 [04:02<07:11,  2.26batch/s, loss=0.724][A
+Training VAE:  35%|███▍      | 524/1500 [04:02<07:11,  2.26batch/s, loss=0.724][A
+Training VAE:  35%|███▍      | 524/1500 [04:02<07:11,  2.26batch/s, loss=0.723][ADEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+wave shape: torch.Size([1, 1, 442368]), recon shape: torch.Size([1, 1, 442368])
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+DEVICE: cuda
+
+Training VAE:  35%|███▌      | 525/1500 [04:03<07:11,  2.26batch/s, loss=0.723][A
+Training VAE:  35%|███▌      | 525/1500 [04:03<07:11,  2.26batch/s, loss=0.725][A
+Training VAE:  35%|███▌      | 526/1500 [04:03<07:10,  2.26batch/s, loss=0.725][A
+Training VAE:  35%|███▌      | 526/1500 [04:03<07:10,  2.26batch/s, loss=0.753][A
+Training VAE:  35%|███▌      | 527/1500 [04:04<07:10,  2.26batch/s, loss=0.753][A
+Training VAE:  35%|███▌      | 527/1500 [04:04<07:10,  2.26batch/s, loss=0.745][A
+Training VAE:  35%|███▌      | 528/1500 [04:04<07:10,  2.26batch/s, loss=0.745][A
+Training VAE:  35%|███▌      | 528/1500 [04:04<07:10,  2.26batch/s, loss=0.761][A
+Training VAE:  35%|███▌      | 529/1500 [04:04<07:09,  2.26batch/s, loss=0.761][A
+Training VAE:  35%|███▌      | 529/1500 [04:04<07:09,  2.26batch/s, loss=0.754][A
+Training VAE:  35%|███▌      | 530/1500 [04:05<07:08,  2.26batch/s, loss=0.754][A
+Training VAE:  35%|███▌      | 530/1500 [04:05<07:08,  2.26batch/s, loss=0.712][A
+Training VAE:  35%|███▌      | 531/1500 [04:05<07:08,  2.26batch/s, loss=0.712][A
+Training VAE:  35%|███▌      | 531/1500 [04:05<07:08,  2.26batch/s, loss=0.805][A
+Training VAE:  35%|███▌      | 532/1500 [04:06<07:08,  2.26batch/s, loss=0.805][A
+Training VAE:  35%|███▌      | 532/1500 [04:06<07:08,  2.26batch/s, loss=0.799][A
+Training VAE:  36%|███▌      | 533/1500 [04:07<07:07,  2.26batch/s, loss=0.799][A
+Training VAE:  36%|███▌      | 533/1500 [04:07<07:07,  2.26batch/s, loss=0.708][A
+Training VAE:  36%|███▌      | 534/1500 [04:07<09:01,  1.78batch/s, loss=0.708][A
+Training VAE:  36%|███▌      | 534/1500 [04:07<09:01,  1.78batch/s, loss=0.716][A
+Training VAE:  36%|███▌      | 535/1500 [04:07<08:26,  1.90batch/s, loss=0.716][A
+Training VAE:  36%|███▌      | 535/1500 [04:07<08:26,  1.90batch/s, loss=0.728][A
+Training VAE:  36%|███▌      | 536/1500 [04:08<08:02,  2.00batch/s, loss=0.728][A
+Training VAE:  36%|███▌      | 536/1500 [04:08<08:02,  2.00batch/s, loss=0.703][A
+Training VAE:  36%|███▌      | 537/1500 [04:08<07:44,  2.07batch/s, loss=0.703][A
+Training VAE:  36%|███▌      | 537/1500 [04:08<07:44,  2.07batch/s, loss=0.831][A
+Training VAE:  36%|███▌      | 538/1500 [04:09<07:32,  2.13batch/s, loss=0.831][A
+Training VAE:  36%|███▌      | 538/1500 [04:09<07:32,  2.13batch/s, loss=0.716][A
+Training VAE:  36%|███▌      | 539/1500 [04:09<07:23,  2.16batch/s, loss=0.716][A
+Training VAE:  36%|███▌      | 539/1500 [04:09<07:23,  2.16batch/s, loss=0.8]  [A
+Training VAE:  36%|███▌      | 540/1500 [04:10<07:18,  2.19batch/s, loss=0.8][A
+Training VAE:  36%|███▌      | 540/1500 [04:10<07:18,  2.19batch/s, loss=0.734][A
+Training VAE:  36%|███▌      | 541/1500 [04:10<07:13,  2.21batch/s, loss=0.734][A
+Training VAE:  36%|███▌      | 541/1500 [04:10<07:13,  2.21batch/s, loss=0.725][A
+Training VAE:  36%|███▌      | 542/1500 [04:11<07:10,  2.23batch/s, loss=0.725][A
+Training VAE:  36%|███▌      | 542/1500 [04:11<07:10,  2.23batch/s, loss=0.743][A
+Training VAE:  36%|███▌      | 543/1500 [04:11<07:07,  2.24batch/s, loss=0.743][A
+Training VAE:  36%|███▌      | 543/1500 [04:11<07:07,  2.24batch/s, loss=0.724][A
+Training VAE:  36%|███▋      | 544/1500 [04:11<07:06,  2.24batch/s, loss=0.724][A
+Training VAE:  36%|███▋      | 544/1500 [04:11<07:06,  2.24batch/s, loss=0.736][A
+Training VAE:  36%|███▋      | 545/1500 [04:12<07:04,  2.25batch/s, loss=0.736][A
+Training VAE:  36%|███▋      | 545/1500 [04:12<07:04,  2.25batch/s, loss=0.761][A
+Training VAE:  36%|███▋      | 546/1500 [04:12<07:03,  2.25batch/s, loss=0.761][A
+Training VAE:  36%|███▋      | 546/1500 [04:12<07:03,  2.25batch/s, loss=0.713][A
+Training VAE:  36%|███▋      | 547/1500 [04:13<07:02,  2.26batch/s, loss=0.713][A
+Training VAE:  36%|███▋      | 547/1500 [04:13<07:02,  2.26batch/s, loss=0.728][A
+Training VAE:  37%|███▋      | 548/1500 [04:13<07:02,  2.25batch/s, loss=0.728][A
+Training VAE:  37%|███▋      | 548/1500 [04:13<07:02,  2.25batch/s, loss=0.712][A
+Training VAE:  37%|███▋      | 549/1500 [04:14<07:01,  2.26batch/s, loss=0.712][A
+Training VAE:  37%|███▋      | 549/1500 [04:14<07:01,  2.26batch/s, loss=0.717][A
+Training VAE:  37%|███▋      | 550/1500 [04:14<07:00,  2.26batch/s, loss=0.717][A
+Training VAE:  37%|███▋      | 550/1500 [04:14<07:00,  2.26batch/s, loss=0.718][A
+Training VAE:  37%|███▋      | 551/1500 [04:15<06:59,  2.26batch/s, loss=0.718][A
+Training VAE:  37%|███▋      | 551/1500 [04:15<06:59,  2.26batch/s, loss=0.755][A
+Training VAE:  37%|███▋      | 552/1500 [04:15<06:59,  2.26batch/s, loss=0.755][A
+Training VAE:  37%|███▋      | 552/1500 [04:15<06:59,  2.26batch/s, loss=0.742][A
+Training VAE:  37%|███▋      | 553/1500 [04:15<06:58,  2.26batch/s, loss=0.742][A
+Training VAE:  37%|███▋      | 553/1500 [04:15<06:58,  2.26batch/s, loss=0.78] [A
+Training VAE:  37%|███▋      | 554/1500 [04:16<06:58,  2.26batch/s, loss=0.78][A
+Training VAE:  37%|███▋      | 554/1500 [04:16<06:58,  2.26batch/s, loss=0.773][A
+Training VAE:  37%|███▋      | 555/1500 [04:16<06:57,  2.26batch/s, loss=0.773][A
+Training VAE:  37%|███▋      | 555/1500 [04:16<06:57,  2.26batch/s, loss=0.748][A
+Training VAE:  37%|███▋      | 556/1500 [04:17<06:57,  2.26batch/s, loss=0.748][A
+Training VAE:  37%|███▋      | 556/1500 [04:17<06:57,  2.26batch/s, loss=0.827][A
+Training VAE:  37%|███▋      | 557/1500 [04:17<06:57,  2.26batch/s, loss=0.827][A
+Training VAE:  37%|███▋      | 557/1500 [04:17<06:57,  2.26batch/s, loss=0.815][A
+Training VAE:  37%|███▋      | 558/1500 [04:18<06:56,  2.26batch/s, loss=0.815][A
+Training VAE:  37%|███▋      | 558/1500 [04:18<06:56,  2.26batch/s, loss=0.777][A
+Training VAE:  37%|███▋      | 559/1500 [04:18<06:56,  2.26batch/s, loss=0.777][A
+Training VAE:  37%|███▋      | 559/1500 [04:18<06:56,  2.26batch/s, loss=0.766][A
+Training VAE:  37%|███▋      | 560/1500 [04:19<06:56,  2.26batch/s, loss=0.766][A
+Training VAE:  37%|███▋      | 560/1500 [04:19<06:56,  2.26batch/s, loss=0.842][A
+Training VAE:  37%|███▋      | 561/1500 [04:19<06:55,  2.26batch/s, loss=0.842][A
+Training VAE:  37%|███▋      | 561/1500 [04:19<06:55,  2.26batch/s, loss=0.812][A
+Training VAE:  37%|███▋      | 562/1500 [04:19<06:54,  2.26batch/s, loss=0.812][A
+Training VAE:  37%|███▋      | 562/1500 [04:19<06:54,  2.26batch/s, loss=0.768][A
+Training VAE:  38%|███▊      | 563/1500 [04:20<06:54,  2.26batch/s, loss=0.768][A
+Training VAE:  38%|███▊      | 563/1500 [04:20<06:54,  2.26batch/s, loss=0.718][A
+Training VAE:  38%|███▊      | 564/1500 [04:20<06:54,  2.26batch/s, loss=0.718][A
+Training VAE:  38%|███▊      | 564/1500 [04:20<06:54,  2.26batch/s, loss=0.775][A
+Training VAE:  38%|███▊      | 565/1500 [04:21<06:53,  2.26batch/s, loss=0.775][A
+Training VAE:  38%|███▊      | 565/1500 [04:21<06:53,  2.26batch/s, loss=0.795][A
+Training VAE:  38%|███▊      | 566/1500 [04:21<06:53,  2.26batch/s, loss=0.795][A
+Training VAE:  38%|███▊      | 566/1500 [04:21<06:53,  2.26batch/s, loss=0.814][A
+Training VAE:  38%|███▊      | 567/1500 [04:22<06:52,  2.26batch/s, loss=0.814][A
+Training VAE:  38%|███▊      | 567/1500 [04:22<06:52,  2.26batch/s, loss=0.743][A
+Training VAE:  38%|███▊      | 568/1500 [04:22<06:52,  2.26batch/s, loss=0.743][A
+Training VAE:  38%|███▊      | 568/1500 [04:22<06:52,  2.26batch/s, loss=0.738][A
+Training VAE:  38%|███▊      | 569/1500 [04:22<06:51,  2.26batch/s, loss=0.738][A
+Training VAE:  38%|███▊      | 569/1500 [04:22<06:51,  2.26batch/s, loss=0.709][A
+Training VAE:  38%|███▊      | 570/1500 [04:23<06:51,  2.26batch/s, loss=0.709][A
+Training VAE:  38%|███▊      | 570/1500 [04:23<06:51,  2.26batch/s, loss=0.706][A
+Training VAE:  38%|███▊      | 571/1500 [04:23<06:50,  2.26batch/s, loss=0.706][A
+Training VAE:  38%|███▊      | 571/1500 [04:23<06:50,  2.26batch/s, loss=0.707][A
+Training VAE:  38%|███▊      | 572/1500 [04:24<06:50,  2.26batch/s, loss=0.707][A
+Training VAE:  38%|███▊      | 572/1500 [04:24<06:50,  2.26batch/s, loss=0.826][A
+Training VAE:  38%|███▊      | 573/1500 [04:24<06:50,  2.26batch/s, loss=0.826][A
+Training VAE:  38%|███▊      | 573/1500 [04:24<06:50,  2.26batch/s, loss=0.714][A
+Training VAE:  38%|███▊      | 574/1500 [04:25<06:49,  2.26batch/s, loss=0.714][A
+Training VAE:  38%|███▊      | 574/1500 [04:25<06:49,  2.26batch/s, loss=0.702][A
+Training VAE:  38%|███▊      | 575/1500 [04:25<06:49,  2.26batch/s, loss=0.702][A
+Training VAE:  38%|███▊      | 575/1500 [04:25<06:49,  2.26batch/s, loss=0.812][A
+Training VAE:  38%|███▊      | 576/1500 [04:26<06:49,  2.26batch/s, loss=0.812][A
+Training VAE:  38%|███▊      | 576/1500 [04:26<06:49,  2.26batch/s, loss=0.707][A
+Training VAE:  38%|███▊      | 577/1500 [04:26<06:48,  2.26batch/s, loss=0.707][A
+Training VAE:  38%|███▊      | 577/1500 [04:26<06:48,  2.26batch/s, loss=0.716][A
+Training VAE:  39%|███▊      | 578/1500 [04:26<06:47,  2.26batch/s, loss=0.716][A
+Training VAE:  39%|███▊      | 578/1500 [04:26<06:47,  2.26batch/s, loss=0.801][A
+Training VAE:  39%|███▊      | 579/1500 [04:27<06:47,  2.26batch/s, loss=0.801][A
+Training VAE:  39%|███▊      | 579/1500 [04:27<06:47,  2.26batch/s, loss=0.758][A
+Training VAE:  39%|███▊      | 580/1500 [04:27<06:47,  2.26batch/s, loss=0.758][A
+Training VAE:  39%|███▊      | 580/1500 [04:27<06:47,  2.26batch/s, loss=0.706][A
+Training VAE:  39%|███▊      | 581/1500 [04:28<06:46,  2.26batch/s, loss=0.706][A
+Training VAE:  39%|███▊      | 581/1500 [04:28<06:46,  2.26batch/s, loss=0.789][A
+Training VAE:  39%|███▉      | 582/1500 [04:28<06:45,  2.26batch/s, loss=0.789][A
+Training VAE:  39%|███▉      | 582/1500 [04:28<06:45,  2.26batch/s, loss=0.718][A
+Training VAE:  39%|███▉      | 583/1500 [04:29<06:45,  2.26batch/s, loss=0.718][A
+Training VAE:  39%|███▉      | 583/1500 [04:29<06:45,  2.26batch/s, loss=0.701][A
+Training VAE:  39%|███▉      | 584/1500 [04:29<06:45,  2.26batch/s, loss=0.701][A
+Training VAE:  39%|███▉      | 584/1500 [04:29<06:45,  2.26batch/s, loss=0.713][A
+Training VAE:  39%|███▉      | 585/1500 [04:30<06:44,  2.26batch/s, loss=0.713][A
+Training VAE:  39%|███▉      | 585/1500 [04:30<06:44,  2.26batch/s, loss=0.735][A
+Training VAE:  39%|███▉      | 586/1500 [04:30<06:44,  2.26batch/s, loss=0.735][A
+Training VAE:  39%|███▉      | 586/1500 [04:30<06:44,  2.26batch/s, loss=0.713][A
+Training VAE:  39%|███▉      | 587/1500 [04:30<06:43,  2.26batch/s, loss=0.713][A
+Training VAE:  39%|███▉      | 587/1500 [04:30<06:43,  2.26batch/s, loss=0.803][A
+Training VAE:  39%|███▉      | 588/1500 [04:31<06:43,  2.26batch/s, loss=0.803][A
+Training VAE:  39%|███▉      | 588/1500 [04:31<06:43,  2.26batch/s, loss=0.722][A
+Training VAE:  39%|███▉      | 589/1500 [04:31<06:42,  2.26batch/s, loss=0.722][A
+Training VAE:  39%|███▉      | 589/1500 [04:31<06:42,  2.26batch/s, loss=0.752][A
+Training VAE:  39%|███▉      | 590/1500 [04:32<06:42,  2.26batch/s, loss=0.752][A
+Training VAE:  39%|███▉      | 590/1500 [04:32<06:42,  2.26batch/s, loss=0.828][A
+Training VAE:  39%|███▉      | 591/1500 [04:32<06:41,  2.26batch/s, loss=0.828][A
+Training VAE:  39%|███▉      | 591/1500 [04:32<06:41,  2.26batch/s, loss=0.716][A
+Training VAE:  39%|███▉      | 592/1500 [04:33<06:41,  2.26batch/s, loss=0.716][A
+Training VAE:  39%|███▉      | 592/1500 [04:33<06:41,  2.26batch/s, loss=0.712][A
+Training VAE:  40%|███▉      | 593/1500 [04:33<06:41,  2.26batch/s, loss=0.712][A
+Training VAE:  40%|███▉      | 593/1500 [04:33<06:41,  2.26batch/s, loss=0.708][A
+Training VAE:  40%|███▉      | 594/1500 [04:34<06:40,  2.26batch/s, loss=0.708][A
+Training VAE:  40%|███▉      | 594/1500 [04:34<06:40,  2.26batch/s, loss=0.71] [A
+Training VAE:  40%|███▉      | 595/1500 [04:34<06:40,  2.26batch/s, loss=0.71][A
+Training VAE:  40%|███▉      | 595/1500 [04:34<06:40,  2.26batch/s, loss=0.726][A
+Training VAE:  40%|███▉      | 596/1500 [04:34<06:40,  2.26batch/s, loss=0.726][A
+Training VAE:  40%|███▉      | 596/1500 [04:34<06:40,  2.26batch/s, loss=0.785][A
+Training VAE:  40%|███▉      | 597/1500 [04:35<06:39,  2.26batch/s, loss=0.785][A
+Training VAE:  40%|███▉      | 597/1500 [04:35<06:39,  2.26batch/s, loss=0.796][A
+Training VAE:  40%|███▉      | 598/1500 [04:35<06:38,  2.26batch/s, loss=0.796][A
+Training VAE:  40%|███▉      | 598/1500 [04:35<06:38,  2.26batch/s, loss=0.758][A
+Training VAE:  40%|███▉      | 599/1500 [04:36<06:38,  2.26batch/s, loss=0.758][A
+Training VAE:  40%|███▉      | 599/1500 [04:36<06:38,  2.26batch/s, loss=0.711][A
+Training VAE:  40%|████      | 600/1500 [04:36<06:38,  2.26batch/s, loss=0.711][A
+Training VAE:  40%|████      | 600/1500 [04:36<06:38,  2.26batch/s, loss=0.714][A
+Training VAE:  40%|████      | 601/1500 [04:37<06:37,  2.26batch/s, loss=0.714][A
+Training VAE:  40%|████      | 601/1500 [04:37<06:37,  2.26batch/s, loss=0.724][A
+Training VAE:  40%|████      | 602/1500 [04:37<06:37,  2.26batch/s, loss=0.724][A
+Training VAE:  40%|████      | 602/1500 [04:37<06:37,  2.26batch/s, loss=0.722][A
+Training VAE:  40%|████      | 603/1500 [04:38<06:36,  2.26batch/s, loss=0.722][A
+Training VAE:  40%|████      | 603/1500 [04:38<06:36,  2.26batch/s, loss=0.788][A
+Training VAE:  40%|████      | 604/1500 [04:38<06:36,  2.26batch/s, loss=0.788][A
+Training VAE:  40%|████      | 604/1500 [04:38<06:36,  2.26batch/s, loss=0.704][A
+Training VAE:  40%|████      | 605/1500 [04:38<06:35,  2.26batch/s, loss=0.704][A
+Training VAE:  40%|████      | 605/1500 [04:38<06:35,  2.26batch/s, loss=0.714][A
+Training VAE:  40%|████      | 606/1500 [04:39<06:35,  2.26batch/s, loss=0.714][A
+Training VAE:  40%|████      | 606/1500 [04:39<06:35,  2.26batch/s, loss=0.715][A
+Training VAE:  40%|████      | 607/1500 [04:39<06:34,  2.26batch/s, loss=0.715][A
+Training VAE:  40%|████      | 607/1500 [04:39<06:34,  2.26batch/s, loss=0.701][A
+Training VAE:  41%|████      | 608/1500 [04:40<06:34,  2.26batch/s, loss=0.701][A
+Training VAE:  41%|████      | 608/1500 [04:40<06:34,  2.26batch/s, loss=0.706][A
+Training VAE:  41%|████      | 609/1500 [04:40<06:34,  2.26batch/s, loss=0.706][A
+Training VAE:  41%|████      | 609/1500 [04:40<06:34,  2.26batch/s, loss=0.73] [A
+Training VAE:  41%|████      | 610/1500 [04:41<06:33,  2.26batch/s, loss=0.73][A
+Training VAE:  41%|████      | 610/1500 [04:41<06:33,  2.26batch/s, loss=0.718][A
+Training VAE:  41%|████      | 611/1500 [04:41<06:33,  2.26batch/s, loss=0.718][A
+Training VAE:  41%|████      | 611/1500 [04:41<06:33,  2.26batch/s, loss=0.728][A
+Training VAE:  41%|████      | 612/1500 [04:42<06:33,  2.26batch/s, loss=0.728][A
+Training VAE:  41%|████      | 612/1500 [04:42<06:33,  2.26batch/s, loss=0.716][A
+Training VAE:  41%|████      | 613/1500 [04:42<06:32,  2.26batch/s, loss=0.716][A
+Training VAE:  41%|████      | 613/1500 [04:42<06:32,  2.26batch/s, loss=0.785][A
+Training VAE:  41%|████      | 614/1500 [04:42<06:31,  2.26batch/s, loss=0.785][A
+Training VAE:  41%|████      | 614/1500 [04:42<06:31,  2.26batch/s, loss=0.709][A
+Training VAE:  41%|████      | 615/1500 [04:43<06:31,  2.26batch/s, loss=0.709][A
+Training VAE:  41%|████      | 615/1500 [04:43<06:31,  2.26batch/s, loss=0.855][A
+Training VAE:  41%|████      | 616/1500 [04:43<06:31,  2.26batch/s, loss=0.855][A
+Training VAE:  41%|████      | 616/1500 [04:43<06:31,  2.26batch/s, loss=0.778][A
+Training VAE:  41%|████      | 617/1500 [04:44<06:30,  2.26batch/s, loss=0.778][A
+Training VAE:  41%|████      | 617/1500 [04:44<06:30,  2.26batch/s, loss=0.773][A
+Training VAE:  41%|████      | 618/1500 [04:44<06:30,  2.26batch/s, loss=0.773][A
+Training VAE:  41%|████      | 618/1500 [04:44<06:30,  2.26batch/s, loss=0.806][A
+Training VAE:  41%|████▏     | 619/1500 [04:45<06:29,  2.26batch/s, loss=0.806][A
+Training VAE:  41%|████▏     | 619/1500 [04:45<06:29,  2.26batch/s, loss=0.71] [A
+Training VAE:  41%|████▏     | 620/1500 [04:45<06:29,  2.26batch/s, loss=0.71][A
+Training VAE:  41%|████▏     | 620/1500 [04:45<06:29,  2.26batch/s, loss=0.71][A
+Training VAE:  41%|████▏     | 621/1500 [04:46<07:07,  2.06batch/s, loss=0.71][A
+Training VAE:  41%|████▏     | 621/1500 [04:46<07:07,  2.06batch/s, loss=0.722][A
+Training VAE:  41%|████▏     | 622/1500 [04:46<06:55,  2.11batch/s, loss=0.722][A
+Training VAE:  41%|████▏     | 622/1500 [04:46<06:55,  2.11batch/s, loss=0.813][A
+Training VAE:  42%|████▏     | 623/1500 [04:47<06:46,  2.16batch/s, loss=0.813][A
+Training VAE:  42%|████▏     | 623/1500 [04:47<06:46,  2.16batch/s, loss=0.836][A
+Training VAE:  42%|████▏     | 624/1500 [04:47<06:40,  2.18batch/s, loss=0.836][A
+Training VAE:  42%|████▏     | 624/1500 [04:47<06:40,  2.18batch/s, loss=0.727][A
+Training VAE:  42%|████▏     | 625/1500 [04:47<06:36,  2.21batch/s, loss=0.727][A
+Training VAE:  42%|████▏     | 625/1500 [04:47<06:36,  2.21batch/s, loss=0.735][A
+Training VAE:  42%|████▏     | 626/1500 [04:48<06:33,  2.22batch/s, loss=0.735][A
+Training VAE:  42%|████▏     | 626/1500 [04:48<06:33,  2.22batch/s, loss=0.769][A
+Training VAE:  42%|████▏     | 627/1500 [04:48<06:30,  2.24batch/s, loss=0.769][A
+Training VAE:  42%|████▏     | 627/1500 [04:48<06:30,  2.24batch/s, loss=0.723][A
+Training VAE:  42%|████▏     | 628/1500 [04:49<06:29,  2.24batch/s, loss=0.723][A
+Training VAE:  42%|████▏     | 628/1500 [04:49<06:29,  2.24batch/s, loss=0.705][A
+Training VAE:  42%|████▏     | 629/1500 [04:49<06:27,  2.25batch/s, loss=0.705][A
+Training VAE:  42%|████▏     | 629/1500 [04:49<06:27,  2.25batch/s, loss=0.706][A
+Training VAE:  42%|████▏     | 630/1500 [04:50<06:26,  2.25batch/s, loss=0.706][A
+Training VAE:  42%|████▏     | 630/1500 [04:50<06:26,  2.25batch/s, loss=0.704][A
+Training VAE:  42%|████▏     | 631/1500 [04:50<06:25,  2.25batch/s, loss=0.704][A
+Training VAE:  42%|████▏     | 631/1500 [04:50<06:25,  2.25batch/s, loss=0.717][A
+Training VAE:  42%|████▏     | 632/1500 [04:50<06:25,  2.25batch/s, loss=0.717][A
+Training VAE:  42%|████▏     | 632/1500 [04:50<06:25,  2.25batch/s, loss=0.705][A
+Training VAE:  42%|████▏     | 633/1500 [04:51<06:24,  2.26batch/s, loss=0.705][A
+Training VAE:  42%|████▏     | 633/1500 [04:51<06:24,  2.26batch/s, loss=0.745][A
+Training VAE:  42%|████▏     | 634/1500 [04:51<06:23,  2.26batch/s, loss=0.745][A
+Training VAE:  42%|████▏     | 634/1500 [04:51<06:23,  2.26batch/s, loss=0.815][A
+Training VAE:  42%|████▏     | 635/1500 [04:52<06:22,  2.26batch/s, loss=0.815][A
+Training VAE:  42%|████▏     | 635/1500 [04:52<06:22,  2.26batch/s, loss=0.733][A
+Training VAE:  42%|████▏     | 636/1500 [04:52<06:22,  2.26batch/s, loss=0.733][A
+Training VAE:  42%|████▏     | 636/1500 [04:52<06:22,  2.26batch/s, loss=0.753][A
+Training VAE:  42%|████▏     | 637/1500 [04:53<06:22,  2.26batch/s, loss=0.753][A
+Training VAE:  42%|████▏     | 637/1500 [04:53<06:22,  2.26batch/s, loss=0.784][A
+Training VAE:  43%|████▎     | 638/1500 [04:53<06:21,  2.26batch/s, loss=0.784][A
+Training VAE:  43%|████▎     | 638/1500 [04:53<06:21,  2.26batch/s, loss=0.783][A
+Training VAE:  43%|████▎     | 639/1500 [04:54<06:21,  2.26batch/s, loss=0.783][A
+Training VAE:  43%|████▎     | 639/1500 [04:54<06:21,  2.26batch/s, loss=0.781][A
+Training VAE:  43%|████▎     | 640/1500 [04:54<06:20,  2.26batch/s, loss=0.781][A
+Training VAE:  43%|████▎     | 640/1500 [04:54<06:20,  2.26batch/s, loss=0.819][A
+Training VAE:  43%|████▎     | 641/1500 [04:54<06:20,  2.26batch/s, loss=0.819][A
+Training VAE:  43%|████▎     | 641/1500 [04:54<06:20,  2.26batch/s, loss=0.747][A
+Training VAE:  43%|████▎     | 642/1500 [04:55<06:19,  2.26batch/s, loss=0.747][A
+Training VAE:  43%|████▎     | 642/1500 [04:55<06:19,  2.26batch/s, loss=0.71] [A
+Training VAE:  43%|████▎     | 643/1500 [04:55<06:19,  2.26batch/s, loss=0.71][A
+Training VAE:  43%|████▎     | 643/1500 [04:55<06:19,  2.26batch/s, loss=0.72][A
+Training VAE:  43%|████▎     | 644/1500 [04:56<06:18,  2.26batch/s, loss=0.72][A
+Training VAE:  43%|████▎     | 644/1500 [04:56<06:18,  2.26batch/s, loss=0.708][A
+Training VAE:  43%|████▎     | 645/1500 [04:56<06:18,  2.26batch/s, loss=0.708][A
+Training VAE:  43%|████▎     | 645/1500 [04:56<06:18,  2.26batch/s, loss=0.73] [A
+Training VAE:  43%|████▎     | 646/1500 [04:57<06:17,  2.26batch/s, loss=0.73][A
+Training VAE:  43%|████▎     | 646/1500 [04:57<06:17,  2.26batch/s, loss=0.707][A
+Training VAE:  43%|████▎     | 647/1500 [04:57<06:17,  2.26batch/s, loss=0.707][A
+Training VAE:  43%|████▎     | 647/1500 [04:57<06:17,  2.26batch/s, loss=0.74] [A
+Training VAE:  43%|████▎     | 648/1500 [04:58<06:17,  2.26batch/s, loss=0.74][A
+Training VAE:  43%|████▎     | 648/1500 [04:58<06:17,  2.26batch/s, loss=0.701][A
+Training VAE:  43%|████▎     | 649/1500 [04:58<06:16,  2.26batch/s, loss=0.701][A
+Training VAE:  43%|████▎     | 649/1500 [04:58<06:16,  2.26batch/s, loss=0.716][A
+Training VAE:  43%|████▎     | 650/1500 [04:58<06:15,  2.26batch/s, loss=0.716][A
+Training VAE:  43%|████▎     | 650/1500 [04:58<06:15,  2.26batch/s, loss=0.757][A
+Training VAE:  43%|████▎     | 651/1500 [04:59<06:15,  2.26batch/s, loss=0.757][A
+Training VAE:  43%|████▎     | 651/1500 [04:59<06:15,  2.26batch/s, loss=0.779][A
+Training VAE:  43%|████▎     | 652/1500 [04:59<06:15,  2.26batch/s, loss=0.779][A
+Training VAE:  43%|████▎     | 652/1500 [04:59<06:15,  2.26batch/s, loss=0.73] [A
+Training VAE:  44%|████▎     | 653/1500 [05:00<06:14,  2.26batch/s, loss=0.73][A
+Training VAE:  44%|████▎     | 653/1500 [05:00<06:14,  2.26batch/s, loss=0.72][A
+Training VAE:  44%|████▎     | 654/1500 [05:00<06:14,  2.26batch/s, loss=0.72][A
+Training VAE:  44%|████▎     | 654/1500 [05:00<06:14,  2.26batch/s, loss=0.712][A
+Training VAE:  44%|████▎     | 655/1500 [05:01<06:13,  2.26batch/s, loss=0.712][A
+Training VAE:  44%|████▎     | 655/1500 [05:01<06:13,  2.26batch/s, loss=0.722][A
+Training VAE:  44%|████▎     | 656/1500 [05:01<06:13,  2.26batch/s, loss=0.722][A
+Training VAE:  44%|████▎     | 656/1500 [05:01<06:13,  2.26batch/s, loss=0.76] [A
+Training VAE:  44%|████▍     | 657/1500 [05:02<06:12,  2.26batch/s, loss=0.76][A
+Training VAE:  44%|████▍     | 657/1500 [05:02<06:12,  2.26batch/s, loss=0.843][A
+Training VAE:  44%|████▍     | 658/1500 [05:02<06:12,  2.26batch/s, loss=0.843][A
+Training VAE:  44%|████▍     | 658/1500 [05:02<06:12,  2.26batch/s, loss=0.715][A
+Training VAE:  44%|████▍     | 659/1500 [05:02<06:11,  2.26batch/s, loss=0.715][A
+Training VAE:  44%|████▍     | 659/1500 [05:02<06:11,  2.26batch/s, loss=0.743][A
+Training VAE:  44%|████▍     | 660/1500 [05:03<06:11,  2.26batch/s, loss=0.743][A
+Training VAE:  44%|████▍     | 660/1500 [05:03<06:11,  2.26batch/s, loss=0.794][A
+Training VAE:  44%|████▍     | 661/1500 [05:03<06:11,  2.26batch/s, loss=0.794][A
+Training VAE:  44%|████▍     | 661/1500 [05:03<06:11,  2.26batch/s, loss=0.74] [A
+Training VAE:  44%|████▍     | 662/1500 [05:04<06:10,  2.26batch/s, loss=0.74][A
+Training VAE:  44%|████▍     | 662/1500 [05:04<06:10,  2.26batch/s, loss=0.74][A
+Training VAE:  44%|████▍     | 663/1500 [05:04<06:10,  2.26batch/s, loss=0.74][A
+Training VAE:  44%|████▍     | 663/1500 [05:04<06:10,  2.26batch/s, loss=0.725][A
+Training VAE:  44%|████▍     | 664/1500 [05:05<06:09,  2.26batch/s, loss=0.725][A
+Training VAE:  44%|████▍     | 664/1500 [05:05<06:09,  2.26batch/s, loss=0.721][A
+Training VAE:  44%|████▍     | 665/1500 [05:05<06:09,  2.26batch/s, loss=0.721][A
+Training VAE:  44%|████▍     | 665/1500 [05:05<06:09,  2.26batch/s, loss=0.75] [A
+Training VAE:  44%|████▍     | 666/1500 [05:06<06:08,  2.26batch/s, loss=0.75][A
+Training VAE:  44%|████▍     | 666/1500 [05:06<06:08,  2.26batch/s, loss=0.712][A
+Training VAE:  44%|████▍     | 667/1500 [05:06<06:08,  2.26batch/s, loss=0.712][A
+Training VAE:  44%|████▍     | 667/1500 [05:06<06:08,  2.26batch/s, loss=0.703][A
+Training VAE:  45%|████▍     | 668/1500 [05:06<06:08,  2.26batch/s, loss=0.703][A
+Training VAE:  45%|████▍     | 668/1500 [05:06<06:08,  2.26batch/s, loss=0.702][A
+Training VAE:  45%|████▍     | 669/1500 [05:07<06:07,  2.26batch/s, loss=0.702][A
+Training VAE:  45%|████▍     | 669/1500 [05:07<06:07,  2.26batch/s, loss=0.827][A
+Training VAE:  45%|████▍     | 670/1500 [05:07<06:07,  2.26batch/s, loss=0.827][A
+Training VAE:  45%|████▍     | 670/1500 [05:07<06:07,  2.26batch/s, loss=0.736][A
+Training VAE:  45%|████▍     | 671/1500 [05:08<06:06,  2.26batch/s, loss=0.736][A
+Training VAE:  45%|████▍     | 671/1500 [05:08<06:06,  2.26batch/s, loss=0.738][A
+Training VAE:  45%|████▍     | 672/1500 [05:08<06:06,  2.26batch/s, loss=0.738][A
+Training VAE:  45%|████▍     | 672/1500 [05:08<06:06,  2.26batch/s, loss=0.736][A
+Training VAE:  45%|████▍     | 673/1500 [05:09<06:05,  2.26batch/s, loss=0.736][A
+Training VAE:  45%|████▍     | 673/1500 [05:09<06:05,  2.26batch/s, loss=0.761][A
+Training VAE:  45%|████▍     | 674/1500 [05:09<06:05,  2.26batch/s, loss=0.761][A
+Training VAE:  45%|████▍     | 674/1500 [05:09<06:05,  2.26batch/s, loss=0.753][A
+Training VAE:  45%|████▌     | 675/1500 [05:10<06:04,  2.26batch/s, loss=0.753][A
+Training VAE:  45%|████▌     | 675/1500 [05:10<06:04,  2.26batch/s, loss=0.749][A
+Training VAE:  45%|████▌     | 676/1500 [05:10<06:04,  2.26batch/s, loss=0.749][A
+Training VAE:  45%|████▌     | 676/1500 [05:10<06:04,  2.26batch/s, loss=0.754][A
+Training VAE:  45%|████▌     | 677/1500 [05:10<06:04,  2.26batch/s, loss=0.754][A
+Training VAE:  45%|████▌     | 677/1500 [05:10<06:04,  2.26batch/s, loss=0.739][A
+Training VAE:  45%|████▌     | 678/1500 [05:11<06:03,  2.26batch/s, loss=0.739][A
+Training VAE:  45%|████▌     | 678/1500 [05:11<06:03,  2.26batch/s, loss=0.816][A
+Training VAE:  45%|████▌     | 679/1500 [05:11<06:03,  2.26batch/s, loss=0.816][A
+Training VAE:  45%|████▌     | 679/1500 [05:11<06:03,  2.26batch/s, loss=0.768][A
+Training VAE:  45%|████▌     | 680/1500 [05:12<06:03,  2.26batch/s, loss=0.768][A
+Training VAE:  45%|████▌     | 680/1500 [05:12<06:03,  2.26batch/s, loss=0.739][A
+Training VAE:  45%|████▌     | 681/1500 [05:12<06:02,  2.26batch/s, loss=0.739][A
+Training VAE:  45%|████▌     | 681/1500 [05:12<06:02,  2.26batch/s, loss=0.711][A
+Training VAE:  45%|████▌     | 682/1500 [05:13<06:01,  2.26batch/s, loss=0.711][A
+Training VAE:  45%|████▌     | 682/1500 [05:13<06:01,  2.26batch/s, loss=0.707][A
+Training VAE:  46%|████▌     | 683/1500 [05:13<06:01,  2.26batch/s, loss=0.707][A
+Training VAE:  46%|████▌     | 683/1500 [05:13<06:01,  2.26batch/s, loss=0.727][A
+Training VAE:  46%|████▌     | 684/1500 [05:14<06:01,  2.26batch/s, loss=0.727][A
+Training VAE:  46%|████▌     | 684/1500 [05:14<06:01,  2.26batch/s, loss=0.707][A
+Training VAE:  46%|████▌     | 685/1500 [05:14<06:00,  2.26batch/s, loss=0.707][A
+Training VAE:  46%|████▌     | 685/1500 [05:14<06:00,  2.26batch/s, loss=0.737][A
+Training VAE:  46%|████▌     | 686/1500 [05:14<06:00,  2.26batch/s, loss=0.737][A
+Training VAE:  46%|████▌     | 686/1500 [05:14<06:00,  2.26batch/s, loss=0.851][A
+Training VAE:  46%|████▌     | 687/1500 [05:15<05:59,  2.26batch/s, loss=0.851][A
+Training VAE:  46%|████▌     | 687/1500 [05:15<05:59,  2.26batch/s, loss=0.756][A
+Training VAE:  46%|████▌     | 688/1500 [05:15<05:59,  2.26batch/s, loss=0.756][A
+Training VAE:  46%|████▌     | 688/1500 [05:15<05:59,  2.26batch/s, loss=0.759][A
+Training VAE:  46%|████▌     | 689/1500 [05:16<05:58,  2.26batch/s, loss=0.759][A
+Training VAE:  46%|████▌     | 689/1500 [05:16<05:58,  2.26batch/s, loss=0.827][A
+Training VAE:  46%|████▌     | 690/1500 [05:16<05:58,  2.26batch/s, loss=0.827][A
+Training VAE:  46%|████▌     | 690/1500 [05:16<05:58,  2.26batch/s, loss=0.809][A
+Training VAE:  46%|████▌     | 691/1500 [05:17<05:57,  2.26batch/s, loss=0.809][A
+Training VAE:  46%|████▌     | 691/1500 [05:17<05:57,  2.26batch/s, loss=0.783][A
+Training VAE:  46%|████▌     | 692/1500 [05:17<05:57,  2.26batch/s, loss=0.783][A
+Training VAE:  46%|████▌     | 692/1500 [05:17<05:57,  2.26batch/s, loss=0.795][A
+Training VAE:  46%|████▌     | 693/1500 [05:17<05:56,  2.26batch/s, loss=0.795][A
+Training VAE:  46%|████▌     | 693/1500 [05:17<05:56,  2.26batch/s, loss=0.796][A
+Training VAE:  46%|████▋     | 694/1500 [05:18<05:56,  2.26batch/s, loss=0.796][A
+Training VAE:  46%|████▋     | 694/1500 [05:18<05:56,  2.26batch/s, loss=0.794][A
+Training VAE:  46%|████▋     | 695/1500 [05:18<05:55,  2.26batch/s, loss=0.794][A
+Training VAE:  46%|████▋     | 695/1500 [05:18<05:55,  2.26batch/s, loss=0.792][A
+Training VAE:  46%|████▋     | 696/1500 [05:19<05:56,  2.26batch/s, loss=0.792][A
+Training VAE:  46%|████▋     | 696/1500 [05:19<05:56,  2.26batch/s, loss=0.84] [A
+Training VAE:  46%|████▋     | 697/1500 [05:19<05:55,  2.26batch/s, loss=0.84][A
+Training VAE:  46%|████▋     | 697/1500 [05:19<05:55,  2.26batch/s, loss=0.761][A
+Training VAE:  47%|████▋     | 698/1500 [05:20<05:54,  2.26batch/s, loss=0.761][A
+Training VAE:  47%|████▋     | 698/1500 [05:20<05:54,  2.26batch/s, loss=0.76] [A
+Training VAE:  47%|████▋     | 699/1500 [05:20<05:54,  2.26batch/s, loss=0.76][A
+Training VAE:  47%|████▋     | 699/1500 [05:20<05:54,  2.26batch/s, loss=0.772][A
+Training VAE:  47%|████▋     | 700/1500 [05:21<05:54,  2.26batch/s, loss=0.772][A
+Training VAE:  47%|████▋     | 700/1500 [05:21<05:54,  2.26batch/s, loss=0.755][A
+Training VAE:  47%|████▋     | 701/1500 [05:21<05:53,  2.26batch/s, loss=0.755][A
+Training VAE:  47%|████▋     | 701/1500 [05:21<05:53,  2.26batch/s, loss=0.733][A
+Training VAE:  47%|████▋     | 702/1500 [05:21<05:52,  2.26batch/s, loss=0.733][A
+Training VAE:  47%|████▋     | 702/1500 [05:21<05:52,  2.26batch/s, loss=0.821][A
+Training VAE:  47%|████▋     | 703/1500 [05:22<05:52,  2.26batch/s, loss=0.821][A
+Training VAE:  47%|████▋     | 703/1500 [05:22<05:52,  2.26batch/s, loss=0.738][A
+Training VAE:  47%|████▋     | 704/1500 [05:22<05:52,  2.26batch/s, loss=0.738][A
+Training VAE:  47%|████▋     | 704/1500 [05:22<05:52,  2.26batch/s, loss=0.859][A
+Training VAE:  47%|████▋     | 705/1500 [05:23<05:51,  2.26batch/s, loss=0.859][A
+Training VAE:  47%|████▋     | 705/1500 [05:23<05:51,  2.26batch/s, loss=0.832][A
+Training VAE:  47%|████▋     | 706/1500 [05:23<05:51,  2.26batch/s, loss=0.832][A
+Training VAE:  47%|████▋     | 706/1500 [05:23<05:51,  2.26batch/s, loss=0.824][A
+Training VAE:  47%|████▋     | 707/1500 [05:24<05:50,  2.26batch/s, loss=0.824][A
+Training VAE:  47%|████▋     | 707/1500 [05:24<05:50,  2.26batch/s, loss=0.792][A
+Training VAE:  47%|████▋     | 708/1500 [05:24<05:50,  2.26batch/s, loss=0.792][A
+Training VAE:  47%|████▋     | 708/1500 [05:24<05:50,  2.26batch/s, loss=0.801][A
+Training VAE:  47%|████▋     | 709/1500 [05:25<05:49,  2.26batch/s, loss=0.801][A
+Training VAE:  47%|████▋     | 709/1500 [05:25<05:49,  2.26batch/s, loss=0.819][A
+Training VAE:  47%|████▋     | 710/1500 [05:25<05:49,  2.26batch/s, loss=0.819][A
+Training VAE:  47%|████▋     | 710/1500 [05:25<05:49,  2.26batch/s, loss=0.748][A
+Training VAE:  47%|████▋     | 711/1500 [05:25<05:48,  2.26batch/s, loss=0.748][A
+Training VAE:  47%|████▋     | 711/1500 [05:25<05:48,  2.26batch/s, loss=0.76] [A
+Training VAE:  47%|████▋     | 712/1500 [05:26<05:48,  2.26batch/s, loss=0.76][A
+Training VAE:  47%|████▋     | 712/1500 [05:26<05:48,  2.26batch/s, loss=0.824][A
+Training VAE:  48%|████▊     | 713/1500 [05:26<05:48,  2.26batch/s, loss=0.824][A
+Training VAE:  48%|████▊     | 713/1500 [05:26<05:48,  2.26batch/s, loss=0.737][A
+Training VAE:  48%|████▊     | 714/1500 [05:27<05:47,  2.26batch/s, loss=0.737][A
+Training VAE:  48%|████▊     | 714/1500 [05:27<05:47,  2.26batch/s, loss=0.751][A
+Training VAE:  48%|████▊     | 715/1500 [05:27<05:47,  2.26batch/s, loss=0.751][A
+Training VAE:  48%|████▊     | 715/1500 [05:27<05:47,  2.26batch/s, loss=0.727][A
+Training VAE:  48%|████▊     | 716/1500 [05:28<05:47,  2.26batch/s, loss=0.727][A
+Training VAE:  48%|████▊     | 716/1500 [05:28<05:47,  2.26batch/s, loss=0.725][A
+Training VAE:  48%|████▊     | 717/1500 [05:28<05:46,  2.26batch/s, loss=0.725][A
+Training VAE:  48%|████▊     | 717/1500 [05:28<05:46,  2.26batch/s, loss=0.73] [A
+Training VAE:  48%|████▊     | 718/1500 [05:29<05:45,  2.26batch/s, loss=0.73][A
+Training VAE:  48%|████▊     | 718/1500 [05:29<05:45,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 719/1500 [05:29<05:45,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 719/1500 [05:29<05:45,  2.26batch/s, loss=0.723][A
+Training VAE:  48%|████▊     | 720/1500 [05:29<05:45,  2.26batch/s, loss=0.723][A
+Training VAE:  48%|████▊     | 720/1500 [05:29<05:45,  2.26batch/s, loss=0.796][A
+Training VAE:  48%|████▊     | 721/1500 [05:30<05:44,  2.26batch/s, loss=0.796][A
+Training VAE:  48%|████▊     | 721/1500 [05:30<05:44,  2.26batch/s, loss=0.806][A
+Training VAE:  48%|████▊     | 722/1500 [05:30<05:44,  2.26batch/s, loss=0.806][A
+Training VAE:  48%|████▊     | 722/1500 [05:30<05:44,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 723/1500 [05:31<05:43,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 723/1500 [05:31<05:43,  2.26batch/s, loss=0.733][A
+Training VAE:  48%|████▊     | 724/1500 [05:31<05:43,  2.26batch/s, loss=0.733][A
+Training VAE:  48%|████▊     | 724/1500 [05:31<05:43,  2.26batch/s, loss=0.73] [A
+Training VAE:  48%|████▊     | 725/1500 [05:32<05:42,  2.26batch/s, loss=0.73][A
+Training VAE:  48%|████▊     | 725/1500 [05:32<05:42,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 726/1500 [05:32<05:42,  2.26batch/s, loss=0.729][A
+Training VAE:  48%|████▊     | 726/1500 [05:32<05:42,  2.26batch/s, loss=0.787][A
+Training VAE:  48%|████▊     | 727/1500 [05:33<05:41,  2.26batch/s, loss=0.787][A
+Training VAE:  48%|████▊     | 727/1500 [05:33<05:41,  2.26batch/s, loss=0.732][A
+Training VAE:  49%|████▊     | 728/1500 [05:33<05:41,  2.26batch/s, loss=0.732][A
+Training VAE:  49%|████▊     | 728/1500 [05:33<05:41,  2.26batch/s, loss=0.741][A
+Training VAE:  49%|████▊     | 729/1500 [05:33<05:41,  2.26batch/s, loss=0.741][A
+Training VAE:  49%|████▊     | 729/1500 [05:33<05:41,  2.26batch/s, loss=0.711][A
+Training VAE:  49%|████▊     | 730/1500 [05:34<05:40,  2.26batch/s, loss=0.711][A
+Training VAE:  49%|████▊     | 730/1500 [05:34<05:40,  2.26batch/s, loss=0.821][A
+Training VAE:  49%|████▊     | 731/1500 [05:34<05:40,  2.26batch/s, loss=0.821][A
+Training VAE:  49%|████▊     | 731/1500 [05:34<05:40,  2.26batch/s, loss=0.79] [A
+Training VAE:  49%|████▉     | 732/1500 [05:35<05:40,  2.26batch/s, loss=0.79][A
+Training VAE:  49%|████▉     | 732/1500 [05:35<05:40,  2.26batch/s, loss=0.768][A
+Training VAE:  49%|████▉     | 733/1500 [05:35<05:39,  2.26batch/s, loss=0.768][A
+Training VAE:  49%|████▉     | 733/1500 [05:35<05:39,  2.26batch/s, loss=0.737][A
+Training VAE:  49%|████▉     | 734/1500 [05:36<05:38,  2.26batch/s, loss=0.737][A
+Training VAE:  49%|████▉     | 734/1500 [05:36<05:38,  2.26batch/s, loss=0.773][A
+Training VAE:  49%|████▉     | 735/1500 [05:36<05:38,  2.26batch/s, loss=0.773][A
+Training VAE:  49%|████▉     | 735/1500 [05:36<05:38,  2.26batch/s, loss=0.719][A
+Training VAE:  49%|████▉     | 736/1500 [05:37<05:38,  2.26batch/s, loss=0.719][A
+Training VAE:  49%|████▉     | 736/1500 [05:37<05:38,  2.26batch/s, loss=0.797][A
+Training VAE:  49%|████▉     | 737/1500 [05:37<05:37,  2.26batch/s, loss=0.797][A
+Training VAE:  49%|████▉     | 737/1500 [05:37<05:37,  2.26batch/s, loss=0.695][A
+Training VAE:  49%|████▉     | 738/1500 [05:37<05:36,  2.26batch/s, loss=0.695][A
+Training VAE:  49%|████▉     | 738/1500 [05:37<05:36,  2.26batch/s, loss=0.755][A
+Training VAE:  49%|████▉     | 739/1500 [05:38<05:36,  2.26batch/s, loss=0.755][A
+Training VAE:  49%|████▉     | 739/1500 [05:38<05:36,  2.26batch/s, loss=0.721][A
+Training VAE:  49%|████▉     | 740/1500 [05:38<05:36,  2.26batch/s, loss=0.721][A
+Training VAE:  49%|████▉     | 740/1500 [05:38<05:36,  2.26batch/s, loss=0.759][A
+Training VAE:  49%|████▉     | 741/1500 [05:39<05:35,  2.26batch/s, loss=0.759][A
+Training VAE:  49%|████▉     | 741/1500 [05:39<05:35,  2.26batch/s, loss=0.791][A
+Training VAE:  49%|████▉     | 742/1500 [05:39<05:35,  2.26batch/s, loss=0.791][A
+Training VAE:  49%|████▉     | 742/1500 [05:39<05:35,  2.26batch/s, loss=0.701][A
+Training VAE:  50%|████▉     | 743/1500 [05:40<05:34,  2.26batch/s, loss=0.701][A
+Training VAE:  50%|████▉     | 743/1500 [05:40<05:34,  2.26batch/s, loss=0.721][A
+Training VAE:  50%|████▉     | 744/1500 [05:40<05:40,  2.22batch/s, loss=0.721][A
+Training VAE:  50%|████▉     | 744/1500 [05:40<05:40,  2.22batch/s, loss=0.724][A
+Training VAE:  50%|████▉     | 745/1500 [05:41<05:37,  2.23batch/s, loss=0.724][A
+Training VAE:  50%|████▉     | 745/1500 [05:41<05:37,  2.23batch/s, loss=0.702][Aslurmstepd: error: *** JOB 62944 ON edu01 CANCELLED AT 2025-08-27T18:43:39 ***

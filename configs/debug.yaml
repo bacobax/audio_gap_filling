@@ -26,3 +26,4 @@ paths:
 
 data:
   n_mels: 80
+  sample_rate: 44100
