@@ -26,7 +26,7 @@ class DiffusionTrainer(BaseTrainer):
         device: Optional[torch.device] = None,
     ) -> None:
         self.cfg = config or {}
-        super().__init__(model, train_loader, val_loader, config, device)
+        super().__init__(model, train_loader, val_loader, config, device, config["log_dir"])
 
     def _setup_training_components(self) -> None:
         # Optimizer and scheduler

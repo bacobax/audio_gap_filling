@@ -60,6 +60,8 @@ training:
     # If provided, the encoder/decoder weights will be loaded (strict=False)
     checkpoint: pretrained/vae_checkpoint.pt
   resume: true
+  log_dir: runs/train/diffusion-20250831-222904
+
   # CLAP conditioner (optional). Set checkpoint to enable
   clap:
     checkpoint: pretrained/music_audioset_epoch_15_esc_90.14.pt

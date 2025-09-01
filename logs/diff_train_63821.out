@@ -1,0 +1,109 @@
+Starting training with configuration: diffusion
+{'data': {'dataset_type': 'gap_waveform',
+          'gap_percentage': [0.2, 0.6],
+          'hop_length': 256,
+          'n_fft': 1024,
+          'n_mels': 80,
+          'sample_rate': 16000,
+          'segment_length': 65536},
+ 'model': {'network': {'channels_per_scale': [128, 256, 384, 512, 768],
+                       'cond_dim': 256,
+                       'gradient_checkpointing': True,
+                       'in_channels': 129,
+                       'latents_channels': 64,
+                       'n_heads': 8,
+                       'num_res_blocks': 2,
+                       'self_attn_scales': [3, 4]},
+           'type': 'diffusion_unet'},
+ 'paths': {'audio_filename': 'assets/gapped_audio.wav',
+           'clap_checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
+           'log_dir': 'runs/train/diffusion-20250831-222904',
+           'test_audio_filename': 'assets/wav_test.wav'},
+ 'training': {'batch_size': 1,
+              'cfg_dropout_p': 0.15,
+              'clap': {'audio_model_type': 'HTSAT-base',
+                       'checkpoint': 'pretrained/music_audioset_epoch_15_esc_90.14.pt',
+                       'enable_fusion': True},
+              'early_stop_patience': 3,
+              'lambda_ctx': 0.1,
+              'lr': 5e-05,
+              'max_device_batch_size': 4,
+              'resume': True,
+              'seed': 42,
+              'step_interval': 2,
+              'total_epoch': 30,
+              'total_steps': 100000,
+              'trainer_type': 'diffusion',
+              'vae': {'checkpoint': 'pretrained/vae_checkpoint.pt',
+                      'downsample_stride': 2,
+                      'hidden_channels': 64,
+                      'input_channels': 1,
+                      'kernel_size': 3,
+                      'latent_dim': 64,
+                      'num_blocks': 3},
+              'warmup_steps': 2000,
+              'weight_decay': 0.001}}
+Using device: cuda
+SAMPLE RATE 16000
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'gap_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': [0.2, 0.6],
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 16000,
+ 'segment_length': 65536,
+ 'split': 'train',
+ 'step_interval': 2,
+ 'test_audio_filename': 'assets/wav_test.wav'}
+SAMPLE RATE 16000
+DATASET CONFIG
+{'batch_size': 1,
+ 'dataset_type': 'gap_waveform',
+ 'flac_path': 'assets/gapped_audio.wav',
+ 'folder': 'assets',
+ 'gap_percentage': [0.2, 0.6],
+ 'hop_length': 256,
+ 'n_fft': 1024,
+ 'n_mels': 80,
+ 'patch_size': 16,
+ 'sample_rate': 16000,
+ 'segment_length': 65536,
+ 'split': 'val',
+ 'step_interval': 2,
+ 'test_audio_filename': 'assets/wav_test.wav'}
+Data setup complete: training and validation datasets created
+sample shape: torch.Size([290816])
+MODEL CONFIG
+{'audio_len': 290816,
+ 'device': 'cuda',
+ 'exp': {'audio_len': 65536, 'sample_rate': 16000},
+ 'network': {'channels_per_scale': [128, 256, 384, 512, 768],
+             'cond_dim': 256,
+             'gradient_checkpointing': True,
+             'in_channels': 129,
+             'latents_channels': 64,
+             'n_heads': 8,
+             'num_res_blocks': 2,
+             'self_attn_scales': [3, 4]},
+ 'type': 'diffusion_unet'}
+Model created successfully
+Traceback (most recent call last):
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 41, in <module>
+    main() 
+  File "/home/francesco.bassignana/audio_gap_filling/train.py", line 37, in main
+    pipeline.setup_trainer()
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 302, in setup_trainer
+    self.trainer = TrainerFactory.create_trainer(
+  File "/home/francesco.bassignana/audio_gap_filling/src/factory.py", line 164, in create_trainer
+    return DiffusionTrainer(
+  File "/home/francesco.bassignana/audio_gap_filling/src/training/diff_trainer.py", line 29, in __init__
+    super().__init__(model, train_loader, val_loader, config, device)
+  File "/home/francesco.bassignana/audio_gap_filling/src/core/base_trainer.py", line 55, in __init__
+    raise Exception("To resume training provide the log_dir")
+Exception: To resume training provide the log_dir
+Training failed for config: diffusion
